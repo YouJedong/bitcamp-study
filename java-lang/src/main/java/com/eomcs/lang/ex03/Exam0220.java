@@ -6,7 +6,7 @@ package com.eomcs.lang.ex03;
 public class Exam0220 {
   public static void main(String[] args) {
     
-    //## 10진수에 _ 문자를 삽입하기
+    //## 10진수에 _ 문자를 삽입하기 (하지만 리턴값으로 _문자 안나옴)
     System.out.println(12783406);
     System.out.println(1278_3406);
     System.out.println(12_783_406);

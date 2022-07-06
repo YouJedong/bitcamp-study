@@ -17,7 +17,7 @@ public class Exam0430 {
 
     //작은 따옴표가 알려준 유니코드를 그대로 출력하기
     //정수를 의미하는 (int)를 앞에 붙인다.
-    System.out.println((int)'A');
+    System.out.println((int)'각');
 
     // '각' ==> 0xac01(44033) 을 리턴한다.
     // 따라서 다음과 같이 다른 숫자와 연산을 수행할 수 있다.

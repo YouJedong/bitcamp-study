@@ -24,4 +24,4 @@ class Exam0300 {
 //- 예) $ javac -d bin/main -encoding UTF-8 src/main/java/com/eomcs/lang/ex01/Exam0300.java
 //
 //2) 실행하기
-//- $ java -cp bin/main com.eomcs.lang.ex01.Exam0300
+//- $ java -cp bin/main com.eomcs.lang.ex01.Exam0300 ?왜 경로를 bin/main 하고 띄어쓰고 다음 경로를 쓸까?

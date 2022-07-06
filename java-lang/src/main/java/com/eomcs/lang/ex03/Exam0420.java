@@ -79,8 +79,12 @@ public class Exam0420 {
     
     //영어 대문자 모두 출력하기
     //첫 번째 알파벳의 코드 값만 안다면 + 연산자를 이용하여 출력할 수 있다.
-    for (int i = 0; i < 26; i++) {
-      System.out.print((char)(i + 65) + ",");
+   // for (int i = 0; i < 26; i++) {
+   //   System.out.print((char)(i + 65) + ",");
+   // }
+    for(int i = 0; i < 26; i++) {
+      System.out.println((char)(i + 65) + ",");
+    
     }
   }
 }
