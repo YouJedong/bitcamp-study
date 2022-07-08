@@ -24,10 +24,10 @@ public class Exam0560 {
     char[] arr4 = new char[5];
     Object[] arr5 = new Object[5];
 
-    System.out.println(arr1[0]);
-    System.out.println(arr2[0]);
-    System.out.println(arr3[0]);
-    System.out.println(arr4[0]);
-    System.out.println(arr5[0]);
+    System.out.println(arr1[4]);
+    System.out.println(arr2[4]);
+    System.out.println(arr3[4]);
+    System.out.println(arr4[4]);
+    System.out.println(arr5[4]);
   }
 }
