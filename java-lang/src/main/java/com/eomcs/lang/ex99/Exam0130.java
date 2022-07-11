@@ -7,12 +7,14 @@ public class Exam0130 {
     // 현재 날짜 및 시각 정보를 생성한다.
     // java.lang 패키지의 멤버를 사용할 때는 그냥 이름을 지정하면 된다.
     // 그 외 다른 패키지의 멤버를 사용할 때는 반드시 패키지 이름을 함께 지정해야 한다.
+    //java.util.Date today = new java.util.Date();
     java.util.Date today = new java.util.Date();
-
+    
     // %t[날짜 및 시각 옵션]
     // 날짜 및 시간 옵션
     // Y : 날짜 및 시각 데이터에서 년도를 추출하여 4자리로 표현한다.
     // y : 날짜 및 시각 데이터에서 년도를 추출하여 뒤의 2자리로 표현한다.
+    //System.out.printf("%1$tY, %1$ty\n", today);
     System.out.printf("%1$tY, %1$ty\n", today);
 
     // B : 날짜 및 시각 데이터에서 월을 추출하여 전체 이름으로 표현한다. ex) January
@@ -49,7 +51,7 @@ public class Exam0130 {
     System.out.printf("%1$tp\n", today);
 
     // 년-월-일 시:분:초를 출력하라! 예) 2019-01-04 12:04:30
-    System.out.printf("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS\n", today);
+    System.out.printf("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS\n %1$tB/%1$ta", today);
   }
 }
 
