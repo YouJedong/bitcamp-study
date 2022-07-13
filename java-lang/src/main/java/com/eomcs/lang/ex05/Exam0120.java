@@ -30,7 +30,7 @@ public class Exam0120 {
 관계 연산자: <, >, <=, >=, instanceof
 등위 연산자: ==, !=
 &
-^
+^ 
 |
 논리 연산자 AND: &&
 논리 연산자 OR: ||

@@ -16,7 +16,8 @@ public class Exam0940 {
 
     // 1) 큰 메모리의 값이 작은 메모리에 충분히 들어가는 경우
     // short ==> byte
-    byte b2 = (byte)s; // 명시적 형변환
+    byte b2 = s;
+    //byte b2 = (byte)s; // 명시적 형변환
     System.out.println(b2);
 
     // int ==> byte

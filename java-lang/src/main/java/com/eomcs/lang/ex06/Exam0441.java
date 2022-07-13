@@ -9,7 +9,7 @@ public class Exam0441 {
     // 인덱스 범위 조정
     for (int i = 2; i < 4; i++) {
       System.out.println(names[i]);
-    }
+    } //유관순, 윤봉길
 
   }
 }

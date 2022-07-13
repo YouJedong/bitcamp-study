@@ -17,7 +17,7 @@ public class Exam0480 {
 
     // 3) 접근 테스트
     // => menu1이 로그아웃 상태에서 접근 가능한 것인지 검사한다.
-    System.out.println((menu1 & LOGOUT) > 0);
+    System.out.println((menu1 & LOGOUT) > 0); //true
     // 계산 원리
     //    menu1:    00000001
     //    LOGOUT:   00000001
@@ -27,7 +27,7 @@ public class Exam0480 {
     // 어떤 값에 대해 LOGOUT 값을 & 한다는 것은
     // LOGOUT 비트(오른쪽에서 첫 번째 비트)가 1인지 검사한다는 뜻이다. 
 
-    System.out.println((menu1 & GENERAL) > 0);
+    System.out.println((menu1 & GENERAL) > 0); //false
     // 계산 원리
     //    menu1:    00000001
     //    GENERAL:  00000010

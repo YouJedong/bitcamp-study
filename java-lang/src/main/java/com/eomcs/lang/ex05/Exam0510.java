@@ -5,7 +5,7 @@ package com.eomcs.lang.ex05;
 public class Exam0510 {
   public static void main(String[] args) {
     // 조건연산자
-    // => 조건 ? 표현식1 : 표현식2
+    // => 조건 ? 표현식1 : 표현식2 (리터럴, 변수, 메소드호출)
     // => 조건이 참이면 표현식1을 실행하고,
     //    조건이 거짓이면 표현식2를 실행한다.
     //

@@ -49,7 +49,7 @@ public class Exam0150 {
     // float + double = double
     //    float r9 = f + d; // 컴파일 오류!
 
-    // byte + short + int + long + float + double = double
+    // byte + short + int + long(값이 잘릴수있음) + float + double = double
     //long r10 = b + s + i + l + f + d; // 컴파일 오류!
 
     // float + int + long = float

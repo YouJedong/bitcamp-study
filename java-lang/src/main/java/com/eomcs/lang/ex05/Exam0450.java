@@ -86,6 +86,7 @@ public class Exam0450 {
     //   00000000 00000000 00000000 00000000 10101010
 
     System.out.println(Integer.toBinaryString(lang2));
+    System.out.println(((lang2 & 0x20 ) == 0x20) ? true : false); // 뭐가 트루인지 확인
 
     // 실무에서는 이렇게 비트를 이용하여 여러 개의 true/false 상태를 저장하기도 한다.
 

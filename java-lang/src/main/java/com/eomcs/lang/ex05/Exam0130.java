@@ -20,9 +20,12 @@ public class Exam0130 {
     // - 이유? 리터럴 값은 컴파일 단계에서 그 값이 얼마인지 확인할 수 있기 때문이다.
     // - 변수의 경우는 컴파일 단계에서 값을 확인할 수 없다.
 
-    byte x = 5, y = 6, z;
+    byte x = 5, y = 6;
+    byte z;
     z = x; // OK!
     z = y; // OK!
+    System.out.println(x);
+    System.out.println(y);
 
     //    z = x + y; // 컴파일 오류!
     //

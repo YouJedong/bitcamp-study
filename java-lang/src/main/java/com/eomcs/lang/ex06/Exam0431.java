@@ -10,7 +10,17 @@ public class Exam0431 {
         System.out.print(j + " ");
         if (j == 5)
           break; // break 소속된 현재 반복문을 멈춘다.
-      }
+      }//1
+       //1 2
+       //1 2 3
+       //1 2 3 4 
+       //1 2 3 4 5
+       //1 2 3 4 5
+       //1 2 3 4 5  
+       //1 2 3 4 5 
+       //1 2 3 4 5
+       //1 2 3 4 5 
+    
       System.out.println();
     }
   }

@@ -9,5 +9,3 @@ public class Exam0150 {
     int a1 = 100, a2 = 200;
   }
 }
-
-

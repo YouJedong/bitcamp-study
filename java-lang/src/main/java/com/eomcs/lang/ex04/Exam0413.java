@@ -8,9 +8,7 @@ public class Exam0413 {
     int i = 100;
     short s = 100;
     byte b = 100;
-    char c = 65;
-
-    //System.out.print(c);
+    char c = 100;
 
     //변수의 값을 다른 변수에 저장할 때,
     //- 값의 크기에 상관없이 같거나 큰 크기의 메모리이어야 한다.
@@ -21,22 +19,21 @@ public class Exam0413 {
     byte b2;
     char c2;
 
-    // long ===> long 이상없음
-    i2 = l;
-    System.out.print(i2);
+    // long ===> long 이상
+    l2 = l;
     //i2 = l; // 컴파일 오류
     //s2 = l; // 컴파일 오류
     //b2 = l; // 컴파일 오류!
     //c2 = l; // 컴파일 오류!
 
-    // int ===> int 이상없음
+    // int ===> int 이상
     l2 = i;
     i2 = i;
     //s2 = i; // 컴파일 오류!
     //b2 = i; // 컴파일 오류!
     //c2 = i;  // 컴파일 오류!
     
-    // short ===> short 이상없음
+    // short ===> short 이상
     l2 = s;
     i2 = s;
     s2 = s;
