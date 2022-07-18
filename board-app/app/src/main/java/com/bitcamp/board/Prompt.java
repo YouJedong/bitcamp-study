@@ -14,9 +14,15 @@ public class Prompt {
   }
 
   static int inputInt(String title) {
-    System.out.print(title);
+    System.out.print(title + " ");
     String str = keyboardInput.nextLine(); 
     return Integer.parseInt(str);
+  }
+
+  static char inputStringToChar(String ask) {
+    System.out.println(ask);
+    String charac  = keyboardInput.nextLine(); 
+    return charac.charAt(0);
   }
 
   static String inputString () {
