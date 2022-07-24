@@ -29,6 +29,7 @@ public class Exam0260 {
     }
 
     // 인스턴스를 사용하지 않는 메서드라면 그냥 클래스 메서드로 두어라.
+    // 인스턴스 멤버를 쓰냐 안쓰냐에 따라 static
     static int abs(int a) {
       return a >= 0 ? a : a * -1;
     }
@@ -60,6 +61,9 @@ public class Exam0260 {
 
     c1.divide(3); // + 2 + 3 - 1 * 7 / 3 = ?
     c2.minus(5); // + 3 * 2 + 7 / 4 - 5 = ?
+
+    c2.result = Calculator.abs(c2.result);
+
 
     // 식1의 계산 결과는 c1 인스턴스의 result에 들어 있고,
     // 식2의 계산 결과는 c2 인스턴스의 result에 들어 있다.
