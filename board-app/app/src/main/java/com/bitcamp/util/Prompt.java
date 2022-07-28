@@ -15,7 +15,19 @@ public class Prompt {
   public static int inputInt(String title) {
     System.out.print(title);
     String str = keyboardInput.nextLine();
+    //    try {
     return Integer.parseInt(str); 
+    //    } catch(Throwable ex) {
+    // 예외 처리
+    // => 예외가 발생했음을 알리는 메세지를 출력한다.
+    // System.out.println("숫자가 아닙니다.");
+
+
+    // 예외를 처리한 후에도메서드는 값을 리턴해야 한다.
+    // 그런데 사용자가 입력할 법한 값을 이턴하면 호출하는 쪽에서는 예외가 발생했는지 모른다.
+    // 그래서 다음과 같이 사용자가 입력할 것 같지 않은 아주 독특한 값을 리턴한다.
+    //      return -12121212;
+    //    }
   }
 
   public static String inputString() {

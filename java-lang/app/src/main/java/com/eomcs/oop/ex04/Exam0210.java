@@ -7,7 +7,7 @@ public class Exam0210 {
 
     // s1 인스턴스(s1 레퍼런스가 가리키는 인스턴스)의 값을 조회하는 메서드 사용
     // 따라서 이 메서드를 호출하려면 반드시 String 인스턴스의 주소를 줘야 한다.
-    char c = s1.charAt(1);
+    char c = s1.charAt(0);
     System.out.println(c);
 
     System.out.println(s1.compareTo("Helli"));

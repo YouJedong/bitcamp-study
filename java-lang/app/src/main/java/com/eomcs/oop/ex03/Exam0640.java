@@ -34,7 +34,7 @@ public class Exam0640 {
     new A();
     System.out.println("-------------------------------");
 
-    new A();
+    new A();// 로딩안됨 스태틱블록 실행 안
     System.out.println("-------------------------------");
 
     new A();
