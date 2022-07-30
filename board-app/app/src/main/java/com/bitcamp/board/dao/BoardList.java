@@ -15,7 +15,7 @@ public class BoardList extends ObjectList {
   }
 
   @Override
-  public Board get(int boardNo) throws Throwable {
+  public Board get(int boardNo) {
     for (int i = 0; i < size(); i++) {
       Board board = (Board)super.get(i);
       if (board.no == boardNo) {
@@ -26,7 +26,7 @@ public class BoardList extends ObjectList {
   }
 
   @Override
-  public boolean remove(int boardNo) throws Throwable {
+  public boolean remove(int boardNo) {
     for (int i = 0; i < size(); i++) {
       Board board = (Board) super.get(i);
       if (board.no == boardNo) {
@@ -36,8 +36,6 @@ public class BoardList extends ObjectList {
     }
     return false;
   }
-
-
 
 
   private int nextNo() {

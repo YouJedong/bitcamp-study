@@ -33,7 +33,7 @@ public class ObjectList {
 
   public Object get(int index) {
     if (index < 0 || index >= size) {
-      return null;
+      throw new ListException("인덱스가 무효함!");
     }
 
     return elementData[index];
@@ -41,7 +41,7 @@ public class ObjectList {
 
   public boolean remove(int index) {
     if (index < 0 || index >= size) {
-      return false;
+      throw new ListException("인덱스가 무효하다.");
     }
 
     // 삭제할 항목의 다음 항목을 앞으로 당긴다.

@@ -51,7 +51,7 @@ public class BoardHandler {
 
         displayBlankLine();
 
-      } catch (Throwable ex) {
+      } catch (Exception ex) {
         System.out.printf("예외 발생: %s\n", ex.getMessage());
       } // 게시판 while
     }
@@ -84,7 +84,7 @@ public class BoardHandler {
 
   }
 
-  private void onDetail() throws Throwable {
+  private void onDetail() {
     System.out.printf("[%s 상세보기]\n", this.title);
 
     //로컬변수는초기화 해서 써라~ 
@@ -93,7 +93,7 @@ public class BoardHandler {
       try {
         boardNo = Prompt.inputInt("조회할 게시글 번호? ");
         break;
-      } catch (Throwable ex) {
+      } catch (Exception ex) {
         System.out.println("입력 값이 옳지 않습니다.");
       }
     }
@@ -133,7 +133,7 @@ public class BoardHandler {
     System.out.println("게시글을 등록했습니다.");
   }
 
-  private void onDelete() throws Throwable {
+  private void onDelete() {
     System.out.printf("[%s 삭제]\n", this.title);
 
     int boardNo = 0;
@@ -141,7 +141,7 @@ public class BoardHandler {
       try {
         boardNo = Prompt.inputInt("삭제할 게시글 번호? ");
         break;
-      } catch (Throwable ex) {
+      } catch (Exception ex) {
         System.out.println("입력 값이 옳지 않습니다.");
       }
     }
@@ -153,7 +153,7 @@ public class BoardHandler {
   }
 
 
-  private void onUpdate() throws Throwable {
+  private void onUpdate() {
     System.out.printf("[%s 변경]\n", this.title);
 
     int boardNo = 0;
@@ -161,7 +161,7 @@ public class BoardHandler {
       try {
         boardNo = Prompt.inputInt("변경할 게시글 번호? ");
         break;
-      } catch (Throwable ex) {
+      } catch (Exception ex) {
         System.out.println("입력 값이 옳지 않습니다.");
       }
     }

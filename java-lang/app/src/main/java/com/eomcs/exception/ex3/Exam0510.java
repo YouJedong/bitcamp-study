@@ -21,7 +21,6 @@ public class Exam0510 {
     try {
       m(0);
       System.out.println("try");
-
     } catch (RuntimeException | SQLException | IOException e) {
       System.out.println("catch 1");
 

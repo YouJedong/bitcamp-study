@@ -8,7 +8,7 @@ import com.bitcamp.util.ObjectList;
 public class MemberList extends ObjectList {
 
 
-  public Member get(String email) throws Throwable {
+  public Member get(String email) {
     for (int i = 0; i < size(); i++) {
       Member member = (Member) super.get(i);
       if (member.email.equals(email)) {
@@ -18,7 +18,7 @@ public class MemberList extends ObjectList {
     return null;
   }
 
-  public boolean remove(String email) throws Throwable {
+  public boolean remove(String email) {
     for (int i = 0; i < size(); i++) {
       Member member = (Member) super.get(i);
       if (member.email.equals(email)) {

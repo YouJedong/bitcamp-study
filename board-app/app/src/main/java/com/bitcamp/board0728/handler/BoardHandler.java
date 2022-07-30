@@ -50,8 +50,8 @@ public class BoardHandler {
         }
 
         displayBlankLine();
-      } catch (Throwable ex) {
-        System.out.println("잘못된 입력입니다. 메뉴 번호를 입력하세요.");
+      } catch (Exception ex) {
+        System.out.printf("익스큐트예외상황 발생! %s\n", ex.getMessage());
       }
 
     } 
@@ -91,15 +91,14 @@ public class BoardHandler {
       try {
         boardNo = Prompt.inputInt("조회할 게시글 번호? ");
         break;
-      }catch (Throwable ex) {
-        System.out.println("잘못된 입력입니다.다시 조회할 게시글 번호를 입력해주세요.");
+      }catch (Exception ex) {
+        System.out.println("[잘못된 입력입니다.다시 조회할 게시글 번호를 입력해주세요.]");
 
       }
     }
     // 해당 번호의 게시글이 몇 번 배열에 들어 있는지 알아내기
-
-    Board board = this.boardList.get(boardNo);
-
+    Board board = null;
+    board = this.boardList.get(boardNo);
     // 사용자가 입력한 번호에 해당하는 게시글을 못 찾았다면
     if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다!");
@@ -135,48 +134,56 @@ public class BoardHandler {
 
   private void onDelete() {
     System.out.printf("[%s 삭제]\n", this.title);
-
-    try {
-      int boardNo = Prompt.inputInt("삭제할 게시글 번호? ");
-
-      if (boardList.remove(boardNo)) {
-        System.out.println("삭제하였습니다.");
-      } else {
-        System.out.println("해당 번호의 게시글이 없습니다!");
+    int boardNo = 0;
+    while (true) {
+      try {
+        boardNo = Prompt.inputInt("삭제할 게시글 번호? ");
+        break;
+      } catch (Exception ex) {
+        System.out.println("[잘못된 입력입니다. 다시 삭제할 게시글 번호를 입력해주세요.]");
       }
-    } catch (Throwable ex) {
-      System.out.println("잘못된 입력입니다. 삭제할 게시글 번호를 다시 입력해주세요.");
     }
+    if (boardList.remove(boardNo)) {
+      System.out.println("삭제하였습니다.");
+    } else {
+      System.out.println("해당 번호의 게시글이 없습니다!");
+    }
+
   }
+
+
 
   private void onUpdate() {
     System.out.printf("[%s 변경]\n", this.title);
-
-    try {
-      int boardNo = Prompt.inputInt("변경할 게시글 번호? ");
-
-      Board board = this.boardList.get(boardNo);
-
-      if (board == null) {
-        System.out.println("해당 번호의 게시글이 없습니다!");
-        return;
+    int boardNo = 0;
+    while (true) {
+      try {
+        boardNo = Prompt.inputInt("변경할 게시글 번호? ");
+        break;
+      } catch (Exception ex) {
+        System.out.println("[잘못된 입력입니다. 다시 변경할 게시글 번호를 입력해주세요]");
       }
-
-
-      String newTitle = Prompt.inputString("제목?(" + board.title + ") ");
-      String newContent = Prompt.inputString(String.format("내용?(%s) ", board.content));
-
-      String input = Prompt.inputString("변경하시겠습니까?(y/n) ");
-      if (input.equals("y")) {
-        board.title = newTitle;
-        board.content = newContent;
-        System.out.println("변경했습니다.");
-      } else {
-        System.out.println("변경 취소했습니다.");
-      }
-    } catch (Throwable ex) {
-      System.out.println("잘못된 입력입니다. 다시 변경할 게시글 번호를 입력해주세요.");
     }
+    Board board = this.boardList.get(boardNo);
+
+    if (board == null) {
+      System.out.println("해당 번호의 게시글이 없습니다!");
+      return;
+    }
+
+
+    String newTitle = Prompt.inputString("제목?(" + board.title + ") ");
+    String newContent = Prompt.inputString(String.format("내용?(%s) ", board.content));
+
+    String input = Prompt.inputString("변경하시겠습니까?(y/n) ");
+    if (input.equals("y")) {
+      board.title = newTitle;
+      board.content = newContent;
+      System.out.println("변경했습니다.");
+    } else {
+      System.out.println("변경 취소했습니다.");
+    }
+
   }
 }
 

@@ -19,10 +19,11 @@ public class Exam0520 {
 
   public static void main(String[] args) throws Exception {
     try {
-      m(1);
+      m(0);
+      System.out.println("try");
       // m()에서 발생된 예외는
       // try 블록에서 받지 않는다.
-      // 따라서 main() 호출자에게 위임한다.
+      // 따라서 main() 호출자에게 위임한다.jvm
       // => 물론 main() 메서드 선언부에 위임할 예외의 종류를 표시해야 한다.
       //
     } finally {

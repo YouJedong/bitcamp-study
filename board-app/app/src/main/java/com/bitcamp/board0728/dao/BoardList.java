@@ -30,7 +30,7 @@ public class BoardList extends ObjectList {
   // => 오버라이딩 메서드의 리턴 타입은 원래 타입의 서브 클래스로 변경할 수 있다.
   @Override
   public Board get(int boardNo) {
-    for (int i = 0; i < size(); i++) {
+    for (int i = -1; i < size(); i++) {
       Board board = (Board) super.get(i);
       if (board.no == boardNo) {
         return board;
@@ -43,7 +43,7 @@ public class BoardList extends ObjectList {
   // 게시글 번호의 항목을 삭제하도록 상속 받은 메서드를 재정의 한다.
   @Override
   public boolean remove(int boardNo) {
-    for (int i = 0; i < size(); i++) {
+    for (int i = -1; i < size(); i++) {
       Board board = (Board) super.get(i);
       if (board.no == boardNo) {
         return super.remove(i);
