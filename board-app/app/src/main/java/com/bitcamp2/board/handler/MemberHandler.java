@@ -1,12 +1,12 @@
 /*
  * 회원 메뉴 처리 클래스
  */
-package com.bitcamp.board0728.handler;
+package com.bitcamp2.board.handler;
 
 import java.util.Date;
-import com.bitcamp.board0728.dao.MemberList;
-import com.bitcamp.board0728.domain.Member;
-import com.bitcamp.util0728.Prompt;
+import com.bitcamp2.board.dao.MemberList;
+import com.bitcamp2.board.domain.Member;
+import com.bitcamp2.util.Prompt;
 
 public class MemberHandler {
 
@@ -21,6 +21,7 @@ public class MemberHandler {
       System.out.println("  4: 삭제");
       System.out.println("  5: 변경");
       System.out.println();
+
       try {
         int menuNo = Prompt.inputInt("메뉴를 선택하세요[1..5](0: 이전) ");
         displayHeadline();
@@ -36,11 +37,11 @@ public class MemberHandler {
         }
 
         displayBlankLine();
+
       } catch (Exception ex) {
-        System.out.printf("예외상황! :%s\n", ex.getMessage());
+        System.out.printf("예외 발생: %s\n", ex.getMessage());
       }
     } // 게시판 while
-
   }
 
   private static void displayHeadline() {
@@ -81,7 +82,6 @@ public class MemberHandler {
     System.out.printf("이메일: %s\n", member.email);
     Date date = new Date(member.createdDate);
     System.out.printf("등록일: %tY-%1$tm-%1$td %1$tH:%1$tM\n", date);
-
   }
 
   private void onInput() {
@@ -96,7 +96,7 @@ public class MemberHandler {
 
     this.memberList.add(member);
 
-    System.out.println("회을 등록했습니다.");
+    System.out.println("회워을 등록했습니다.");
   }
 
   private void onDelete() {

@@ -1,13 +1,13 @@
 /*
  * 게시글 메뉴 처리 클래스
  */
-package com.bitcamp.board0728.handler;
+package com.bitcamp2.board.handler;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import com.bitcamp.board0728.dao.BoardList;
-import com.bitcamp.board0728.domain.Board;
-import com.bitcamp.util0728.Prompt;
+import com.bitcamp2.board.dao.BoardList;
+import com.bitcamp2.board.domain.Board;
+import com.bitcamp2.util.Prompt;
 
 public class BoardHandler {
 
@@ -36,6 +36,7 @@ public class BoardHandler {
 
       try {
         int menuNo = Prompt.inputInt("메뉴를 선택하세요[1..5](0: 이전) ");
+
         displayHeadline();
 
         // 다른 인스턴스 메서드를 호출할 때 this에 보관된 인스턴스 주소를 사용한다. 
@@ -50,11 +51,11 @@ public class BoardHandler {
         }
 
         displayBlankLine();
-      } catch (Exception ex) {
-        System.out.printf("익스큐트예외상황 발생! %s\n", ex.getMessage());
-      }
 
-    } 
+      } catch (Exception ex) {
+        System.out.printf("예외 발생: %s\n", ex.getMessage());
+      }
+    } // 게시판 while
   }
 
   private static void displayHeadline() {
@@ -86,19 +87,20 @@ public class BoardHandler {
 
   private void onDetail() {
     System.out.printf("[%s 상세보기]\n", this.title);
+
     int boardNo = 0;
     while (true) {
       try {
         boardNo = Prompt.inputInt("조회할 게시글 번호? ");
         break;
-      }catch (Exception ex) {
-        System.out.println("[잘못된 입력입니다.다시 조회할 게시글 번호를 입력해주세요.]");
-
+      } catch (Exception ex) {
+        System.out.println("입력 값이 옳지 않습니다!");
       }
     }
+
     // 해당 번호의 게시글이 몇 번 배열에 들어 있는지 알아내기
-    Board board = null;
-    board = this.boardList.get(boardNo);
+    Board board = this.boardList.get(boardNo);
+
     // 사용자가 입력한 번호에 해당하는 게시글을 못 찾았다면
     if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다!");
@@ -134,43 +136,44 @@ public class BoardHandler {
 
   private void onDelete() {
     System.out.printf("[%s 삭제]\n", this.title);
+
     int boardNo = 0;
     while (true) {
       try {
         boardNo = Prompt.inputInt("삭제할 게시글 번호? ");
         break;
       } catch (Exception ex) {
-        System.out.println("[잘못된 입력입니다. 다시 삭제할 게시글 번호를 입력해주세요.]");
+        System.out.println("입력 값이 옳지 않습니다!");
       }
     }
+
     if (boardList.remove(boardNo)) {
       System.out.println("삭제하였습니다.");
     } else {
       System.out.println("해당 번호의 게시글이 없습니다!");
     }
-
   }
 
-
-
   private void onUpdate() {
+
     System.out.printf("[%s 변경]\n", this.title);
+
     int boardNo = 0;
     while (true) {
       try {
         boardNo = Prompt.inputInt("변경할 게시글 번호? ");
         break;
-      } catch (Exception ex) {
-        System.out.println("[잘못된 입력입니다. 다시 변경할 게시글 번호를 입력해주세요]");
+      } catch (Throwable ex) {
+        System.out.println("입력 값이 옳지 않습니다!");
       }
     }
+
     Board board = this.boardList.get(boardNo);
 
     if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다!");
       return;
     }
-
 
     String newTitle = Prompt.inputString("제목?(" + board.title + ") ");
     String newContent = Prompt.inputString(String.format("내용?(%s) ", board.content));
@@ -183,7 +186,6 @@ public class BoardHandler {
     } else {
       System.out.println("변경 취소했습니다.");
     }
-
   }
 }
 

@@ -1,4 +1,4 @@
-package com.bitcamp.board0728.domain;
+package com.bitcamp2.board.domain;
 
 public class Member {
   public int no;

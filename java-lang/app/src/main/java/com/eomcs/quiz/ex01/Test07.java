@@ -39,13 +39,9 @@ public class Test07 {
 
   static int factorialTrailingZeros(int n) {  
     int result = 0;
-    int primeFactor = 5;
-
-    while (primeFactor <= n) {
-      result += (n / primeFactor);
-      primeFactor *= 5;
+    for (int i = 5; i <= n; i *= 5) {
+      result += (n / i);
     }
-
     return result;
   }
 }

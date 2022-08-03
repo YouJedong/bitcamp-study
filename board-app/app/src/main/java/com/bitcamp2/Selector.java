@@ -1,4 +1,4 @@
-package com.bitcamp;
+package com.bitcamp2;
 
 import java.util.ArrayList;
 import java.util.Scanner;

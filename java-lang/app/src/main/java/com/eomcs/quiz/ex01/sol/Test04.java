@@ -13,6 +13,7 @@ package com.eomcs.quiz.ex01.sol;
 public class Test04 {
 
   public static void main(String[] args) {
+    System.out.println(countEvenNumber(0) == 1);
     System.out.println(countEvenNumber(1238694636) == 6);
     System.out.println(countEvenNumber(2567884) == 5);
   }

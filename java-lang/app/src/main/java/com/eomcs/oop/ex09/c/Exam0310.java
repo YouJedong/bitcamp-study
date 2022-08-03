@@ -7,14 +7,14 @@ public class Exam0310 {
   interface ProtocolA {
     void rule1();
     default void rule3() {
-      System.out.println("**ProtocolA.rule3()**");
+      //      System.out.println("**ProtocolA.rule3()**");
     }
   }
 
   interface ProtocolB {
     void rule2();
     default void rule3() {
-      System.out.println("====> ProtocolB.rule3()");
+      //      System.out.println("====> ProtocolB.rule3()");
     }
   }
 

@@ -23,15 +23,15 @@ public class Exam0230 {
   //    // ProtocolA 입장에서는 rule0() 규칙 준수!
   //    // ProtocolB 입장에서는 rule0() 규칙을 준수하지 못했다.
   //    // - 리턴 타입이 다르다.
-  //    @Override
-  //    public void rule0() {}
-  //
+  //      @Override
+  //      public void rule0() {}
+  //  
   //    // ProtocolB 입장에서는 rule0() 규칙 준수!
   //    // ProtocolA 입장에서는 rule0() 규칙을 준수하지 못했다.
   //    // - 리턴 타입이 다르다.
-  //    @Override
-  //    public int rule0() {return 0;}
-  //
+  //      @Override
+  //      public int rule0() {return 0;}
+  //  
   //    // 두 메서드를 모두 정의하면 되지 않을까?
   //    // - 메서드 오버로딩 문법 상 리턴 타입만 다른 메서드를
   //    //   동시에 정의할 수 없다.

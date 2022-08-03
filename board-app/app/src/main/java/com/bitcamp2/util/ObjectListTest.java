@@ -1,4 +1,4 @@
-package com.bitcamp.util;
+package com.bitcamp2.util;
 
 public class ObjectListTest {
 

@@ -2,11 +2,11 @@
  * 게시판 관리 애플리케이션
  * 비트캠프-20220704
  */
-package com.bitcamp.board0728;
+package com.bitcamp2.board;
 
-import com.bitcamp.board0728.handler.BoardHandler;
-import com.bitcamp.board0728.handler.MemberHandler;
-import com.bitcamp.util0728.Prompt;
+import com.bitcamp2.board.handler.BoardHandler;
+import com.bitcamp2.board.handler.MemberHandler;
+import com.bitcamp2.util.Prompt;
 
 public class App {
 
@@ -34,6 +34,7 @@ public class App {
       System.out.println("  5: 일기장");
       System.out.println("  6: 회원");
       System.out.println();
+
       try {
         int mainMenuNo = Prompt.inputInt("메뉴를 선택하세요[1..6](0: 종료) ");
 
@@ -59,9 +60,11 @@ public class App {
             break;
           default: System.out.println("메뉴 번호가 옳지 않습니다!");
         } // switch
-      } catch (Throwable ex) {
-        System.out.println("[잘못된 입력입니다. 다시 입력해주세요.]");
+      } catch (Exception ex) {
+        System.out.println("입력 값이 옳지 않습니다.");
       }
+
+
     } // while
 
     System.out.println("안녕히 가세요!");
