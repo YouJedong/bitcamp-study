@@ -12,11 +12,13 @@ import com.bitcamp.util.Stack;
 
 public class App {
 
-  public static Stack breadcrumMenu = new Stack();
+  // breadcrumb 메뉴를 저장할 스택을 준비
+  public static Stack breadcrumbMenu = new Stack();
 
   public static void main(String[] args) {
     welcome();
 
+    // 핸들러를 담을 레퍼런스 배열을 준비한다.
     Handler[] handlers = new Handler[] {
         new BoardHandler(), // 게시판
         new BoardHandler(), // 독서록
@@ -26,13 +28,16 @@ public class App {
         new MemberHandler() // 회원
     };
 
-    breadcrumMenu.push("메인");
+    // "메인" 메뉴의 이름을 스택에 등록한다.
+    breadcrumbMenu.push("메인");
 
+    // 메뉴명을 저장할 배열을 준비한다.
     String[] menus = {"게시판", "독서록", "방명록", "공지사항", "일기장", "회원"};
 
     loop: while (true) {
 
-      System.out.printf("%s:\n", breadcrumMenu);
+      // 메인 메뉴 출력
+      System.out.printf("%s:\n", breadcrumbMenu);
 
       printMenus(menus);
 
@@ -43,16 +48,19 @@ public class App {
 
         if (mainMenuNo < 0 || mainMenuNo > menus.length) {
           System.out.println("메뉴 번호가 옳지 않습니다!");
-          continue;
+          continue; // while 문의 조건 검사로 보낸다.
+
         } else if (mainMenuNo == 0) {
           break loop;
         }
 
-        breadcrumMenu.push(menus[mainMenuNo - 1]);
+        // 메뉴에 진입할 때 breadcrumb 메뉴바에 그 메뉴를 등록한다.
+        breadcrumbMenu.push(menus[mainMenuNo - 1]);
 
+        // 메뉴 번호로 Handler 레퍼런스에 들어있는 객체를 찾아 실행한다.
         handlers[mainMenuNo - 1].execute();
 
-        breadcrumMenu.pop();
+        breadcrumbMenu.pop();
 
       } catch (Exception ex) {
         System.out.println("입력 값이 옳지 않습니다.");
@@ -78,7 +86,6 @@ public class App {
     }
   }
 }
-
 
 
 

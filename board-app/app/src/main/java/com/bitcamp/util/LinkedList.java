@@ -1,29 +1,16 @@
 package com.bitcamp.util;
 
-/**
- * Node를 이용해 값을 목록을 관리하는 일을 한다.
- * 
- * @author bitcamp
- *
- */
-public class LinkedList extends AbstractList{
+public class LinkedList extends AbstractList {
 
   private Node head; // 첫 노드의 주소를 저장
   private Node tail; // 마지막 노드의 주소를 저장
 
-  /**
-   * 파라미터로 주어진 값을 노드에 담아 리스트 끝에 연결한다.
-   * @param value
-   */
   @Override
   public void add(Object value) {
-    // Node 생성 후 값을 저장한다.
     Node node = new Node(value);
 
     size++; // 목록의 크기를 한 개 증가시킨다.
 
-    // 리스트의 끝에 노드를 붙인다.
-    // 만약, 리스트에 노드가 없다면 
     if (tail == null) {
       head = tail = node; // 첫 노드를 등록한다.
       return;
@@ -125,6 +112,13 @@ public class LinkedList extends AbstractList{
     return arr;
   }
 
+  // LinkedList 클래스에서만 사용할 클래스라면 
+  // 이 클래스 안에 선언하는 것이 유지보수에 좋다.
+  // 클래스 안에 정의된 클래스를 "중첩 클래스(nested class)"라 한다.
+  // 
+  // 다음과 같이 특정 인스턴스에 종속되지 않는 중첩 클래스라면 
+  // static nested class(스태틱 중첩클래스)로 정의한다.
+  // 
   private static class Node {
     Object value;
     Node prev;
@@ -134,5 +128,18 @@ public class LinkedList extends AbstractList{
       this.value = v;
     }
   }
-}
+
+} // LinkedList 끝
+
+
+
+
+
+
+
+
+
+
+
+
 

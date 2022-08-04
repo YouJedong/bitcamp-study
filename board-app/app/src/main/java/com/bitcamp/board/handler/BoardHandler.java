@@ -8,32 +8,26 @@ import java.util.Date;
 import com.bitcamp.board.App;
 import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.Board;
-import com.bitcamp.handler.Handler;
+import com.bitcamp.handler.AbstractHandler;
 import com.bitcamp.util.Prompt;
 
-public class BoardHandler implements Handler{
-
-  private String title; // 게시판의 제목
+public class BoardHandler extends AbstractHandler {
 
   // 게시글 목록을 관리할 객체 준비
   private BoardDao boardDao = new BoardDao();
 
-  private static String[] menus = {"목록", "상세보기", "등록", "삭제", "변경"};
-
-  static void printMenus(String[] menus) {
-    for (int i = 0; i < menus.length; i++) {
-      System.out.printf("  %d: %s\n", i + 1, menus[i]);
-    }
+  public BoardHandler() {
+    super(new String[] {"목록", "상세보기", "등록", "삭제", "변경"});
   }
+
+
 
   @Override
   public void execute() {
 
     while (true) {
-      System.out.printf("%s:\n", App.breadcrumMenu);
-
-      printMenus(menus); 
-
+      System.out.printf("%s:\n", App.breadcrumbMenu);
+      printMenus(menus);
       System.out.println();
 
       try {
@@ -41,18 +35,20 @@ public class BoardHandler implements Handler{
 
         if (menuNo < 0 || menuNo > menus.length) {
           System.out.println("메뉴 번호가 옳지 않습니다!");
-          continue;
+          continue; // while 문의 조건 검사로 보낸다.
+
         } else if (menuNo == 0) {
-          return;
+          return; // 메인 메뉴로 돌아간다.
         }
 
-        App.breadcrumMenu.push(menus[menuNo - 1]);
+        // 메뉴에 진입할 때 breadcrumb 메뉴바에 그 메뉴를 등록한다.
+        App.breadcrumbMenu.push(menus[menuNo - 1]);
 
         displayHeadline();
 
-        System.out.printf("%s:\n", App.breadcrumMenu);
+        // 서브 메뉴의 제목을 출력한다.
+        System.out.printf("%s:\n", App.breadcrumbMenu);
 
-        // 다른 인스턴스 메서드를 호출할 때 this에 보관된 인스턴스 주소를 사용한다. 
         switch (menuNo) {
           case 1: this.onList(); break;
           case 2: this.onDetail(); break;
@@ -63,7 +59,7 @@ public class BoardHandler implements Handler{
 
         displayBlankLine();
 
-        App.breadcrumMenu.pop();
+        App.breadcrumbMenu.pop();
 
       } catch (Exception ex) {
         System.out.printf("예외 발생: %s\n", ex.getMessage());
@@ -71,13 +67,6 @@ public class BoardHandler implements Handler{
     } // 게시판 while
   }
 
-  private static void displayHeadline() {
-    System.out.println("=========================================");
-  }
-
-  private static void displayBlankLine() {
-    System.out.println(); // 메뉴를 처리한 후 빈 줄 출력
-  }
 
   private void onList() {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -96,7 +85,6 @@ public class BoardHandler implements Handler{
   }
 
   private void onDetail() {
-
     int boardNo = 0;
     while (true) {
       try {
@@ -127,7 +115,6 @@ public class BoardHandler implements Handler{
   }
 
   private void onInput() {
-
     Board board = new Board();
 
     board.title = Prompt.inputString("제목? ");
@@ -143,7 +130,6 @@ public class BoardHandler implements Handler{
   }
 
   private void onDelete() {
-
     int boardNo = 0;
     while (true) {
       try {
@@ -162,8 +148,6 @@ public class BoardHandler implements Handler{
   }
 
   private void onUpdate() {
-
-
     int boardNo = 0;
     while (true) {
       try {
