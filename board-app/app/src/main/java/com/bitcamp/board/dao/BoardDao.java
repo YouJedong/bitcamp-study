@@ -38,12 +38,13 @@ public class BoardDao {
   }
 
   public Board[] findAll() {
-    Board[] arr = list.toArray(new Board[0]); 
+    Board[] arr = list.toArray(new Board[0]);
+
     Board[] arr2 = new Board[arr.length];
-    for (int i = 0; i < arr2.length; i++) {
-      arr2[i] = arr[arr.length - i - 1];
+    for (int i = 0; i < arr.length; i++) {
+      arr[i] = arr2[arr.length - i - 1];
     }
-    return arr2; 
+    return arr;
   }
 
   private int nextNo() {

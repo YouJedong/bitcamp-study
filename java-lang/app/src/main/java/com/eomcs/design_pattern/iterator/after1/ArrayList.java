@@ -96,24 +96,8 @@ public class ArrayList<E> {
     arr = temp;
   }
 
+  // Iterator 구현체를 제공한다.
   public Iterator<E> iterator() {
-    return new ArrayListIterator<E>(this); //본인의 주소 , 자신의 주소를 전함 (this)
+    return new ArrayListIterator<E>(this);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

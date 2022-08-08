@@ -33,6 +33,11 @@ public class Test21 {
 
   static int rectangleArea(int a, int b) {
     // 이 메서드를 완성하시오!
-    return 0;
+    int result = 0;
+    while (b != 0) {
+      result += a;
+      b--;
+    }
+    return result;
   }
 }

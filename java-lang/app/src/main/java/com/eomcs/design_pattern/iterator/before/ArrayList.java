@@ -95,21 +95,23 @@ public class ArrayList<E> {
     }
     arr = temp;
   }
+
+  public Iterator<E> iterator() {
+
+    return new Iterator<>() {
+
+      int index = 0;
+
+      @Override
+      public boolean hasNext() {
+        return index < ArrayList.this.size();
+      }
+
+      @Override
+      public E next() {
+        return ArrayList.this.get(index++);
+      }
+    };
+  }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

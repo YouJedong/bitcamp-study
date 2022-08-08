@@ -39,22 +39,27 @@ public class Stack<E> {
     return this.size;
   }
 
+  // Iterator 구현체를 제공한다.
   public Iterator<E> iterator() {
-    return new Iterator<E>(){
-
+    return new Iterator<E>() {
       @Override
       public boolean hasNext() {
         return !Stack.this.empty();
       }
+
       @Override
       public E next() {
         return Stack.this.pop();
-      }  
+      }
     };
   }
 
 
 }
+
+
+
+
 
 
 

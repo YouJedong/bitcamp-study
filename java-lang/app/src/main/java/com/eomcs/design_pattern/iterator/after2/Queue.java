@@ -14,28 +14,29 @@ public class Queue<E> extends LinkedList<E> {
     return this.size == 0;
   }
 
+  // Iterator 구현체를 제공한다.
   @Override
   public Iterator<E> iterator() {
-    return new QueIteratorue<E>(this);
+    return new QueueIterator<E>(this);
   }
 
-  static class QueIteratorue<E> implements Iterator<E>{
+  // 스태틱 중첩 클래스로 정의한다.
+  static class QueueIterator<E> implements Iterator<E> {
 
     Queue<E> list;
 
-    public QueIteratorue(Queue<E> list) {
+    public QueueIterator(Queue<E> list) {
       this.list = list;
     }
+
     @Override
     public boolean hasNext() {
       return !list.empty();
     }
+
     @Override
     public E next() {
       return list.poll();
-    }  
+    }
   }
-
 }
-
-

@@ -172,13 +172,10 @@ public class LinkedList<E> {
     }
   }
 
-
-
+  // Iterator 구현체를 제공한다.
   public Iterator<E> iterator() {
-
-    return new Iterator<E> () {
-
-      int index = 0 ;
+    return new Iterator<E>() {
+      int index = 0;
 
       @Override
       public boolean hasNext() {
@@ -186,13 +183,13 @@ public class LinkedList<E> {
       }
 
       @Override
-      @SuppressWarnings("unchecked")
       public E next() {
-        return  LinkedList.this.get(index++);
+        return LinkedList.this.get(index++);
       }
     };
-
   }
+
+
 }
 
 

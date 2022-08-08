@@ -25,12 +25,20 @@ public class Test09 {
   public static void main(String[] args) {
     int[] reverseList = myReverse(new int[]{9,8,7,6,5,4,3,2,1});
     for (int i : reverseList) {
-      System.out.print(i + ",");
+      if (i != reverseList[reverseList.length -1]) {
+        System.out.print(i + ",");
+      } else {
+        System.out.print(i);
+      }
     }
   }
 
   static int[] myReverse(int[] input) {
     // 이 메서드를 완성하시오!
+    int[] reverseResult = new int[input.length];
+    for (int i = 0; i < input.length; i++) {
+      reverseResult[i] = input[input.length - 1 - i];
+    }
     return input;
   }
 }

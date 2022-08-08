@@ -172,19 +172,21 @@ public class LinkedList<E> {
     }
   }
 
+  public Iterator<E> iterator() {
+    return new Iterator<>() {
+
+      int index = 0;
+
+      @Override
+      public boolean hasNext() {
+        return index < LinkedList.this.size(); 
+      } 
+      @Override
+      public E next() {
+        return LinkedList.this.get(index++);
+      }
+    };
+
+  }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

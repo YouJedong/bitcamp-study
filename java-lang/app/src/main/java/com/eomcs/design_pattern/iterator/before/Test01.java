@@ -29,52 +29,54 @@ public class Test01 {
     list4.offer("ccc4");
     list4.offer("ddd4");
 
-    HashSet<String> list5 = new HashSet<>();
+    HashSet<String> list5 = new HashSet<String>();
     list5.add("aaa5");
     list5.add("bbb5");
     list5.add("ccc5");
     list5.add("ddd5");
 
-
     // 목록에서 값 꺼내기
-    for (int i = 0; i < list1.size(); i++) {
-      System.out.println(list1.get(i));
+    // 1) ArrayList 에서 값 꺼내기
+    // => ArrayList에게 값을 꺼내는 일을 할 객체를 달라고 요구한다.
+    Iterator<String> iterator1 = list1.iterator();
+    while (iterator1.hasNext()) {
+      System.out.println(iterator1.next());
+    } 
+    System.out.println("-------------------------");
+    // 2) LinkedList 에서 값 꺼내기
+    Iterator<String> iterator2 = list2.iterator();
+    while (iterator2.hasNext()) { 
+      System.out.println(iterator2.next());
+      System.out.println(list2.size);
     }
-    System.out.println("------------------------------------");
+    System.out.println("-------------------------");
 
-    for (int i = 0; i < list2.size(); i++) {
-      System.out.println(list2.get(i));
+    // 3) Stack 에서 값 꺼내기
+    Iterator<String> iterator3 = list3.iterator();
+    while (iterator3.hasNext()) {
+      System.out.println(iterator3.next());
+      System.out.println(list3.size);
     }
-    System.out.println("------------------------------------");
+    System.out.println("-------------------------");
 
-    while (!list3.empty()) {
-      System.out.println(list3.pop());
+    //    // 4) Queue 에서 값 꺼내기
+    Iterator<String> iterator4 = list4.iterator();
+    while (iterator4.hasNext()) {
+      System.out.println(iterator4.next());
+      System.out.println(list4.size);
     }
-    System.out.println("------------------------------------");
+    System.out.println("-------------------------");
 
-    while (!list4.empty()) {
-      System.out.println(list4.poll());
+    // 5) HashSet 에서 값 꺼내기
+    // => 해시셋은 입력 된 순서가 아니라 해시값의 오름차순으로 꺼낸다.
+    java.util.Iterator<String> iterator5 = list5.iterator();
+    while (iterator5.hasNext()) {
+      System.out.println(iterator5.next());
     }
-    System.out.println("------------------------------------");
-
-    String[] arr = list5.toArray(new String[0]); 
-    for (String s : arr) {
-      System.out.println(s);
-    }
-    System.out.println("------------------------------------");
-
-
+    System.out.println("-------------------------");
 
   }
 
-
 }
-
-
-
-
-
-
-
 
 

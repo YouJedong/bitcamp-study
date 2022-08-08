@@ -51,6 +51,15 @@ public class Test22 {
 
   static String getMonthName(int mo) {
     // 이 메서드를 완성하시오!
-    return "";
+    String[] monthName = {
+        "invalid month", 
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sem", "Oct", "Nov", "Dec"
+    };
+    String[] month = new String[13];
+    for (int i = 0; i < monthName.length; i++) {
+      month[i] = monthName[i];
+    }
+    return month[mo];
   }
 }

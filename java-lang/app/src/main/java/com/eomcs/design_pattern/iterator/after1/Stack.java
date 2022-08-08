@@ -39,6 +39,7 @@ public class Stack<E> {
     return this.size;
   }
 
+  // Iterator 구현체를 제공한다.
   public Iterator<E> iterator() {
     return new StackIterator<E>(this);
   }

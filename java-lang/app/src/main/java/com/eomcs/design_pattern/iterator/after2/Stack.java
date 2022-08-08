@@ -39,31 +39,30 @@ public class Stack<E> {
     return this.size;
   }
 
+  // Iterator 구현체를 제공한다.
   public Iterator<E> iterator() {
     return new StackIterator<E>(this);
   }
 
-  static class StackIterator<E> implements Iterator<E>{
+  // 스태틱 중첩 클래스로 정의한다.
+  static class StackIterator<E> implements Iterator<E> {
 
     Stack<E> list;
 
     public StackIterator(Stack<E> list) {
       this.list = list;
     }
+
     @Override
     public boolean hasNext() {
       return !list.empty();
     }
+
     @Override
     public E next() {
       return list.pop();
-    }  
+    }
   }
-
 }
-
-
-
-
 
 

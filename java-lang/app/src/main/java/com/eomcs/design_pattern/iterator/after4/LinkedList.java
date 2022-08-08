@@ -171,29 +171,29 @@ public class LinkedList<E> {
       this.value = value;
     }
   }
-  public Iterator<E> iterator() {
-    class LinkedListIterator<T> implements Iterator<T>{
 
+  // Iterator 구현체를 제공한다.
+  public Iterator<E> iterator() {
+    class LinkedListIterator<T> implements Iterator<T> {
       int index = 0;
 
       @Override
       public boolean hasNext() {
         return index < LinkedList.this.size();
       }
+
       @SuppressWarnings("unchecked")
       @Override
       public T next() {
         return (T) LinkedList.this.get(index++);
-      }  
+      }
     }
+
     return new LinkedListIterator<E>();
   }
 
 
 }
-
-
-
 
 
 

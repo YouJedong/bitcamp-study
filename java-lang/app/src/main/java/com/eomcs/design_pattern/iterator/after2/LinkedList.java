@@ -171,11 +171,14 @@ public class LinkedList<E> {
       this.value = value;
     }
   }
+
+  // Iterator 구현체를 제공한다.
   public Iterator<E> iterator() {
     return new LinkedListIterator<E>(this);
   }
 
-  static class LinkedListIterator<E> implements Iterator<E>{
+  // 스태틱 중첩 클래스로 정의한다. 
+  static class LinkedListIterator<E> implements Iterator<E> {
 
     LinkedList<E> list;
     int index = 0;
@@ -183,16 +186,22 @@ public class LinkedList<E> {
     public LinkedListIterator(LinkedList<E> list) {
       this.list = list;
     }
+
     @Override
     public boolean hasNext() {
       return index < list.size();
     }
+
     @Override
     public E next() {
       return list.get(index++);
-    }  
+    }
   }
 }
+
+
+
+
 
 
 

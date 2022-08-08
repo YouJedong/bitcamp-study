@@ -171,9 +171,12 @@ public class LinkedList<E> {
       this.value = value;
     }
   }
+
+  // Iterator 구현체를 제공한다.
   public Iterator<E> iterator() {
     return new LinkedListIterator<E>(this);
   }
+
 }
 
 
