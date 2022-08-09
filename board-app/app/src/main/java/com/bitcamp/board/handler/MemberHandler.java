@@ -13,15 +13,15 @@ public class MemberHandler extends AbstractHandler {
 
   private MemberDao memberDao;
 
-  public MemberHandler(String titleName) throws Exception {
+  public MemberHandler(String filename) throws Exception {
     super(new String[] {"목록", "상세보기", "등록", "삭제", "변경"});
 
-    memberDao = new MemberDao(titleName); 
+    memberDao = new MemberDao(filename); 
 
     try {
       memberDao.load();
-    } catch (Exception ex) {
-      System.out.printf("%s 파일 로딩 중 오류 발생!\n", titleName);
+    } catch (Exception e) {
+      System.out.printf("%s 파일 로딩 중 오류 발생!\n", filename);
     }
   }
 
@@ -36,7 +36,7 @@ public class MemberHandler extends AbstractHandler {
         case 5: this.onUpdate(); break;
       }
     } catch (Exception ex) {
-      System.out.printf("%s 파일 로딩 중 오류 발생!\n", ex);
+      throw new RuntimeException();
     }
   }
 
@@ -110,14 +110,10 @@ public class MemberHandler extends AbstractHandler {
     if (input.equals("y")) {
       member.name = newName;
       member.email = newEmail;
+      memberDao.save();
       System.out.println("변경했습니다.");
-      this.memberDao.save();
     } else {
       System.out.println("변경 취소했습니다.");
     }
   }
 }
-
-
-
-

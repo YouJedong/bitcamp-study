@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import com.bitcamp.board.domain.Board;
+import com.bitcamp.study.DataInputStream;
+import com.bitcamp.util.DataOutputStream;
 
 // 게시글 목록을 관리하는 역할
 //
@@ -26,142 +28,42 @@ public class BoardDao {
   }
 
   public void load() throws Exception {
-    FileInputStream in = new FileInputStream(filename);
+    try (DataInputStream in = new DataInputStream(new FileInputStream(filename))) { 
 
-    // 게시글 목록 
-    int size = (in.read() << 24) + (in.read() << 16) + (in.read() << 8) + in.read();
+      // 게시글 목록 
+      int size = in.readInt();
 
-    for (int i = 0; i < size; i++) {
+      for (int i = 0; i < size; i++) {
 
-      // 읽은 객체의 데이터를 저장할 객체 준비
-      Board board = new Board();
+        Board board = new Board();
+        board.no = in.readInt();
+        board.title = in.readUTF();
+        board.content = in.readUTF();
+        board.writer = in.readUTF();
+        board.password = in.readUTF();
+        board.viewCount = in.readInt();
+        board.createdDate =in.readLong();
 
-      // 게시글 번호 불러오기 
-      board.no = (in.read() << 24) + (in.read() << 16) + (in.read() << 8) + in.read();
-
-      // 게시글 제목의 바이트 수를 저장한 데이터 불러오기
-      int strByte = 0;
-      strByte = (in.read() <<24) + (in.read() << 16) + (in.read() << 8) + in.read();
-      // 
-      byte[] bytes = new byte[strByte];
-      //bytes의 배열크기에 해당되는 데이터 크기를 읽고 반환한다.
-      in.read(bytes);
-      board.title = new String(bytes, "UTF-8");
-
-      // 게시글 내용
-      strByte = 0;
-      strByte = (in.read() <<24) + (in.read() << 16) + (in.read() << 8) + in.read();
-      bytes = new byte[strByte];
-      //bytes의 배열크기에 해당되는 데이터 크기를 읽고 반환한다.
-      in.read(bytes);
-      board.content = new String(bytes, "UTF-8");
-
-      // 게시글 작성자
-      strByte = 0;
-      strByte = (in.read() <<24) + (in.read() << 16) + (in.read() << 8) + in.read();
-      bytes = new byte[strByte];
-      //bytes의 배열크기에 해당되는 데이터 크기를 읽고 반환한다.
-      in.read(bytes);
-      board.writer = new String(bytes, "UTF-8");
-
-      // 게시글 암호
-      strByte = 0;
-      strByte = (in.read() <<24) + (in.read() << 16) + (in.read() << 8) + in.read();
-      bytes = new byte[strByte];
-      //bytes의 배열크기에 해당되는 데이터 크기를 읽고 반환한다.
-      in.read(bytes);
-      board.password = new String(bytes, "UTF-8");
-
-      // 게시글 조회수
-      board.viewCount = (in.read() << 24) + (in.read() << 16) + (in.read() << 8) + in.read();
-
-      // 게시글 등록일
-      board.createdDate =
-          (((long)in.read()) << 54) + 
-          (((long)in.read()) << 48) +
-          (((long)in.read()) << 40) +
-          (((long)in.read()) << 32) +
-          (((long)in.read()) << 24) +
-          (((long)in.read()) << 16) +
-          (((long)in.read()) << 8) +
-          ((in.read()));
-
-      list.add(board);
-
-      boardNo = board.no;
-
+        list.add(board);
+        boardNo = board.no;
+      }
     }
-    in.close();
   }
-
   public void save() throws Exception {
-    FileOutputStream out = new FileOutputStream(filename);
+    try(DataOutputStream out = new DataOutputStream(new FileOutputStream(filename))) {
+      out.writeInt(list.size());
 
-    //    게시글 수 저장
-    out.write(list.size() >> 24);
-    out.write(list.size() >> 16);
-    out.write(list.size() >> 8);
-    out.write(list.size());
-
-    for (Board board : list) {
-      // 게시글 번호
-      out.write(board.no >> 24);
-      out.write(board.no >> 16);
-      out.write(board.no >> 8);
-      out.write(board.no);
-
-      // 게시글 제목
-      byte[] bytes = board.title.getBytes("UTF-8");
-      out.write(bytes.length >> 24);
-      out.write(bytes.length >> 16);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(bytes);
-
-      // 게시글 내용
-      bytes = board.content.getBytes("UTF-8");
-      out.write(bytes.length >> 24);
-      out.write(bytes.length >> 16);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(bytes);
-
-      // 게시글 작성자
-      bytes = board.writer.getBytes("UTF-8");
-      out.write(bytes.length >> 24);
-      out.write(bytes.length >> 16);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(bytes);
-
-      // 게시글 암호 
-      bytes = board.password.getBytes("UTF-8");
-      out.write(bytes.length >> 24);
-      out.write(bytes.length >> 16);
-      out.write(bytes.length >> 8);
-      out.write(bytes.length);
-      out.write(bytes);
-
-      // 게시글 조회수
-      out.write(board.viewCount >> 24);
-      out.write(board.viewCount >> 16);
-      out.write(board.viewCount >> 8);
-      out.write(board.viewCount);
-
-      // 게시글 등록일 
-      out.write((int)(board.createdDate >> 54));
-      out.write((int)(board.createdDate >> 48));
-      out.write((int)(board.createdDate >> 40));
-      out.write((int)(board.createdDate >> 32));
-      out.write((int)(board.createdDate >> 24));
-      out.write((int)(board.createdDate >> 16));
-      out.write((int)(board.createdDate >> 8));
-      out.write((int)(board.createdDate));
+      for (Board board : list) {
+        out.writeInt(board.no);
+        out.writeUTF(board.title);
+        out.writeUTF(board.content);
+        out.writeUTF(board.writer);
+        out.writeUTF(board.password);
+        out.writeInt(board.viewCount);
+        out.writeLong(board.createdDate);
+      }
     }
-
-    out.close();
   }
-
 
   public Board findByNo(int boardNo) {
     for (int i = 0; i < list.size(); i++) {
