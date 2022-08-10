@@ -21,12 +21,12 @@ public class App {
 
       // 핸들러를 담을 레퍼런스 배열을 준비한다.
       Handler[] handlers = new Handler[] {
-          new BoardHandler("board.data"), // 게시판
-          new BoardHandler("reading.data"), // 독서록
-          new BoardHandler("visit.data"), // 방명록
-          new BoardHandler("notice.data"), // 공지사항
-          new BoardHandler("daily.data"), // 일기장
-          new MemberHandler("member.data") // 회원
+          new BoardHandler("board.csv"), // 게시판
+          new BoardHandler("reading.csv"), // 독서록
+          new BoardHandler("visit.csv"), // 방명록
+          new BoardHandler("notice.csv"), // 공지사항
+          new BoardHandler("daily.csv"), // 일기장
+          new MemberHandler("member.csv") // 회원
       };
 
       // "메인" 메뉴의 이름을 스택에 등록한다.
@@ -71,7 +71,8 @@ public class App {
 
     } catch (Exception e) {
       // 더이상 애플리케이션을 계속 실행할 수 없는 상황일 때,
-      // (main() 메서드까지 예외 보고가 올라 왔다는 것은 계속 실행할 수 없는 상태라는 뜻이다)
+      // (main() 메서드까지 예외 보고가 올라 왔다는 것은 
+      // 계속 실행할 수 없는 상태라는 뜻이다)
       // 사용자에게 간단한 예외 메시지를 남기고
       // 필요하다면 로그 파일에 오류 기록을 남기고,
       // 실행을 종료한다.
