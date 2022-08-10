@@ -16,9 +16,9 @@ public class App {
   public static Stack<String> breadcrumbMenu = new Stack<>();
 
   public static void main(String[] args) {
-    welcome();
-
     try {
+      welcome();
+
       // 핸들러를 담을 레퍼런스 배열을 준비한다.
       Handler[] handlers = new Handler[] {
           new BoardHandler("board.data"), // 게시판
@@ -37,7 +37,6 @@ public class App {
 
       loop: while (true) {
 
-        // 메인 메뉴 출력
         printTitle();
         printMenus(menus);
         System.out.println();
@@ -67,14 +66,21 @@ public class App {
 
 
       } // while
-    } catch (Exception ex) {
-      System.out.printf("실행오류발생 - %s%s\n",
-          ex.getClass().getName(),
-          ex.getMessage() != null ? ex.getMessage() : "");
+
+      Prompt.close();
+
+    } catch (Exception e) {
+      // 더이상 애플리케이션을 계속 실행할 수 없는 상황일 때,
+      // (main() 메서드까지 예외 보고가 올라 왔다는 것은 계속 실행할 수 없는 상태라는 뜻이다)
+      // 사용자에게 간단한 예외 메시지를 남기고
+      // 필요하다면 로그 파일에 오류 기록을 남기고,
+      // 실행을 종료한다.
+      System.out.printf("실행 오류 발생! - %s:%s\n", 
+          e.getClass().getName(), 
+          e.getMessage() != null ? e.getMessage() : "");
     }
 
     System.out.println("안녕히 가세요!");
-    Prompt.close();
   } // main
 
   static void welcome() {
@@ -93,7 +99,7 @@ public class App {
   protected static void printTitle() {
     StringBuilder builder = new StringBuilder();
     for (String title : App.breadcrumbMenu) {
-      if (!builder.isEmpty() ) {
+      if (!builder.isEmpty()) {
         builder.append(" > ");
       }
       builder.append(title);

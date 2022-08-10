@@ -27,10 +27,17 @@ public class Test10 {
   public static void main(String[] args) {
     System.out.println(isLuckyNumber(4744) == true);
     System.out.println(isLuckyNumber(4754) == false);
+    System.out.println(isLuckyNumber(4744447) == true);
   }
 
   static boolean isLuckyNumber(int n) {
-    // 이 메서드를 완성하시오!
+    for (int i = 0; n < 0; i++) {
+      int value = n % 10;
+      if (value != 4 || value != 7) {
+        return false;
+      }
+      n /= 10;
+    }
     return true;
   }
 

@@ -12,16 +12,19 @@ import com.bitcamp.util.Prompt;
 
 public class BoardHandler extends AbstractHandler {
 
+  // 게시글 목록을 관리할 객체 준비
   private BoardDao boardDao;
 
-  public BoardHandler(String filename) throws Exception {
+  public BoardHandler(String filename) {
+    // 수퍼 클래스의 생성자를 호출할 때 메뉴 목록을 전달한다.
     super(new String[] {"목록", "상세보기", "등록", "삭제", "변경"});
+
     boardDao = new BoardDao(filename);
 
     try {
       boardDao.load();
-    } catch (Exception ex) {
-      System.out.printf("%s - 파일 로딩 중 오류 발생", filename);
+    } catch (Exception e) {
+      System.out.printf("%s 파일 로딩 중 오류 발생!\n", filename);
     }
   }
 
@@ -38,8 +41,8 @@ public class BoardHandler extends AbstractHandler {
         case 4: this.onDelete(); break;
         case 5: this.onUpdate(); break;
       }
-    } catch (Exception ex) {
-      System.out.printf("%s - 파일 세이브중 오류 발생", ex.getClass().getName());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -117,8 +120,8 @@ public class BoardHandler extends AbstractHandler {
     }
 
     if (boardDao.delete(boardNo)) {
-      System.out.println("삭제하였습니다.");
       this.boardDao.save();
+      System.out.println("삭제하였습니다.");
     } else {
       System.out.println("해당 번호의 게시글이 없습니다!");
     }
@@ -149,8 +152,8 @@ public class BoardHandler extends AbstractHandler {
     if (input.equals("y")) {
       board.title = newTitle;
       board.content = newContent;
-      System.out.println("변경했습니다.");
       this.boardDao.save();
+      System.out.println("변경했습니다.");
     } else {
       System.out.println("변경 취소했습니다.");
     }

@@ -13,10 +13,9 @@ public class MemberHandler extends AbstractHandler {
 
   private MemberDao memberDao;
 
-  public MemberHandler(String filename) throws Exception {
+  public MemberHandler(String filename) {
     super(new String[] {"목록", "상세보기", "등록", "삭제", "변경"});
-
-    memberDao = new MemberDao(filename); 
+    memberDao = new MemberDao(filename);
 
     try {
       memberDao.load();
@@ -35,8 +34,8 @@ public class MemberHandler extends AbstractHandler {
         case 4: this.onDelete(); break;
         case 5: this.onUpdate(); break;
       }
-    } catch (Exception ex) {
-      throw new RuntimeException();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -77,7 +76,7 @@ public class MemberHandler extends AbstractHandler {
     member.createdDate = System.currentTimeMillis();
 
     this.memberDao.insert(member);
-    this.memberDao.save();
+    memberDao.save();
 
     System.out.println("회워을 등록했습니다.");
   }
@@ -86,8 +85,8 @@ public class MemberHandler extends AbstractHandler {
     String email = Prompt.inputString("삭제할 회원 이메일? ");
 
     if (memberDao.delete(email)) {
+      memberDao.save();
       System.out.println("삭제하였습니다.");
-      this.memberDao.save();
     } else {
       System.out.println("해당 이메일의 회원이 없습니다!");
     }
@@ -117,3 +116,7 @@ public class MemberHandler extends AbstractHandler {
     }
   }
 }
+
+
+
+

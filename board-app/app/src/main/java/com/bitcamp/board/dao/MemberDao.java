@@ -1,34 +1,29 @@
 package com.bitcamp.board.dao;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import com.bitcamp.board.domain.Member;
-import com.bitcamp.util.DataInputStream;
-import com.bitcamp.util.DataOutputStream;
 
 // 회원 목록을 관리하는 역할
 //
 public class MemberDao {
 
   List<Member> list = new LinkedList<Member>();
-
   String filename;
 
-  public MemberDao(String titleName) {
-    this.filename = titleName;
-  }
-
-  public void insert(Member member) {
-    list.add(member);
+  public MemberDao(String filename) {
+    this.filename = filename;
   }
 
   public void load() throws Exception {
     try (DataInputStream in = new DataInputStream(new FileInputStream(filename))) {
 
-      int size = in.readInt(); 
+      int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
         Member member = new Member();
@@ -36,10 +31,12 @@ public class MemberDao {
         member.name = in.readUTF();
         member.email = in.readUTF();
         member.password = in.readUTF();
-        member.createdDate = in.readLong();
+        member.createdDate = in.readLong(); 
+
         list.add(member);
       }
-    }
+      in.close();
+    } // try () ==> try 블록을 벗어나기 전에 in.close()가 자동으로 실행된다.
   }
 
   public void save() throws Exception {
@@ -53,9 +50,13 @@ public class MemberDao {
         out.writeUTF(member.email);
         out.writeUTF(member.password);
         out.writeLong(member.createdDate);
-
       }
+      out.close();
     }
+  }
+
+  public void insert(Member member) {
+    list.add(member);
   }
 
   public Member findByEmail(String email) {
@@ -90,3 +91,17 @@ public class MemberDao {
     return arr;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

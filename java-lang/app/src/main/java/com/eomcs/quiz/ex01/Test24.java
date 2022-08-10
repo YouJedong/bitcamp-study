@@ -44,6 +44,13 @@ public class Test24 {
   static int equationSolutions(int L, int R) {
     int result = 0;
     // 이 메서드를 완성하시오!
+    for (int A = L; A <= R; A++) {
+      for (int B = A; B <= R; B++) {
+        if ((A == L && A == 1) || (A * A * A == B * B)) {
+          result++;
+        }
+      }
+    }
     return result;
   }
 }
