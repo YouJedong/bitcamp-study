@@ -1,13 +1,13 @@
 package com.bitcamp.board.dao;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import com.bitcamp.board.domain.Member;
-import com.google.gson.Gson;
 
 // 회원 목록을 관리하는 역할
 //
@@ -21,25 +21,32 @@ public class MemberDao {
   }
 
   public void load() throws Exception {
-    try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
-      StringBuilder strBuilder = new StringBuilder();
-      String str;
-      while ((str = in.readLine()) != null) {
-        strBuilder.append(str);
+    try (DataInputStream in = new DataInputStream(new FileInputStream(filename))) {
+      int size = in.readInt();
+      for (int i = 0; i < size; i++) {
+        Member member = new Member();
+        member.no = in.readInt();
+        member.name = in.readUTF();
+        member.email = in.readUTF();
+        member.password = in.readUTF();
+        member.createdDate = in.readLong();
+        list.add(member);
+        //        System.out.println("============>");
       }
-      Member[] arr = new Gson().fromJson(strBuilder.toString(), Member[].class);
-      for(int i = 0; i < arr.length; i++) {  
-        list.add(arr[i]);
-      }
-    }
+    } // try () ==> try 블록을 벗어나기 전에 in.close()가 자동으로 실행된다.
   }
 
   public void save() throws Exception {
-    try (FileWriter out = new FileWriter(filename)) {
-      Member[] members = list.toArray(new Member[0]);
-      out.write(new Gson().toJson(members));  
-
-    }
+    try (DataOutputStream out = new DataOutputStream(new FileOutputStream(filename))) {
+      out.writeInt(list.size());
+      for (Member member : list) {
+        out.writeInt(member.no);
+        out.writeUTF(member.name);
+        out.writeUTF(member.email);
+        out.writeUTF(member.password);
+        out.writeLong(member.createdDate);
+      }
+    } // try () ==> try 블록을 벗어나기 전에 out.close()가 자동으로 실행된다.
   }
 
   public void insert(Member member) {

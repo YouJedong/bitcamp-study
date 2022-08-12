@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import com.bitcamp.board.domain.Board;
-import com.google.gson.Gson;
 
 // 게시글 목록을 관리하는 역할
 //
@@ -23,23 +22,38 @@ public class BoardDao {
 
   public void load() throws Exception {
     try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
-      StringBuilder strBuilder = new StringBuilder();
       String str;
-      while ((str = in.readLine()) != null) {
-        strBuilder.append(str);
-      }
-      Board[] arr = new Gson().fromJson(strBuilder.toString(), Board[].class);
-      for(int i = 0; i < arr.length; i++) {  
-        list.add(arr[i]);
+      while((str = in.readLine()) != null) {
+
+        String[] values = str.split(",");
+
+        Board board = new Board();
+        board.no = Integer.parseInt(values[0]);
+        board.title = values[1];
+        board.content = values[2];
+        board.writer = values[3];
+        board.password = values[4];
+        board.viewCount = Integer.parseInt(values[5]);
+        board.createdDate = Long.parseLong(values[6]);
+
+        list.add(board);
+        boardNo = board.no;
       }
     }
   }
 
   public void save() throws Exception {
     try (FileWriter out = new FileWriter(filename)) {
-      Board[] boards = list.toArray(new Board[0]);
-      out.write(new Gson().toJson(boards));  
-
+      for (Board board : list) {
+        out.write(String.format("%d,%s,%s,%s,%s,%d,%d\n",
+            board.no,
+            board.title,
+            board.content,
+            board.writer,
+            board.password,
+            board.viewCount,
+            board.createdDate));
+      }
     }
   }
 

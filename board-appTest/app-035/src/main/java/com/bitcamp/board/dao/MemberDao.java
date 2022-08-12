@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import com.bitcamp.board.domain.Member;
-import com.google.gson.Gson;
 
 // 회원 목록을 관리하는 역할
 //
@@ -22,24 +21,34 @@ public class MemberDao {
 
   public void load() throws Exception {
     try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
-      StringBuilder strBuilder = new StringBuilder();
       String str;
-      while ((str = in.readLine()) != null) {
-        strBuilder.append(str);
+      while((str = in.readLine()) != null) {
+        String[] values = str.split(",");
+
+        Member member = new Member();
+        member.no = Integer.parseInt(values[0]);
+        member.name = values[1];
+        member.email = values[2];
+        member.password = values[3];
+        member.createdDate = Long.parseLong(values[4]);
+
+        list.add(member);
+
       }
-      Member[] arr = new Gson().fromJson(strBuilder.toString(), Member[].class);
-      for(int i = 0; i < arr.length; i++) {  
-        list.add(arr[i]);
-      }
-    }
+    } // try () ==> try 블록을 벗어나기 전에 in.close()가 자동으로 실행된다.
   }
 
   public void save() throws Exception {
     try (FileWriter out = new FileWriter(filename)) {
-      Member[] members = list.toArray(new Member[0]);
-      out.write(new Gson().toJson(members));  
-
-    }
+      for (Member member : list) {
+        out.write(String.format("%d,%s,%s,%s,%d\n", 
+            member.no,
+            member.name,
+            member.email,
+            member.password,
+            member.createdDate));
+      }
+    } // try () ==> try 블록을 벗어나기 전에 out.close()가 자동으로 실행된다.
   }
 
   public void insert(Member member) {
