@@ -20,4 +20,33 @@ public class Board implements Serializable{
         + ", createdDate=" + new java.sql.Date(createdDate) 
         + "]";
   }
+
+  public static Board create(String value) {
+    String[] values = value.split(",");
+
+    Board board = new Board();
+    board.no = Integer.parseInt(values[0]);
+    board.title = values[1];
+    board.content = values[2];
+    board.writer = values[3];
+    board.password = values[4];
+    board.viewCount = Integer.parseInt(values[5]);
+    board.createdDate = Long.parseLong(values[6]);
+
+    return board;
+  }
+
+  public String toCsv() {
+    return String.format("%d,%s,%s,%s,%s,%d,%d",
+        this.no,
+        this.title,
+        this.content,
+        this.writer,
+        this.password,
+        this.viewCount,
+        this.createdDate);
+  }
+
+
+
 }
