@@ -11,7 +11,7 @@ public class Exam0140 {
     // push() - 스택의 맨 마지막에 값을 추가한다.
     stack.push("aaa");
     stack.push("bbb");
-    stack.push("ccc");z
+    stack.push("ccc");
 
     // search() - 스택의 맨 위에서부터 해당 값을 찾는다. 위치는 맨 위가 1이다.
     System.out.println(stack.search(new String("ccc"))); // 1

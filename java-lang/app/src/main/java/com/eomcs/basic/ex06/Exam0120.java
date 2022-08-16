@@ -22,6 +22,7 @@ public class Exam0120 {
     for (String s : queue) {
       System.out.println(s);
     }
+
   }
 }
 

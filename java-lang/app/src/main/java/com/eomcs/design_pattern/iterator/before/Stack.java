@@ -43,7 +43,7 @@ public class Stack<E> {
     return new Iterator<>() {
       @Override
       public boolean hasNext() {
-        return !Stack.this.empty() ;
+        return !Stack.this.empty();
       }
       @Override
       public E next() {

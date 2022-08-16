@@ -47,7 +47,6 @@ public class Test01 {
     Iterator<String> iterator2 = list2.iterator();
     while (iterator2.hasNext()) { 
       System.out.println(iterator2.next());
-      System.out.println(list2.size);
     }
     System.out.println("-------------------------");
 
@@ -55,7 +54,6 @@ public class Test01 {
     Iterator<String> iterator3 = list3.iterator();
     while (iterator3.hasNext()) {
       System.out.println(iterator3.next());
-      System.out.println(list3.size);
     }
     System.out.println("-------------------------");
 
@@ -63,7 +61,6 @@ public class Test01 {
     Iterator<String> iterator4 = list4.iterator();
     while (iterator4.hasNext()) {
       System.out.println(iterator4.next());
-      System.out.println(list4.size);
     }
     System.out.println("-------------------------");
 

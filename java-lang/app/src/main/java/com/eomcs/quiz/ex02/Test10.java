@@ -31,9 +31,9 @@ public class Test10 {
   }
 
   static boolean isLuckyNumber(int n) {
-    for (int i = 0; n < 0; i++) {
+    while (n > 0) {
       int value = n % 10;
-      if (value != 4 || value != 7) {
+      if ((value != 4) && (value != 7)) {
         return false;
       }
       n /= 10;
