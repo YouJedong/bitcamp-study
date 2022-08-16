@@ -6,7 +6,7 @@ package com.bitcamp.board;
 
 import java.util.Stack;
 import com.bitcamp.board.servlet.BoardServlet;
-import com.bitcamp.board.servlet.MemberHandler;
+import com.bitcamp.board.servlet.MemberServlet;
 import com.bitcamp.servlet.Servlet;
 import com.bitcamp.util.Prompt;
 
@@ -26,7 +26,7 @@ public class App {
           new BoardServlet("visit.json"), // 방명록
           new BoardServlet("notice.json"), // 공지사항
           new BoardServlet("daily.json"), // 일기장
-          new MemberHandler("member.json") // 회원
+          new MemberServlet("member.json") // 회원
       };
 
       // "메인" 메뉴의 이름을 스택에 등록한다.
@@ -56,7 +56,7 @@ public class App {
           breadcrumbMenu.push(menus[mainMenuNo - 1]);
 
           // 메뉴 번호로 Handler 레퍼런스에 들어있는 객체를 찾아 실행한다.
-          handlers[mainMenuNo - 1].service();
+          handlers[mainMenuNo - 1].execute();
 
           breadcrumbMenu.pop();
 
@@ -96,16 +96,16 @@ public class App {
     }
   }
 
-  protected static void printTitle() {
-    StringBuilder builder = new StringBuilder();
-    for (String title : App.breadcrumbMenu) {
-      if (!builder.isEmpty()) {
-        builder.append(" > ");
-      }
-      builder.append(title);
-    }
-    System.out.printf("%s:\n", builder.toString());
-  }
+  //  protected static void printTitle() {
+  //    StringBuilder builder = new StringBuilder();
+  //    for (String title : App.breadcrumbMenu) {
+  //      if (!builder.isEmpty()) {
+  //        builder.append(" > ");
+  //      }
+  //      builder.append(title);
+  //    }
+  //    System.out.printf("%s:\n", builder.toString());
+  //  }
 }
 
 

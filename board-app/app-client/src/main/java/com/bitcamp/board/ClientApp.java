@@ -10,21 +10,16 @@ import com.bitcamp.util.Prompt;
 
 public class ClientApp {
 
-  //breadcrumb 메뉴를 저장할 스택을 준비
-  public static Stack<String> breadcrumbMenu = new Stack<>();
+  public static Stack<String> breadcrumbMenu = new Stack<>(); 
 
   public static void main(String[] args) {
     System.out.println("[게시글 관리 클라이언트]");
-
     try (
-        // 네트워크 준비
-        // -> 정상적으로 연결되었으면 Socket객체를 리턴한다.
         Socket socket = new Socket("127.0.0.1", 8888);
         DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-        DataInputStream in = new DataInputStream(socket.getInputStream());) {
-
-
-      System.out.println("연결되었음!");
+        DataInputStream in = new DataInputStream(socket.getInputStream());
+        ) {
+      System.out.println("연결되었음 !");
 
       welcome();
 
@@ -73,20 +68,17 @@ public class ClientApp {
         } catch (Exception ex) {
           System.out.println("입력 값이 옳지 않습니다.");
         }
-
-
       } // while
 
       Prompt.close();
-
       System.out.println("연결을 끊었음!");
 
     } catch (Exception e) {
-      e.printStackTrace();
+      e.getStackTrace();
     }
     System.out.println("종료!");
-  }
 
+  }
   static void welcome() {
     System.out.println("[게시판 애플리케이션]");
     System.out.println();
@@ -110,4 +102,5 @@ public class ClientApp {
     }
     System.out.printf("%s:\n", builder.toString());
   }
+
 }

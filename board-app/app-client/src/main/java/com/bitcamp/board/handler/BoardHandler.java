@@ -5,25 +5,21 @@ package com.bitcamp.board.handler;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.handler.AbstractHandler;
 
 public class BoardHandler extends AbstractHandler {
 
-  // 게시글 목록을 관리할 객체 준비
-  private BoardDao boardDao;
+  String dataname;
+  DataInputStream in;
+  DataOutputStream out;
 
-  private String dataName;
-  private DataInputStream in;
-  private DataOutputStream out;
-
-  public BoardHandler(String dataName, DataInputStream in, DataOutputStream out) {
+  public BoardHandler(String dataname, DataInputStream in, DataOutputStream out) {
     // 수퍼 클래스의 생성자를 호출할 때 메뉴 목록을 전달한다.
     super(new String[] {"목록", "상세보기", "등록", "삭제", "변경"});
-
-    this.dataName = dataName;
+    this.dataname = dataname;
     this.in = in;
     this.out = out;
+
   }
 
   // 템플릿 메서드 패턴(template method pattern) 
@@ -46,13 +42,14 @@ public class BoardHandler extends AbstractHandler {
 
   private void onList() {
     try {
-      out.writeUTF(dataName);
+      out.writeUTF(dataname);
       out.writeUTF("findAll");
       System.out.println(in.readUTF());
 
-    } catch (Exception e) {
+    }catch (Exception e) {
       throw new RuntimeException(e);
     }
+
     //    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     //
     //    System.out.println("번호 제목 조회수 작성자 등록일");
@@ -70,11 +67,11 @@ public class BoardHandler extends AbstractHandler {
 
   private void onDetail() {
     try {
-      out.writeUTF(dataName);
+      out.writeUTF(dataname);
       out.writeUTF("findByNo");
       System.out.println(in.readUTF());
 
-    } catch (Exception e) {
+    }catch (Exception e) {
       throw new RuntimeException(e);
     }
     //    int boardNo = 0;
@@ -108,11 +105,11 @@ public class BoardHandler extends AbstractHandler {
 
   private void onInput() throws Exception {
     try {
-      out.writeUTF(dataName);
+      out.writeUTF(dataname);
       out.writeUTF("insert");
       System.out.println(in.readUTF());
 
-    } catch (Exception e) {
+    }catch (Exception e) {
       throw new RuntimeException(e);
     }
     //    Board board = new Board();
@@ -132,11 +129,11 @@ public class BoardHandler extends AbstractHandler {
 
   private void onDelete() throws Exception {
     try {
-      out.writeUTF(dataName);
+      out.writeUTF(dataname);
       out.writeUTF("delete");
       System.out.println(in.readUTF());
 
-    } catch (Exception e) {
+    }catch (Exception e) {
       throw new RuntimeException(e);
     }
     //    int boardNo = 0;
@@ -159,11 +156,11 @@ public class BoardHandler extends AbstractHandler {
 
   private void onUpdate() throws Exception {
     try {
-      out.writeUTF(dataName);
+      out.writeUTF(dataname);
       out.writeUTF("update");
       System.out.println(in.readUTF());
 
-    } catch (Exception e) {
+    }catch (Exception e) {
       throw new RuntimeException(e);
     }
     //    int boardNo = 0;
