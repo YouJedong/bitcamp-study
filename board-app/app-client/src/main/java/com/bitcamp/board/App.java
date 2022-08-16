@@ -6,7 +6,6 @@ package com.bitcamp.board;
 
 import java.util.Stack;
 import com.bitcamp.board.handler.BoardHandler;
-import com.bitcamp.board.handler.MemberHandler;
 import com.bitcamp.handler.Handler;
 import com.bitcamp.util.Prompt;
 
@@ -26,7 +25,7 @@ public class App {
           new BoardHandler("visit.json"), // 방명록
           new BoardHandler("notice.json"), // 공지사항
           new BoardHandler("daily.json"), // 일기장
-          new MemberHandler("member.json") // 회원
+          //          new MemberHandler("member.json") // 회원
       };
 
       // "메인" 메뉴의 이름을 스택에 등록한다.
