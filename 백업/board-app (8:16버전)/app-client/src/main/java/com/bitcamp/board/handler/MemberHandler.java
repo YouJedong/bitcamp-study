@@ -1,19 +1,19 @@
 /*
  * 회원 메뉴 처리 클래스
  */
-package com.bitcamp.board.servlet;
+package com.bitcamp.board.handler;
 
 import java.util.Date;
 import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.domain.Member;
-import com.bitcamp.servlet.AbstractHandler;
+import com.bitcamp.handler.AbstractHandler;
 import com.bitcamp.util.Prompt;
 
-public class MemberServlet extends AbstractHandler {
+public class MemberHandler extends AbstractHandler {
 
   private MemberDao memberDao;
 
-  public MemberServlet(String filename) {
+  public MemberHandler(String filename) {
     super(new String[] {"목록", "상세보기", "등록", "삭제", "변경"});
     memberDao = new MemberDao(filename);
 

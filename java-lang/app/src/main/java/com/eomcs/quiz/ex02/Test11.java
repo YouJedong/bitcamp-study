@@ -45,11 +45,13 @@ public class Test11 {
     for(int i = 0; i < sides.length; i++) {
       arr.add(String.valueOf(sides[i]));
     }
+    //        List<int[]> arr = Arrays.asList(sides);
+
     Collections.sort(arr);
-    bigNo = Integer.parseInt(arr.get(3));
-    oneNo = Integer.parseInt(arr.get(1));
-    twoNo = Integer.parseInt(arr.get(2));
-    if (bigNo * bigNo == oneNo * oneNo + twoNo * twoNo) {
+    bigNo = Integer.parseInt(arr.get(2));
+    oneNo = Integer.parseInt(arr.get(0));
+    twoNo = Integer.parseInt(arr.get(1));
+    if ((bigNo * bigNo) == (oneNo * oneNo) + (twoNo * twoNo)) {
       return true;
     } else {
       return false;      

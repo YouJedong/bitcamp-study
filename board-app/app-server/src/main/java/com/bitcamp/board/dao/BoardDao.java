@@ -63,6 +63,17 @@ public class BoardDao {
     return null;
   }
 
+  public boolean update(Board board) {
+    for (int i = 0; i < list.size(); i++) {
+      Board b = list.get(i);
+      if (b.no == board.no) {
+        list.set(i, board);
+        return true;
+      }
+    }
+    return false;
+  }
+
   public boolean delete(int boardNo) {
     for (int i = 0; i < list.size(); i++) {
       Board board = list.get(i);

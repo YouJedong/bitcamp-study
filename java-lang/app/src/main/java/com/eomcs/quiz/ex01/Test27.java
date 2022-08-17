@@ -48,7 +48,6 @@ public class Test27 {
       } else if (sequence[i] % 2 == 0) {
         result++;
       }
-
     }
     return result == 0 ? -1 : result;
   }
