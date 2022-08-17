@@ -6,7 +6,7 @@ package com.bitcamp.board;
 
 import java.util.Stack;
 import com.bitcamp.board.servlet.BoardServlet;
-import com.bitcamp.board.servlet.MemberHandler;
+import com.bitcamp.board.servlet.MemberServlet;
 import com.bitcamp.servlet.Servlet;
 import com.bitcamp.util.Prompt;
 
@@ -26,7 +26,7 @@ public class App {
           new BoardServlet("visit.json"), // 방명록
           new BoardServlet("notice.json"), // 공지사항
           new BoardServlet("daily.json"), // 일기장
-          new MemberHandler("member.json") // 회원
+          new MemberServlet("member.json") // 회원
       };
 
       // "메인" 메뉴의 이름을 스택에 등록한다.

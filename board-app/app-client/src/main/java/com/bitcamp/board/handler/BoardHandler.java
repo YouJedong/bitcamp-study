@@ -119,31 +119,49 @@ public class BoardHandler extends AbstractHandler {
   }
 
   private void onDelete() throws Exception {
-
+    int boardNo = 0;
+    while (true) {
+      try {
+        boardNo = Prompt.inputInt("삭제할 게시글 번호? ");
+        break;
+      } catch (Exception ex) {
+        System.out.println("입력 값이 옳지 않습니다!");
+      }
+    }
     out.writeUTF(dataName);
-      out.writeUTF("delete");
-      System.out.println(in.readUTF());
+    out.writeUTF("delete");
+    out.writeInt(boardNo);
 
-    //    int boardNo = 0;
-    //    while (true) {
-    //      try {
-    //        boardNo = Prompt.inputInt("삭제할 게시글 번호? ");
-    //        break;
-    //      } catch (Exception ex) {
-    //        System.out.println("입력 값이 옳지 않습니다!");
-    //      }
-    //    }
-    //
-    //    if (boardDao.delete(boardNo)) {
-    //      this.boardDao.save();
-    //      System.out.println("삭제하였습니다.");
-    //    } else {
-    //      System.out.println("해당 번호의 게시글이 없습니다!");
-    //    }
+    if (in.readUTF().equals("success")) {
+      System.out.println("삭제하였습니다.");
+      return;
+    } else {
+      System.out.println("해당 번호의 게시글이 없습니다.");
+    }
   }
 
   private void onUpdate() throws Exception {
-    Board board = null;
+    int boardNo = 0;
+    while (true) {
+      try {
+        boardNo = Prompt.inputInt("조회할 게시글 번호? ");
+        break;
+      } catch (Exception ex) {
+        System.out.println("입력 값이 옳지 않습니다!");
+      }
+    }
+    out.writeUTF(dataName);
+    out.writeUTF("findByNo");
+    out.writeInt(boardNo);
+
+    if (in.readUTF().equals("fail")) {
+      System.out.println("해당 번호의 게시글이 없습니다.");
+      return;
+    }
+
+    String json = in.readUTF();
+    Board board = new Gson().fromJson(json, Board.class);
+
     board.title = Prompt.inputString("제목?(" + board.title + ") ");
     board.content = Prompt.inputString(String.format("내용?(%s) ", board.content));
 
@@ -151,13 +169,14 @@ public class BoardHandler extends AbstractHandler {
     if (input.equals("y")) {
       out.writeUTF(dataName);
       out.writeUTF("update");
-      String json = new Gson().toJson(board);
-      out.writeUTF(json);
+      out.writeUTF(new Gson().toJson(board));
+
       if (in.readUTF().equals("success")) {
         System.out.println("변경했습니다.");
       } else {
         System.out.println("변경에 실패했습니다..");
       }
+
     } else {
       System.out.println("변경 취소했습니다.");
     }
