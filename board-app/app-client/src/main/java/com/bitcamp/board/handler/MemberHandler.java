@@ -26,7 +26,7 @@ public class MemberHandler extends AbstractHandler {
   }
 
   @Override
-  public void service(int menuNo)  {
+  public void service(int menuNo) {
     try {
       switch (menuNo) {
         case 1: this.onList(); break;
@@ -43,8 +43,10 @@ public class MemberHandler extends AbstractHandler {
   private void onList() throws Exception {
     out.writeUTF(dataName);
     out.writeUTF("findAll");
+
     if (in.readUTF().equals("fail")) {
-      System.out.println("목록을 가져오는데 실패했습니다.");
+      System.out.println("목록을 가져오는데 실패했습니다!");
+      return;
     }
 
     String json = in.readUTF();
@@ -66,9 +68,10 @@ public class MemberHandler extends AbstractHandler {
     out.writeUTF(email);
 
     if (in.readUTF().equals("fail")) {
-      System.out.println("해당 이메일이 없습니다!");
+      System.out.println("해당 이메일의 회원이 없습니다!");
       return;
-    } 
+    }
+
     String json = in.readUTF();
     Member member = new Gson().fromJson(json, Member.class);
 
@@ -94,7 +97,7 @@ public class MemberHandler extends AbstractHandler {
     if (in.readUTF().equals("success")) {
       System.out.println("회원을 등록했습니다.");
     } else {
-      System.out.println("회원 등록에 실패했습니다.");
+      System.out.println("회원 등록에 실패했습니다!");
     }
   }
 
@@ -104,7 +107,6 @@ public class MemberHandler extends AbstractHandler {
     out.writeUTF(dataName);
     out.writeUTF("delete");
     out.writeUTF(email);
-
 
     if (in.readUTF().equals("success")) {
       System.out.println("삭제하였습니다.");
@@ -116,12 +118,13 @@ public class MemberHandler extends AbstractHandler {
   private void onUpdate() throws Exception {
     String email = Prompt.inputString("변경할 회원 이메일? ");
 
+    // 변경할 회원 가져오기
     out.writeUTF(dataName);
     out.writeUTF("findByEmail");
     out.writeUTF(email);
 
     if (in.readUTF().equals("fail")) {
-      System.out.println("해당 이메일이 없습니다.");
+      System.out.println("해당 이메일의 회원이 없습니다!");
       return;
     }
 
@@ -131,7 +134,9 @@ public class MemberHandler extends AbstractHandler {
     member.name = Prompt.inputString("이름?(" + member.name + ") ");
 
     String input = Prompt.inputString("변경하시겠습니까?(y/n) ");
+
     if (input.equals("y")) {
+      // 회원 변경하기
       out.writeUTF(dataName);
       out.writeUTF("update");
       out.writeUTF(new Gson().toJson(member));
@@ -139,7 +144,7 @@ public class MemberHandler extends AbstractHandler {
       if (in.readUTF().equals("success")) {
         System.out.println("변경했습니다.");
       } else {
-        System.out.println("변경에 실패했습니다..");
+        System.out.println("변경 실패입니다!");
       }
 
     } else {

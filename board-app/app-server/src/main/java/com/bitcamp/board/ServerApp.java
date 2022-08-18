@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Hashtable;
+import java.util.HashMap;
 import com.bitcamp.board.servlet.BoardServlet;
 import com.bitcamp.board.servlet.MemberServlet;
 import com.bitcamp.servlet.Servlet;
@@ -18,8 +18,8 @@ public class ServerApp {
       System.out.println("서버 소켓 준비 완료!");
 
       // 클라이언트 요청을 처리할 객체 준비
-      Hashtable<String,Servlet> servletMap = new Hashtable<>();
-      servletMap.put("board", new BoardServlet("daily"));
+      HashMap<String,Servlet> servletMap = new HashMap<>();
+      servletMap.put("board", new BoardServlet("board"));
       servletMap.put("reading", new BoardServlet("reading"));
       servletMap.put("visit", new BoardServlet("visit"));
       servletMap.put("notice", new BoardServlet("notice"));
@@ -33,6 +33,7 @@ public class ServerApp {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());) {
 
           System.out.println("클라이언트와 연결 되었음!");
+
 
           while (true) {
             // 클라이언트와 서버 사이에 정해진 규칙(protocol)에 따라 데이터를 주고 받는다.

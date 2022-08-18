@@ -31,6 +31,7 @@ public class BoardServlet implements Servlet {
   @Override
   public void service(DataInputStream in, DataOutputStream out) {
     try {
+
       String command = in.readUTF();
       Board board = null;
       int no = 0;
@@ -64,7 +65,7 @@ public class BoardServlet implements Servlet {
           board = new Gson().fromJson(json, Board.class);
           if (boardDao.update(board)) {
             boardDao.save();
-            out.writeUTF(SUCCESS);            
+            out.writeUTF(SUCCESS);
           } else {
             out.writeUTF(FAIL);
           }

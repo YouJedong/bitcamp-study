@@ -29,7 +29,7 @@ public class ClientApp {
 
       welcome();
 
-      // 핸들러를 담을 컬렉션을 준비한다.
+      // 핸들러를 담을 레퍼런스 배열을 준비한다.
       ArrayList<Handler> handlers = new ArrayList<>();
       handlers.add(new BoardHandler("board", in, out));
       handlers.add(new BoardHandler("reading", in, out));
@@ -51,8 +51,7 @@ public class ClientApp {
         System.out.println();
 
         try {
-          int mainMenuNo = Prompt.inputInt(String.format(
-              "메뉴를 선택하세요[1..%d](0: 종료) ", handlers.size()));
+          int mainMenuNo = Prompt.inputInt("메뉴를 선택하세요[1..6](0: 종료) ");
 
           if (mainMenuNo < 0 || mainMenuNo > menus.length) {
             System.out.println("메뉴 번호가 옳지 않습니다!");

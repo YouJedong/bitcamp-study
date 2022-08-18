@@ -31,6 +31,9 @@ public class Exam0310 {
     for (Object key : keys) {
       System.out.println(key);
     }
+    for (String value : keys) {
+      System.out.println(map.get(value));
+    }
   }
 
 }

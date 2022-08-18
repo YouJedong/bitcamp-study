@@ -44,15 +44,17 @@ public class BoardHandler extends AbstractHandler {
   }
 
   private void onList() throws Exception {
-
     out.writeUTF(dataName);
     out.writeUTF("findAll");
+
     if (in.readUTF().equals("fail")) {
-      System.out.println("목록을 가져오는데 실패했습다.");
+      System.out.println("목록을 가져오는데 실패했습니다!");
+      return;
     }
 
     String json = in.readUTF();
     Board[] boards = new Gson().fromJson(json, Board[].class);
+
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     System.out.println("번호 제목 조회수 작성자 등록일");
@@ -63,7 +65,6 @@ public class BoardHandler extends AbstractHandler {
       System.out.printf("%d\t%s\t%d\t%s\t%s\n",
           board.no, board.title, board.viewCount, board.writer, dateStr);
     }
-
   }
 
   private void onDetail() throws Exception {
@@ -76,6 +77,7 @@ public class BoardHandler extends AbstractHandler {
         System.out.println("입력 값이 옳지 않습니다!");
       }
     }
+
     out.writeUTF(dataName);
     out.writeUTF("findByNo");
     out.writeInt(boardNo);
@@ -83,7 +85,8 @@ public class BoardHandler extends AbstractHandler {
     if (in.readUTF().equals("fail")) {
       System.out.println("해당 번호의 게시글이 없습니다!");
       return;
-    } 
+    }
+
     String json = in.readUTF();
     Board board = new Gson().fromJson(json, Board.class);
 
@@ -94,11 +97,11 @@ public class BoardHandler extends AbstractHandler {
     System.out.printf("작성자: %s\n", board.writer);
     Date date = new Date(board.createdDate);
     System.out.printf("등록일: %tY-%1$tm-%1$td %1$tH:%1$tM\n", date);
-
   }
 
   private void onInput() throws Exception {
     Board board = new Board();
+
     board.title = Prompt.inputString("제목? ");
     board.content = Prompt.inputString("내용? ");
     board.writer = Prompt.inputString("작성자? ");
@@ -114,7 +117,7 @@ public class BoardHandler extends AbstractHandler {
     if (in.readUTF().equals("success")) {
       System.out.println("게시글을 등록했습니다.");
     } else {
-      System.out.println("게시글 등록을 실패했습니다.");
+      System.out.println("게시글 등록에 실패했습니다!");
     }
   }
 
@@ -128,15 +131,15 @@ public class BoardHandler extends AbstractHandler {
         System.out.println("입력 값이 옳지 않습니다!");
       }
     }
+
     out.writeUTF(dataName);
     out.writeUTF("delete");
     out.writeInt(boardNo);
 
     if (in.readUTF().equals("success")) {
       System.out.println("삭제하였습니다.");
-      return;
     } else {
-      System.out.println("해당 번호의 게시글이 없습니다.");
+      System.out.println("해당 번호의 게시글이 없습니다!");
     }
   }
 
@@ -144,18 +147,20 @@ public class BoardHandler extends AbstractHandler {
     int boardNo = 0;
     while (true) {
       try {
-        boardNo = Prompt.inputInt("조회할 게시글 번호? ");
+        boardNo = Prompt.inputInt("변경할 게시글 번호? ");
         break;
-      } catch (Exception ex) {
+      } catch (Throwable ex) {
         System.out.println("입력 값이 옳지 않습니다!");
       }
     }
+
+    // 변경할 게시글 가져오기
     out.writeUTF(dataName);
     out.writeUTF("findByNo");
     out.writeInt(boardNo);
 
     if (in.readUTF().equals("fail")) {
-      System.out.println("해당 번호의 게시글이 없습니다.");
+      System.out.println("해당 번호의 게시글이 없습니다!");
       return;
     }
 
@@ -166,7 +171,9 @@ public class BoardHandler extends AbstractHandler {
     board.content = Prompt.inputString(String.format("내용?(%s) ", board.content));
 
     String input = Prompt.inputString("변경하시겠습니까?(y/n) ");
+
     if (input.equals("y")) {
+      // 게시글 변경하기
       out.writeUTF(dataName);
       out.writeUTF("update");
       out.writeUTF(new Gson().toJson(board));
@@ -174,13 +181,12 @@ public class BoardHandler extends AbstractHandler {
       if (in.readUTF().equals("success")) {
         System.out.println("변경했습니다.");
       } else {
-        System.out.println("변경에 실패했습니다..");
+        System.out.println("변경 실패입니다!");
       }
 
     } else {
       System.out.println("변경 취소했습니다.");
     }
-
   }
 }
 

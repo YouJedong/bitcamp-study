@@ -10,7 +10,7 @@ import com.bitcamp.board.domain.Member;
 import com.bitcamp.servlet.Servlet;
 import com.google.gson.Gson;
 
-public class MemberServlet implements Servlet  {
+public class MemberServlet implements Servlet {
 
   private MemberDao memberDao;
   private String filename;
@@ -30,10 +30,11 @@ public class MemberServlet implements Servlet  {
   @Override
   public void service(DataInputStream in, DataOutputStream out) {
     try {
+
       String command = in.readUTF();
-      Member member = null;
-      String json = null;
+      com.bitcamp.board.domain.Member member = null;
       String email = null;
+      String json = null;
 
       switch (command) {
         case "findAll":
@@ -63,7 +64,7 @@ public class MemberServlet implements Servlet  {
           member = new Gson().fromJson(json, Member.class);
           if (memberDao.update(member)) {
             memberDao.save();
-            out.writeUTF(SUCCESS);            
+            out.writeUTF(SUCCESS);
           } else {
             out.writeUTF(FAIL);
           }

@@ -17,7 +17,7 @@ public class Exam0320 {
     java.util.Set<String> keys = map.keySet();
     // Set 객체를 통해 key 를 꺼낼 때,
     // 즉 keySet()을 호출할 때 모든 key를 미리 목록을 만들어 리턴하지 않는다.
-    // 그 순간의 HashSet에 있는 key를 꺼낸다.
+    // 그 순간의 HashMap에 있는 key를 꺼낸다.
 
     Iterator<String> 키를꺼내주는객체 = keys.iterator();
 
@@ -35,7 +35,7 @@ public class Exam0320 {
     // 해결책?
     // - 값을 변경하면 다시 Iterator를 얻어야 한다.
     //
-    //    키를꺼내주는객체 = keys.iterator();
+    키를꺼내주는객체 = keys.iterator();
 
     // 무효한 Iterator를 사용하면 실행오류가 발생할 것이다.
     while (키를꺼내주는객체.hasNext()) {
