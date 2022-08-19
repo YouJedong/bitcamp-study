@@ -3,6 +3,12 @@ package com.bitcamp.board.domain;
 import java.io.Serializable;
 
 public class Member implements Serializable {
+  @Override
+  public String toString() {
+    return "Member [no=" + no + ", name=" + name + ", email=" + email + ", password=" + password
+        + ", createdDate=" + createdDate + "]";
+  }
+
   private static final long serialVersionUID = 1L;
 
   public int no;
