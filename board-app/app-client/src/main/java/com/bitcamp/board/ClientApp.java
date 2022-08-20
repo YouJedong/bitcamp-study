@@ -18,9 +18,9 @@ public class ClientApp {
     String ip = "127.0.0.1"; //"192.168.0.74";
     int port = 8888;
 
+    System.err.println("연결되었습니다.");
     welcome();
 
-    System.err.println("연결되었");
 
     // 핸들러를 담을 레퍼런스 배열을 준비한다.
     ArrayList<Handler> handlers = new ArrayList<>();

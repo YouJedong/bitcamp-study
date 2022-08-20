@@ -11,4 +11,5 @@ rootProject.name = 'board-appStudy'
 // include('app')
 include('app-clientStudy')
 include('app-serverStudy')
+include('app-commonStudy')
 
