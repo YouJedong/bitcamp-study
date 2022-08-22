@@ -14,7 +14,7 @@ public class Receiver4 {
     System.out.println("서버 실행 중...");
 
     ServerSocket serverSocket = new ServerSocket(8888);
-    Socket socket = serverSocket.accept();
+    Socket socket = serverSocket.accept(); 
     System.out.println("클라이언트가 연결됨.");
 
     PrintStream out = new PrintStream(socket.getOutputStream());

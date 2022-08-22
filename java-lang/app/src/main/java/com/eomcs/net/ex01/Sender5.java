@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Sender5 {
+public class Sender5 { 
 
   public static void main(String[] args) throws Exception {
     File file = new File("temp/jls11.pdf");

@@ -10,7 +10,7 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Receiver5 {
+public class Receiver5 { 
 
   public static void main(String[] args) throws Exception {
     System.out.println("서버 실행 중...");

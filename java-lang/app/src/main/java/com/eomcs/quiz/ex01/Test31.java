@@ -36,8 +36,6 @@ public class Test31 {
 
   static int sumOfTheAngles(int n) {
     // 이 메서드를 완성하시오!
-    int result;
-    result = 180 * (n - 2);
-    return result;
+    return 180 * (n - 2);
   }
 }
