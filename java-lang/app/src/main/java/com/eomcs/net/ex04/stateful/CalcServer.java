@@ -24,7 +24,8 @@ public class CalcServer {
   }
 
   static void processRequest(Socket socket) throws Exception {
-    try (DataInputStream in = new DataInputStream(socket.getInputStream());
+    try (Socket s = socket;
+        DataInputStream in = new DataInputStream(socket.getInputStream());
         PrintStream out = new PrintStream(socket.getOutputStream());) {
 
       loop: while (true) {
@@ -59,5 +60,3 @@ public class CalcServer {
     }
   }
 }
-
-
