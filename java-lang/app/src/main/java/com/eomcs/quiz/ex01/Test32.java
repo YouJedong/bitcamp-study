@@ -47,6 +47,10 @@ public class Test32 {
 
   static boolean tennisSet(int score1, int score2) {
     // 이 메서드를 완성하시오!
+    // 6점 먼저 딴사람이 이기는데 5:5가 되면 듀스이기 때문에 2점 더 딴사람이 이긴다.
+    // 다루기 좋은 구조로 정리하고 난 후 계산하자.
+
+
     return false;
   }
 }
