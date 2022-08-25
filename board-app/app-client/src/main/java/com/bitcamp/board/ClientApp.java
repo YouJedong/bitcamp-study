@@ -15,7 +15,7 @@ public class ClientApp {
   public static void main(String[] args) {
     System.out.println("[게시글 관리 클라이언트]");
 
-    String ip = "192.168.0.74"; //"192.168.0.74"; "127.0.0.1"
+    String ip = "localhost"; //"192.168.0.74"; "127.0.0.1"
     int port = 8888;
 
     System.err.println("연결되었습니다.");

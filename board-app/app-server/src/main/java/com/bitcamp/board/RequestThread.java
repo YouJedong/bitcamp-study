@@ -8,7 +8,7 @@ import com.bitcamp.servlet.Servlet;
 
 // 클라이언트 요청을 main 실행 흐름과 분리하여 
 // 별도의 실행으로 다루는 클래스
-public class RequestThread extends Thread {
+public class RequestThread implements Runnable {
 
   private Socket socket;
   private Map<String,Servlet> servletMap;
