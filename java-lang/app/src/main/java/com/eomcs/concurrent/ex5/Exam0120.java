@@ -41,10 +41,7 @@ public class Exam0120 {
     }
 
     public void delay() {
-      int count = (int)(Math.random() * 1000);
-      for (int i = 0; i < count; i++) {
-        Math.atan(34.1234);
-      }
+
     }
   }
 
@@ -61,6 +58,12 @@ public class Exam0120 {
     public void run() {
       for (int i = 0; i < 20; i++) {
         list.add(value);
+
+        // add() 호출 후 다른 스레드에게 CPU 사용권을 뺏길 기회를 만든다.
+        int count = (int)(Math.random() * 1000);
+        for (int x = 0; x < count; x++) {
+          Math.atan(34.1234);
+        }
       }
     }
   }
