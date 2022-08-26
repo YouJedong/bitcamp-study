@@ -66,8 +66,8 @@ public class Exam0310 {
   public static void main(String[] args) throws Exception {
     Counter counter = new Counter(1000);
 
-    Worker w1 = new Worker("**홍길동", counter);
     Worker w2 = new Worker("임꺽정----->", counter);
+    Worker w1 = new Worker("**홍길동", counter);
     Worker w3 = new Worker("유%관%순", counter);
 
     w1.start();
