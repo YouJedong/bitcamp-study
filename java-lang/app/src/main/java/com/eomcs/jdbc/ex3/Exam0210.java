@@ -31,6 +31,7 @@ public class Exam0210 {
       // 제목? aaaa
       // 내용? bbbb'), ('haha', 'hoho'), ('hehe', 'puhul
       //
+
       // 위에서 준비한 SQL 문에 값을 설정한다.
       // => ? : 값이 놓일 자리를 의미한다. 'in-parameter' 라 부른다.
       // => in-parameter 에 들어갈 값의 타입에 따라 적절한 setXxx() 메서드를 호출한다.
@@ -39,9 +40,9 @@ public class Exam0210 {
       stmt.setString(2, contents);
 
       // => 이미 SQL 을 준비한 상태이기 때문에 실행할 때는 SQL를 줄 필요가 없다.
-      // => setXxx()로 설정된 값은 단순한 텍스트로 처리한 후 
-      //    SQL을 실행할 때 
-      //    파라미터로 전달되기 때문에 SQL 삽입 공격이 불가능하다. 
+      // => 서버에 SQL을 전달할 때 
+      //    SQL과 값을 분리해서 보내고 서버에서 분리된 값을 따로 처리할 것이기 때문에
+      //    SQL 삽입 공격이 불가능한다.
       int count = stmt.executeUpdate();
 
       System.out.println(count + " 개를 입력하였습니다.");

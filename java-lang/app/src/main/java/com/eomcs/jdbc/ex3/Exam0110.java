@@ -29,7 +29,7 @@ public class Exam0110 {
       // => 사용자가 입력한 값을 가지고 SQL 문장을 만들 때 이런 문제가 발생한다.
       // => 예를 들어 이 예제를 실행할 때 다음과 같이 입력해 보라!
       // 제목? aaaa
-      // 내용? 
+      // 내용? bbbb'), ('haha', 'hoho'), ('hehe', 'puhul
       //
       int count = stmt.executeUpdate( 
           "insert into x_board(title, contents) values('" + title + "','" + contents + "')");

@@ -22,6 +22,8 @@ public class Exam0330 {
             "select * from x_board where board_id = ?")) {
 
       stmt.setString(1, no);
+      // setString()은 autoCloseable 구현체가 아니기 때문에 try()에 들어갈 수 없기 때문에 
+      // 따로 빼놓는다. 
 
       try (ResultSet rs = stmt.executeQuery()) {
         if (rs.next()) {
