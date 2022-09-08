@@ -1,7 +1,6 @@
 package com.bitcamp.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -10,14 +9,19 @@ import com.bitcamp.board.domain.Board;
 
 // 게시글 목록을 관리하는 역할
 //
-public class MariaDBBoardDao {
+public class MariaDBBoardDao implements BoardDao {
+
+  Connection con;
+
+  public MariaDBBoardDao(Connection con) {
+    this.con = con;
+  }
 
 
+  @Override
   public int insert(Board board) throws Exception {
-    try(Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb","study","1111");
-        PreparedStatement pstmt = con.prepareStatement(
-            "insert into app_board(title,cont,mno) values(?,?,?)")) {
+    try(PreparedStatement pstmt = con.prepareStatement(
+        "insert into app_board(title,cont,mno) values(?,?,?)")) {
       pstmt.setString(1, board.title);
       pstmt.setString(2, board.content);
       pstmt.setInt(3, board.memberNo);
@@ -25,11 +29,10 @@ public class MariaDBBoardDao {
     }
   }
 
+  @Override
   public int update(Board board) throws Exception {
-    try(Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb","study","1111");
-        PreparedStatement pstmt = con.prepareStatement(
-            "update app_board set title=?, cont=? where bno=?")) {
+    try(PreparedStatement pstmt = con.prepareStatement(
+        "update app_board set title=?, cont=? where bno=?")) {
 
       pstmt.setString(1, board.title);
       pstmt.setString(2, board.content);
@@ -39,11 +42,10 @@ public class MariaDBBoardDao {
     }
   }
 
+  @Override
   public Board findByNo(int no) throws Exception {
-    try(Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb","study","1111");
-        PreparedStatement pstmt = con.prepareStatement(
-            "select bno,title,cont,mno,cdt,vw_cnt from app_board where bno=" + no);
+    try(PreparedStatement pstmt = con.prepareStatement(
+        "select bno,title,cont,mno,cdt,vw_cnt from app_board where bno=" + no);
         ResultSet rs = pstmt.executeQuery()) {
 
       if(!rs.next()) {
@@ -62,21 +64,19 @@ public class MariaDBBoardDao {
     }
   }
 
+  @Override
   public int delete(int no) throws Exception {
-    try(Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb","study","1111");
-        PreparedStatement pstmt = con.prepareStatement("delete from app_board where bno=?")) {
+    try(PreparedStatement pstmt = con.prepareStatement("delete from app_board where bno=?")) {
 
       pstmt.setInt(1, no);
       return pstmt.executeUpdate();
     }
   }
 
+  @Override
   public List<Board> findAll() throws Exception {
-    try(Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb","study","1111");
-        PreparedStatement pstmt = con.prepareStatement(
-            "select bno,title,mno,cdt,vw_cnt from app_board");
+    try(PreparedStatement pstmt = con.prepareStatement(
+        "select bno,title,mno,cdt,vw_cnt from app_board");
         ResultSet rs = pstmt.executeQuery()) {
 
       ArrayList<Board> list = new ArrayList<>();
