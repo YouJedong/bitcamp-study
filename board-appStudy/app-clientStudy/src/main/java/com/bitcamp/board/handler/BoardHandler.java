@@ -4,20 +4,19 @@
 package com.bitcamp.board.handler;
 
 import java.util.List;
-import com.bitcamp.board.dao.MariaDBBoardDao;
+import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.handler.AbstractHandler;
 import com.bitcamp.util.Prompt;
 
 public class BoardHandler extends AbstractHandler {
 
-  private MariaDBBoardDao boardDao;
+  private BoardDao boardDao;
 
-  public BoardHandler() {
+  public BoardHandler(BoardDao boardDao) {
 
-    // 수퍼 클래스의 생성자를 호출할 때 메뉴 목록을 전달한다.
     super(new String[] {"목록", "상세보기", "등록", "삭제", "변경"});
-    boardDao = new MariaDBBoardDao();
+    this.boardDao = boardDao;
   }
 
   @Override
@@ -78,8 +77,11 @@ public class BoardHandler extends AbstractHandler {
     board.content = Prompt.inputString("내용? ");
     board.memberNo = Prompt.inputInt("작성자? ");
 
-    boardDao.insert(board);
-    System.out.println("게시글을 등록했습니다.");
+    if (boardDao.insert(board) == 0) {
+      System.out.println("게시글을 등록에 실패했습니다.");
+    } else {
+      System.out.println("게시글을 등록했습니다.");
+    }
   }
 
   private void onDelete() throws Exception {

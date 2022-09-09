@@ -1,7 +1,13 @@
 package com.bitcamp.board;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Stack;
+import com.bitcamp.board.dao.BoardDao;
+import com.bitcamp.board.dao.MariaDBBoardDao;
+import com.bitcamp.board.dao.MariaDBMemberDao;
+import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.handler.BoardHandler;
 import com.bitcamp.board.handler.MemberHandler;
 import com.bitcamp.handler.Handler;
@@ -12,59 +18,69 @@ public class ClientApp {
   public static Stack<String> breadcrumbMenu = new Stack<>();
 
   public static void main(String[] args) {
-    System.out.println("[게시글 관리 클라이언트]");
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/studydb","study","1111")){
 
-    welcome();
+      System.out.println("[게시글 관리 클라이언트]");
 
-    // 핸들러를 담을 컬렉션을 준비한다.
-    ArrayList<Handler> handlers = new ArrayList<>();
-    handlers.add(new BoardHandler());
-    handlers.add(new MemberHandler());
+      welcome();
 
-    // "메인" 메뉴의 이름을 스택에 등록한다.
-    breadcrumbMenu.push("메인");
+      BoardDao boardDao = new MariaDBBoardDao(con);
+      MemberDao memberDao = new MariaDBMemberDao(con);
 
-    // 메뉴명을 저장할 배열을 준비한다.
-    String[] menus = {"게시판", "회원"};
+      // 핸들러를 담을 컬렉션을 준비한다.
+      ArrayList<Handler> handlers = new ArrayList<>();
+      handlers.add(new BoardHandler(boardDao));
+      handlers.add(new MemberHandler(memberDao));
 
-    loop: while (true) {
+      // "메인" 메뉴의 이름을 스택에 등록한다.
+      breadcrumbMenu.push("메인");
 
-      printTitle();
-      printMenus(menus);
-      System.out.println();
+      // 메뉴명을 저장할 배열을 준비한다.
+      String[] menus = {"게시판", "회원"};
 
-      try {
-        int mainMenuNo = Prompt.inputInt(String.format(
-            "메뉴를 선택하세요[1..%d](0: 종료) ", handlers.size()));
+      loop: while (true) {
 
-        if (mainMenuNo < 0 || mainMenuNo > menus.length) {
-          System.out.println("메뉴 번호가 옳지 않습니다!");
-          continue; // while 문의 조건 검사로 보낸다.
+        printTitle();
+        printMenus(menus);
+        System.out.println();
 
-        } else if (mainMenuNo == 0) {
-          break loop;
+        try {
+          int mainMenuNo = Prompt.inputInt(String.format(
+              "메뉴를 선택하세요[1..%d](0: 종료) ", handlers.size()));
+
+          if (mainMenuNo < 0 || mainMenuNo > menus.length) {
+            System.out.println("메뉴 번호가 옳지 않습니다!");
+            continue; // while 문의 조건 검사로 보낸다.
+
+          } else if (mainMenuNo == 0) {
+            break loop;
+          }
+
+          // 메뉴에 진입할 때 breadcrumb 메뉴바에 그 메뉴를 등록한다.
+          breadcrumbMenu.push(menus[mainMenuNo - 1]);
+
+          // 메뉴 번호로 Handler 레퍼런스에 들어있는 객체를 찾아 실행한다.
+          handlers.get(mainMenuNo - 1).execute();
+
+          breadcrumbMenu.pop();
+
+        } catch (Exception ex) {
+          System.out.println("입력 값이 옳지 않습니다.");
         }
 
-        // 메뉴에 진입할 때 breadcrumb 메뉴바에 그 메뉴를 등록한다.
-        breadcrumbMenu.push(menus[mainMenuNo - 1]);
 
-        // 메뉴 번호로 Handler 레퍼런스에 들어있는 객체를 찾아 실행한다.
-        handlers.get(mainMenuNo - 1).execute();
+      } // while
+      Prompt.close();
 
-        breadcrumbMenu.pop();
-
-      } catch (Exception ex) {
-        System.out.println("입력 값이 옳지 않습니다.");
-      }
+      System.out.println("연결을 끊었음!");
 
 
-    } // while
-    Prompt.close();
-
-    System.out.println("연결을 끊었음!");
-
-
-    System.out.println("종료!");
+      System.out.println("종료!");
+    } catch (Exception e) {
+      System.out.println("시스템오류 발생!");
+      e.getStackTrace();
+    }
   }
 
   static void welcome() {
