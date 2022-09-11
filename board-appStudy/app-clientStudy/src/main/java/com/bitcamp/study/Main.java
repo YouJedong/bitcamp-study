@@ -6,14 +6,16 @@ class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
 
-    int oneD = sc.nextInt();
-    int twoD = sc.nextInt();
-    int threeD = sc.nextInt();        
-    int bigNoing = oneD > twoD ? oneD : twoD;
-    int bigNo = bigNoing > threeD ? bigNoing : threeD; 
+    int H = sc.nextInt();
+    int M = sc.nextInt();
+    int needTime = sc.nextInt();
+    int finalM = (H * 60) + M + needTime;
 
-    if ((oneD != twoD) && (oneD != threeD)) {
-
+    if (finalM >= 1440) {
+      int result = finalM - 1440;
+      System.out.println((result / 60) + " " + (result % 60));
+    } else {
+      System.out.println((finalM / 60) + " " + (finalM % 60));
     }
   }
 }
