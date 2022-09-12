@@ -17,5 +17,6 @@ class Main {
     } else {
       System.out.println((finalM / 60) + " " + (finalM % 60));
     }
+    sc.close();
   }
 }

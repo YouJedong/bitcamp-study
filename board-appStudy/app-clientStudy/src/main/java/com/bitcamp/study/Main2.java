@@ -1,4 +1,4 @@
-// 2739 구구
+// 반복문 2739 구구단
 
 package com.bitcamp.study;
 
@@ -14,6 +14,8 @@ class Main2 {
     for(int i = 1; i < 10; i++) {
       result = no * i;
       System.out.println(no + " * " + i + " = " + result);
+
+      sc.close();
     }
   }
 }
