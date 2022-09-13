@@ -1,7 +1,8 @@
 package com.bitcamp.handler;
 
-import com.bitcamp.board.ClientApp;
-import com.bitcamp.util.Prompt;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import com.bitcamp.board.ServerApp;
 
 // Handler 규격에 맞춰 서브 클래스에게 물려줄 공통 필드나 메서드를 구현한다.
 // 
@@ -37,7 +38,7 @@ public abstract class AbstractHandler implements Handler {
 
   protected static void printTitle() {
     StringBuilder builder = new StringBuilder();
-    for (String title : ClientApp.breadcrumbMenu) {
+    for (String title : ServerApp.breadcrumbMenu) {
       if (!builder.isEmpty()) {
         builder.append(" > ");
       }
@@ -47,15 +48,14 @@ public abstract class AbstractHandler implements Handler {
   }
 
   @Override
-  public void execute() {
+  public void execute(DataInputStream in, DataOutputStream out) throws Exception {
     while (true) {
       printTitle();
       printMenus();
       printBlankLine();
 
+      /*
       try {
-        int menuNo = Prompt.inputInt(String.format(
-            "메뉴를 선택하세요[1..%d](0: 이전) ", menus.length));
 
         if (menuNo < 0 || menuNo > menus.length) {
           System.out.println("메뉴 번호가 옳지 않습니다!");
@@ -66,7 +66,7 @@ public abstract class AbstractHandler implements Handler {
         }
 
         // 메뉴에 진입할 때 breadcrumb 메뉴바에 그 메뉴를 등록한다.
-        ClientApp.breadcrumbMenu.push(menus[menuNo - 1]);
+        ServerApp.breadcrumbMenu.push(menus[menuNo - 1]);
 
         printHeadline();
 
@@ -78,13 +78,13 @@ public abstract class AbstractHandler implements Handler {
 
         printBlankLine();
 
-        ClientApp.breadcrumbMenu.pop();
+        ServerApp.breadcrumbMenu.pop();
 
       } catch (Exception ex) {
         System.out.printf("예외 발생: %s\n", ex.getMessage());
       }
+       */
     } // while
-
   }
 
   // 서브 클래스가 반드시 만들어야 할 메서드
