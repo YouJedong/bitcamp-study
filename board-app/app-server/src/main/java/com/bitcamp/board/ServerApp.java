@@ -6,108 +6,57 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import com.bitcamp.board.handler.BoardHandler;
 import com.bitcamp.board.handler.MemberHandler;
+import com.bitcamp.dao.BoardDao;
+import com.bitcamp.dao.MariaDBBoardDao;
+import com.bitcamp.dao.MariaDBMemberDao;
+import com.bitcamp.dao.MemberDao;
 import com.bitcamp.handler.Handler;
 import com.bitcamp.util.BreadCrumb;
 
 public class ServerApp {
 
-
-
   //메인 메뉴 목록 준비
-  static String[] menus = {"게시판", "회원"};
+  private String[] menus = {"게시판", "회원"};
+  private int port;
+  ArrayList<Handler> handlers = new ArrayList<>();
 
   public static void main(String[] args) {
-    try (ServerSocket serverSocket = new ServerSocket(8888);
-        ) {
+    try {
+      ServerApp app = new ServerApp(8888);
+      app.execute();
+
+    } catch (Exception e) {
+      System.out.println("서버 실행 오류!");
+    }
+  }
+
+  public ServerApp(int port) throws Exception {
+    this.port = port;
+
+    Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/studydb","study","1111");    
+
+    // DAO 객체를 준비한다.
+    BoardDao boardDao = new MariaDBBoardDao(con);
+    MemberDao memberDao = new MariaDBMemberDao(con);
+
+    handlers.add(new BoardHandler(boardDao));
+    handlers.add(new MemberHandler(memberDao));
+  }
+
+  public void execute() {
+    try (ServerSocket serverSocket = new ServerSocket(this.port)) {
       System.out.println("서버 실행 중...");
 
-      // 핸들러를 담을 레퍼런스 배열을 준비한다.
-      ArrayList<Handler> handlers = new ArrayList<>();
-      handlers.add(new BoardHandler(null));
-      handlers.add(new MemberHandler(null));
-
       while (true) {
-        Socket socket = serverSocket.accept();
-
-        new Thread(() -> {
-          // 스레드를 시작하는 순간, 별도의 실행 흐름에서 병행으로 실행된다.
-          try (
-              DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-              DataInputStream in = new DataInputStream(socket.getInputStream())) {
-            System.out.println("클라이언트 접속!");
-
-            // 접속한 클라이언트의 이동 경로를 보관할 breadcrumb 
-            BreadCrumb breadcrumb = new BreadCrumb();
-            breadcrumb.put("메인");
-
-            Thread currentThread = Thread.currentThread();
-
-            boolean first = true;
-            String errorMessage = null;
-
-            while (true) {
-
-              try (StringWriter strOut = new StringWriter();
-                  PrintWriter tempOut = new PrintWriter(strOut)) {
-
-                if (first) {// 최초 접속이면 환영 메시지도 출력한다.
-                  welcome(tempOut);
-                  first = false;
-                }
-
-                if (errorMessage != null) {
-                  tempOut.print(errorMessage);
-                  errorMessage = null;
-                }
-
-                tempOut.println(breadcrumb.toString());
-                printMainMenus(tempOut);
-                out.writeUTF(strOut.toString());
-              }
-              // 클라이언트가 보낸 요청을 응답한다.
-              String request = in.readUTF();
-              if (request.equals("quit")) {
-                break;
-              }
-
-              try {
-                int mainMenuNo = Integer.parseInt(request);
-                if (mainMenuNo >= 1 && mainMenuNo <= menus.length) {
-
-                  // 핸들러에 들어가기 전에 breadcrumb 메뉴에 하위 메뉴 이름을 추가한다.
-                  breadcrumb.put(menus[mainMenuNo - 1]);
-
-                  // 현재 스레드를 위해 보관된 Breadcrumb 객체를 꺼낸다.
-                  //                  BreadCrumb breadcrumb = BreadCrumb.getBreadCrumb();
-
-                  handlers.get(mainMenuNo - 1).execute(in, out);
-
-                  // 다시 메인 메뉴로 돌아 왔다면 breadcrumb 메뉴에서 한 단계 위로 올라간다.
-                  breadcrumb.pickUp();
-
-                } else {
-                  throw new Exception("해당 번호의 메뉴가 없습니다.\n");
-                }
-              } catch (Exception e) {
-                errorMessage = String.format("실행 오류: %s", e.getMessage());
-
-              }
-            }
-
-            System.out.println("클라이언트와 접속 종료!");
-
-          } catch (Exception e) {
-            System.out.println("클라이언트와 통신하는 중 오류 발생!");
-            e.printStackTrace();
-          }
-
-        }).start();
-
+        new Thread(new ServiceProcessor(serverSocket.accept())).start();
+        System.out.println("클라이언트 접속!");
       }
-
       //      System.out.println("서버 종료!");
     } catch (Exception e) {
       System.out.println("서버 실행 중 오류 발생!");
@@ -117,18 +66,14 @@ public class ServerApp {
 
   /*
   public static void main2(String[] args) {
-    try (// DAO가 사용할 커넥션 객체 준비
-        Connection con = DriverManager.getConnection(
-            "jdbc:mariadb://localhost:3306/studydb","study","1111");) {
+
       System.out.println("[게시글 관리 클라이언트]");
 
 
       System.out.println("연결되었습니다.");
       welcome();
 
-      // DAO 객체를 준비한다.
-      MemberDao memberDao = new MariaDBMemberDao(con);
-      BoardDao boardDao = new MariaDBBoardDao(con);
+
 
 
 
@@ -168,24 +113,110 @@ public class ServerApp {
     }
   }
    */
-  static void welcome(PrintWriter out) {
-    out.println("[게시판 애플리케이션]");
-    out.println();
-    out.println("환영합니다!");
-    out.println(); // 응답의 끝은 빈 문자열
+  static void welcome(DataOutputStream out) throws Exception {
+    try (StringWriter strOut = new StringWriter();
+        PrintWriter tempOut = new PrintWriter(strOut)) {
+      tempOut.println("[게시판 애플리케이션]");
+      tempOut.println();
+      tempOut.println("환영합니다!");
+      tempOut.println(); // 응답의 끝은 빈 문자열
+      out.writeUTF(strOut.toString());
+    }
+  }
+
+  static void error(DataOutputStream out, Exception e)  {
+    try (StringWriter strOut = new StringWriter();
+        PrintWriter tempOut = new PrintWriter(strOut)) {
+      tempOut.printf("실행 오류:%s\n", e.getMessage());
+      out.writeUTF(strOut.toString());
+    } catch (Exception e2) {
+      e2.printStackTrace();
+    }
   }
 
 
-  static void printMainMenus(PrintWriter out) {
+  void printMainMenus(DataOutputStream out) throws Exception {
+    try (StringWriter strOut = new StringWriter();
+        PrintWriter tempOut = new PrintWriter(strOut)) {
 
-    // 메뉴 목록 출력
-    for (int i = 0; i < menus.length; i++) {
-      out.printf("  %d: %s\n", i + 1, menus[i]);
+      tempOut.println(BreadCrumb.getBreadCrumbOfCurrentThread().toString());
+
+      for (int i = 0; i < menus.length; i++) {
+        tempOut.printf("  %d: %s\n", i + 1, menus[i]);
+      }
+
+      tempOut.printf("메뉴를 선택하세요[1..%d](quit: 종료) ", menus.length);
+      out.writeUTF(strOut.toString());
+    }
+  }
+
+  void processMainMenu(DataInputStream in, DataOutputStream out, String request) throws Exception {
+    try {
+      int menuNo = Integer.parseInt(request);
+      if (menuNo < 1 || menuNo > menus.length) {
+        throw new Exception("메뉴 번호가 옳지 않습니다.");
+      }
+
+      BreadCrumb breadcrumb = BreadCrumb.getBreadCrumbOfCurrentThread();
+      breadcrumb.put(menus[menuNo - 1]);
+
+      handlers.get(menuNo - 1).execute(in, out);
+
+      breadcrumb.pickUp();
+
+      // 하위 메뉴에서 나오면 현재의 메뉴 경로를 출력한다.
+      out.writeUTF(breadcrumb.toString());
+
+    } catch (Exception e) {
+      error(out, e);
+    }
+  }
+
+  private class ServiceProcessor implements Runnable {
+
+    Socket socket;
+
+    public ServiceProcessor(Socket socket) {
+      this.socket = socket;
     }
 
-    // 메뉴 번호 입력을 요구하는 문장 출력
-    out.printf("메뉴를 선택하세요[1..%d](quit: 종료) ", menus.length);
+    @Override
+    public void run() {
+      try (Socket s = this.socket; 
+          //소켓도 오토클로져블을 해야하기 때문에 다시 변수로 넣는다.
+          DataOutputStream out = new DataOutputStream(s.getOutputStream());
+          DataInputStream in = new DataInputStream(s.getInputStream())) {
 
+        BreadCrumb breadcrumb = new BreadCrumb();
+        breadcrumb.put("메인");
+
+        // 클라이언트에게 환영 메세지를 보낸다.
+        // 메인 메뉴를 출력한다.
+
+        welcome(out);
+
+        while (true) {
+          // 클라이언트가 보낸 요청정보를 읽는다.
+          String request = in.readUTF();
+
+          if (request.equals("quit")) {
+            break;
+
+          } else if (request.equals("menu")) {
+            printMainMenus(out);
+
+          } else {
+            processMainMenu(in, out, request);
+          }
+        }
+        System.out.println("클라이언트와 접속 종료!");
+
+      } catch (Exception e) {
+        System.out.println("클라이언트와 통신하는 중 오류 발생!");
+        e.printStackTrace();
+      }
+    }
   }
+
 
 }

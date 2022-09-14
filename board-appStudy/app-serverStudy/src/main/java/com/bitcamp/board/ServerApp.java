@@ -11,6 +11,7 @@ import java.util.Stack;
 import com.bitcamp.board.handler.BoardHandler;
 import com.bitcamp.board.handler.MemberHandler;
 import com.bitcamp.handler.Handler;
+import com.bitcamp.util.BreadCrumb;
 
 public class ServerApp {
 
@@ -36,6 +37,9 @@ public class ServerApp {
               DataInputStream in = new DataInputStream(socket.getInputStream())) {
             System.out.println("클라이언트 접속");
 
+            BreadCrumb breadCrumb = new BreadCrumb();
+            breadCrumb.put("메인");
+
             boolean first = true;
             String errorMessage = null;
 
@@ -52,6 +56,8 @@ public class ServerApp {
                   tempOut.println(errorMessage);
                   errorMessage = null;
                 }
+
+                tempOut.println(breadCrumb.toString());
                 printMainMenus(tempOut);
                 out.writeUTF(strOut.toString());
               }
@@ -60,27 +66,24 @@ public class ServerApp {
               if (request.equals("quit")) {
                 break;
               }
-              try (StringWriter strOut = new StringWriter();
-                  PrintWriter tempOut = new PrintWriter(strOut);) {
 
-                try {
-                  int mainMenuNo = Integer.parseInt(request);
+              try {
+                int mainMenuNo = Integer.parseInt(request);
 
-                  if (mainMenuNo >= 1 && mainMenuNo <= menus.length ) {
-                    handlers.get(mainMenuNo - 1).execute(in, out);
-                  } else {
-                    throw new Exception("해당 번호의 메뉴가 없습니다.");
-                  }
-                } catch (Exception e) {
-                  errorMessage = String.format("실행오류: %s", e.getMessage());
+                if (mainMenuNo >= 1 && mainMenuNo <= menus.length ) {
+                  breadCrumb.put(menus[mainMenuNo - 1]);
+
+                  handlers.get(mainMenuNo - 1).execute(in, out);
+
+                  breadCrumb.pickUp();
+
+                } else {
+                  throw new Exception("해당 번호의 메뉴가 없습니다.");
                 }
-
-                tempOut.println();
-                printMainMenus(tempOut);
-                out.writeUTF(strOut.toString());
-              } 
+              } catch (Exception e) {
+                errorMessage = String.format("실행오류: %s", e.getMessage());
+              }
             }
-
             System.out.println("클라이언트에 접속 종료!");
 
           } catch (Exception e) {
