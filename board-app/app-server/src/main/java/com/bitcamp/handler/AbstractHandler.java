@@ -89,6 +89,7 @@ public abstract class AbstractHandler implements Handler {
 
       } catch (Exception e) {
         error(out, e);
+        BreadCrumb.getBreadCrumbOfCurrentThread().pickUp();
       }
     } // while
 

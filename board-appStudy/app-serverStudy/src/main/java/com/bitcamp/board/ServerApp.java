@@ -7,7 +7,7 @@ import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Stack;
+import javax.swing.text.DefaultEditorKit.InsertBreakAction;
 import com.bitcamp.board.handler.BoardHandler;
 import com.bitcamp.board.handler.MemberHandler;
 import com.bitcamp.handler.Handler;
@@ -15,92 +15,68 @@ import com.bitcamp.util.BreadCrumb;
 
 public class ServerApp {
 
-  public static Stack<String> breadcrumbMenu = new Stack<>();
+  private String[] menus = {"게시판", "회원"};
+  private int port;
+  ArrayList<Handler> handlers = new ArrayList<>();
 
-  static String[] menus = {"게시판", "회원"};
+  public ServerApp(int port) {
+    this.port = port;
+
+    handlers.add(new BoardHandler(null));
+    handlers.add(new MemberHandler(null));
+  }
 
   public static void main(String[] args) {
-    try (ServerSocket serverSocket = new ServerSocket(8888);) {
-      System.out.println("서버 실행 중..");
-
-      // 핸들러를 담을 컬렉션을 준비한다.
-      ArrayList<Handler> handlers = new ArrayList<>();
-      handlers.add(new BoardHandler(null));
-      handlers.add(new MemberHandler(null));
-
-      while (true) {
-        Socket socket = serverSocket.accept();
-
-        new Thread(() -> {
-          try (
-              DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-              DataInputStream in = new DataInputStream(socket.getInputStream())) {
-            System.out.println("클라이언트 접속");
-
-            BreadCrumb breadCrumb = new BreadCrumb();
-            breadCrumb.put("메인");
-
-            boolean first = true;
-            String errorMessage = null;
-
-            while (true) {
-
-              try (StringWriter strOut = new StringWriter();
-                  PrintWriter tempOut = new PrintWriter(strOut);) {
-
-                if (first) {
-                  welcome(tempOut);
-                  first = false;
-                }
-                if (errorMessage != null) {
-                  tempOut.println(errorMessage);
-                  errorMessage = null;
-                }
-
-                tempOut.println(breadCrumb.toString());
-                printMainMenus(tempOut);
-                out.writeUTF(strOut.toString());
-              }
-
-              String request = in.readUTF();
-              if (request.equals("quit")) {
-                break;
-              }
-
-              try {
-                int mainMenuNo = Integer.parseInt(request);
-
-                if (mainMenuNo >= 1 && mainMenuNo <= menus.length ) {
-                  breadCrumb.put(menus[mainMenuNo - 1]);
-
-                  handlers.get(mainMenuNo - 1).execute(in, out);
-
-                  breadCrumb.pickUp();
-
-                } else {
-                  throw new Exception("해당 번호의 메뉴가 없습니다.");
-                }
-              } catch (Exception e) {
-                errorMessage = String.format("실행오류: %s", e.getMessage());
-              }
-            }
-            System.out.println("클라이언트에 접속 종료!");
-
-          } catch (Exception e) {
-            System.out.println("클라이언트 통신하는 중 오류 발생!");
-            e.printStackTrace();
-          }
-        }).start(); 
-
-      }
-
-    } catch (Exception e) {
-      System.out.println("서버 실행 중 오류 발생!");
-      e.printStackTrace();
-    }
+    ServerApp app = new ServerApp(8888);
+    app.execute();
 
   }
-  /*
+
+  public void execute()  {
+    try (ServerSocket serverSocket = new ServerSocket(this.port);) {
+      System.out.println("서버 실행 중..");
+
+      while (true) {
+        new Thread(new ServiceProccesor(serverSocket.accept())).start();
+        System.out.println("클라이언트 접속");
+      } 
+      tempOut.println(breadCrumb.toString());
+      printMainMenus(tempOut);
+      out.writeUTF(strOut.toString());
+    }
+
+
+    try {
+      int mainMenuNo = Integer.parseInt(request);
+
+      if (mainMenuNo >= 1 && mainMenuNo <= menus.length ) {
+        breadCrumb.put(menus[mainMenuNo - 1]);
+
+        handlers.get(mainMenuNo - 1).execute(in, out);
+
+        breadCrumb.pickUp();
+
+      } else {
+        throw new Exception("해당 번호의 메뉴가 없습니다.");
+      }
+    } catch (Exception e) {
+      errorMessage = String.format("실행오류: %s", e.getMessage());
+    }
+  }
+  System.out.println("클라이언트에 접속 종료!");
+
+
+}).start(); 
+
+}
+
+} catch (Exception e) {
+  System.out.println("서버 실행 중 오류 발생!");
+  e.printStackTrace();
+}
+
+}
+/*
   public static void main2(String[] args) {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mariadb://localhost:3306/studydb","study","1111")){
@@ -160,29 +136,88 @@ public class ServerApp {
       e.getStackTrace();
     }
   }
-   */
-  static void welcome(PrintWriter out) throws Exception {
-    out.println("[게시판 애플리케이션]");
-    out.println();
-    out.println("환영합니다!");
-    out.println();
+ */
+static void welcome(DataOutputStream out) throws Exception {
+  try (StringWriter strOut = new StringWriter();
+      PrintWriter tempOut = new PrintWriter(strOut);) {
+    tempOut.println("[게시판 애플리케이션]");
+    tempOut.println();
+    tempOut.println("환영합니다!");
+    tempOut.println();
+    out.writeUTF(strOut.toString());
   }
+}
 
-  static void printMainMenus(PrintWriter out) {
+void printMainMenus(DataOutputStream out) throws Exception {
+  try (StringWriter strOut = new StringWriter();
+      PrintWriter tempOut = new PrintWriter(strOut);) {
     for (int i = 0; i < menus.length; i++) {
-      out.printf("  %d: %s\n", i + 1, menus[i]);
+      tempOut.printf("  %d: %s\n", i + 1, menus[i]);
     }
-    out.printf("메뉴를 선택하세요[1..%d](quit: 종료) ", menus.length);
+    tempOut.printf("메뉴를 선택하세요[1..%d](quit: 종료) ", menus.length);
+    out.writeUTF(strOut.toString());
   }
 
-  protected static void printTitle() {
-    StringBuilder builder = new StringBuilder();
-    for (String title : breadcrumbMenu) {
-      if (!builder.isEmpty()) {
-        builder.append(" > ");
-      }
-      builder.append(title);
+}
+
+protected void printTitle() {
+  StringBuilder builder = new StringBuilder();
+  for (String title : breadcrumbMenu) {
+    if (!builder.isEmpty()) {
+      builder.append(" > ");
     }
-    System.out.printf("%s:\n", builder.toString());
+    builder.append(title);
   }
+  System.out.printf("%s:\n", builder.toString());
+}
+
+private class ServiceProccesor implements Runnable {
+  Socket socket;
+
+  public ServiceProccesor(Socket socket) {
+    this.socket = socket;
+  }
+  @Override
+  public void run() {
+    try (Socket s = this.socket;
+        DataOutputStream out = new DataOutputStream(s.getOutputStream());
+        DataInputStream in = new DataInputStream(s.getInputStream())) {
+
+      BreadCrumb breadCrumb = new BreadCrumb();
+      breadCrumb.put("메인");
+
+      welcome(out);
+
+      while(true) {
+        String request = in.readUTF();
+        if (request.equals("quit")) {
+          break;
+        }
+        if (request.equals("menu")) {
+          breadCrumb.toString();
+          printMainMenus(out);
+          continue;
+        }
+
+        try {
+          int menuNo = Integer.parseInt(request);
+          if (menuNo < 1 || menuNo > menus.length) {
+            throw new Exception("메뉴 번호가 옳지 않습니다.");
+          }
+        } catch (Exception e) {
+
+        }
+      }
+
+
+
+
+    } catch (Exception e) {
+      System.out.println("클라이언트 통신하는 중 오류 발생!");
+      e.printStackTrace();
+    }
+
+
+  }
+}  
 }

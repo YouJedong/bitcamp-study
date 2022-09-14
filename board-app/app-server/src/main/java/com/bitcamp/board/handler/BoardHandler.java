@@ -102,7 +102,7 @@ public class BoardHandler extends AbstractHandler {
     board.memberNo = prompt.inputInt("작성자? ");
 
     boardDao.insert(board);
-    System.out.println("게시글을 등록했습니다.");
+    out.writeUTF("게시글을 등록했습니다.");
   }
 
   private void onDelete(DataInputStream in, DataOutputStream out) throws Exception {

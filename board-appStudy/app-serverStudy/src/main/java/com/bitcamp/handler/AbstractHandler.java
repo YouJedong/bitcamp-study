@@ -44,28 +44,35 @@ public abstract class AbstractHandler implements Handler {
 
     BreadCrumb breadCrumb = BreadCrumb.getBreadCrumbOfCurrentThread();
     //      printTitle();
-    try(StringWriter strOut = new StringWriter();
-        PrintWriter tempOut = new PrintWriter(strOut)) {
 
-      tempOut.println(breadCrumb.toString());
-      printMenus(tempOut);
-      out.writeUTF(strOut.toString());
-    }
+    String message = null;
     while (true) {
-      String request = in.readUTF();
-      if (request.equals("0")) {
-        break;
-      }
 
       try(StringWriter strOut = new StringWriter();
           PrintWriter tempOut = new PrintWriter(strOut)) {
 
-        tempOut.println("해당 매뉴를 준비 중 입니다.");
+        if (message != "null") {
+          tempOut.println(message);
+          message = null;
+        }
 
-        printBlankLine(tempOut);
+        tempOut.println();
         tempOut.println(breadCrumb.toString());
         printMenus(tempOut);
         out.writeUTF(strOut.toString());
+      }
+
+      String request = in.readUTF();
+      if (request.equals("0")) {
+        break;
+      }
+      int menuNo = Integer.parseInt(request);
+
+      if (menuNo < 1 || menuNo > menus.length) {
+        message = "메뉴 번호가 옳지 않습니다!";
+        continue; // while 문의 조건 검사로 보낸다.
+      } else {
+        message = "해당 매뉴를 준비 중 입니다.";
       }
 
       //      printBlankLine();
@@ -74,13 +81,6 @@ public abstract class AbstractHandler implements Handler {
       /*
       try {
 
-        if (menuNo < 0 || menuNo > menus.length) {
-          System.out.println("메뉴 번호가 옳지 않습니다!");
-          continue; // while 문의 조건 검사로 보낸다.
-
-        } else if (menuNo == 0) {
-          return; // 메인 메뉴로 돌아간다.
-        }
 
         // 메뉴에 진입할 때 breadcrumb 메뉴바에 그 메뉴를 등록한다.
         ServerApp.breadcrumbMenu.push(menus[menuNo - 1]);
