@@ -46,63 +46,62 @@ public abstract class AbstractHandler implements Handler {
     out.println(); // 메뉴를 처리한 후 빈 줄 출력
   }
 
+  static void error(DataOutputStream out, Exception e) {
+    try (StringWriter strOut = new StringWriter();
+        PrintWriter tempOut = new PrintWriter(strOut);) {
+      tempOut.printf("실행오류 :&s\n", e.getMessage());
+
+      out.writeUTF(strOut.toString());
+    } catch (Exception e2) {
+      e2.printStackTrace();
+    }
+  }
+
+
   @Override
   public void execute(DataInputStream in, DataOutputStream out) throws Exception {
 
     printMenus(out);
 
-    BreadCrumb breadCrumb = BreadCrumb.getBreadCrumbOfCurrentThread();
-    //      printTitle();
-
-    String message = null;
     while (true) {
 
       String request = in.readUTF();
       if (request.equals("0")) {
         break;
+      } else if (request.equals("menu")) {
+        printMenus(out);
+        continue;
       }
-      int menuNo = Integer.parseInt(request);
-
-      if (menuNo < 1 || menuNo > menus.length) {
-        message = "메뉴 번호가 옳지 않습니다!";
-        continue; // while 문의 조건 검사로 보낸다.
-      } 
-      message = "해당 매뉴를 준비 중 입니다.";
 
 
-      //      printBlankLine();
-
-
-      /*
       try {
+        int menuNo = Integer.parseInt(request);
+        if (menuNo < 1 || menuNo > menus.length) {
+          throw new Exception("메뉴 번호가 옳지 않습니다.");
+        } 
+        BreadCrumb.getBreadCrumbOfCurrentThread().put(menus[menuNo - 1]);
 
+        service(menuNo, in, out);
 
-        // 메뉴에 진입할 때 breadcrumb 메뉴바에 그 메뉴를 등록한다.
-        ServerApp.breadcrumbMenu.push(menus[menuNo - 1]);
+        BreadCrumb.getBreadCrumbOfCurrentThread().pickUp();
 
-        printHeadline();
+        out.writeUTF(request);
+      } catch (Exception e) {
+        error(out, e); 
 
-        // 서브 메뉴의 제목을 출력한다.
-        printTitle();
-
-        // 사용자가 입력한 메뉴 번호에 대해 작업을 수행한다.
-        service(menuNo);
-
-        printBlankLine();
-
-        ServerApp.breadcrumbMenu.pop();
-
-      } catch (Exception ex) {
-        System.out.printf("예외 발생: %s\n", ex.getMessage());
       }
-       */
+
+
+
     } // while
   }
+
+
 
   // 서브 클래스가 반드시 만들어야 할 메서드
   // => 메뉴 번호를 받으면 그 메뉴에 해당하는 작업을 수행한다.
   // => 서브 클래스에게 구현을 강제하기 위해 추상 메서드로 선언한다.
-  public abstract void service(int menuNo);
+  public abstract void service(int menuNo, DataInputStream in, DataOutputStream out);
 }
 
 

@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import com.bitcamp.board.handler.BoardHandler;
 import com.bitcamp.board.handler.MemberHandler;
@@ -18,17 +20,24 @@ public class ServerApp {
   private int port;
   ArrayList<Handler> handlers = new ArrayList<>();
 
-  public ServerApp(int port) {
+  public ServerApp(int port) throws Exception {
     this.port = port;
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/studydb","study","1111")){
 
-    handlers.add(new BoardHandler(null));
-    handlers.add(new MemberHandler(null));
+      handlers.add(new BoardHandler(con));
+      handlers.add(new MemberHandler(null));
+    }
   }
 
   public static void main(String[] args) {
-    ServerApp app = new ServerApp(8888);
-    app.execute();
+    try {
+      ServerApp app = new ServerApp(8888);
+      app.execute();
 
+    } catch (Exception e) {
+      System.out.println("서버 실행 오류!");
+    }
   }
 
   public void execute()  {
@@ -47,8 +56,6 @@ public class ServerApp {
   }
   /*
   public static void main2(String[] args) {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb","study","1111")){
 
       System.out.println("[게시글 관리 클라이언트]");
 

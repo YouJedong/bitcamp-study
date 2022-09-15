@@ -3,6 +3,10 @@
  */
 package com.bitcamp.board.handler;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.Board;
@@ -20,10 +24,10 @@ public class BoardHandler extends AbstractHandler {
   }
 
   @Override
-  public void service(int menuNo) {
+  public void service(int menuNo, DataInputStream in, DataOutputStream out) {
     try {
       switch (menuNo) {
-        case 1: this.onList(); break;
+        case 1: this.onList(in, out); break;
         case 2: this.onDetail(); break;
         case 3: this.onInput(); break;
         case 4: this.onDelete(); break;
@@ -34,14 +38,19 @@ public class BoardHandler extends AbstractHandler {
     }
   }
 
-  private void onList() throws Exception {
-    List<Board> boards = boardDao.findAll();
+  private void onList(DataInputStream in, DataOutputStream out) throws Exception {
+    try (StringWriter strOut = new StringWriter();
+        PrintWriter tempOut = new PrintWriter(strOut);) {
 
-    System.out.println("번호\t제목\t조회수\t작성자\t등록일");
+      List<Board> boards = boardDao.findAll();
 
-    for (Board board : boards) {
-      System.out.printf("%d\t%s\t%d\t%d\t%s\n",
-          board.no, board.title, board.viewCount, board.memberNo, board.createdDate);
+      tempOut.println("번호\t제목\t조회수\t작성자\t등록일");
+
+      for (Board board : boards) {
+        tempOut.printf("%d\t%s\t%d\t%d\t%s\n",
+            board.no, board.title, board.viewCount, board.memberNo, board.createdDate);
+      }
+      out.writeUTF(strOut.toString());
     }
   }
 
