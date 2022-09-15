@@ -9,6 +9,10 @@ import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
+import com.bitcamp.board.dao.BoardDao;
+import com.bitcamp.board.dao.MariaDBBoardDao;
+import com.bitcamp.board.dao.MariaDBMemberDao;
+import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.handler.BoardHandler;
 import com.bitcamp.board.handler.MemberHandler;
 import com.bitcamp.handler.Handler;
@@ -22,12 +26,16 @@ public class ServerApp {
 
   public ServerApp(int port) throws Exception {
     this.port = port;
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb","study","1111")){
+    Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/studydb","study","1111");
 
-      handlers.add(new BoardHandler(con));
-      handlers.add(new MemberHandler(null));
-    }
+    BoardDao boardDao = new MariaDBBoardDao(con);
+    MemberDao memberDao = new MariaDBMemberDao(con);
+
+
+    handlers.add(new BoardHandler(boardDao));
+    handlers.add(new MemberHandler(memberDao));
+
   }
 
   public static void main(String[] args) {
@@ -57,12 +65,7 @@ public class ServerApp {
   /*
   public static void main2(String[] args) {
 
-      System.out.println("[게시글 관리 클라이언트]");
 
-      welcome();
-
-      BoardDao boardDao = new MariaDBBoardDao(con);
-      MemberDao memberDao = new MariaDBMemberDao(con);
 
 
 
@@ -177,6 +180,7 @@ public class ServerApp {
           } else {
             processMainMenu(in, out, request);
           }
+
         }
         System.out.println("클라이언트에 접속 종료!");
 
@@ -201,6 +205,7 @@ public class ServerApp {
 
         breadCrumb.pickUp();
 
+        out.writeUTF(breadCrumb.toString());
       } catch (Exception e) {
         error(out, e); 
       }

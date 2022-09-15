@@ -49,7 +49,7 @@ public abstract class AbstractHandler implements Handler {
   static void error(DataOutputStream out, Exception e) {
     try (StringWriter strOut = new StringWriter();
         PrintWriter tempOut = new PrintWriter(strOut);) {
-      tempOut.printf("실행오류 :&s\n", e.getMessage());
+      tempOut.printf("실행오류 :%s\n", e.getMessage());
 
       out.writeUTF(strOut.toString());
     } catch (Exception e2) {
@@ -72,8 +72,6 @@ public abstract class AbstractHandler implements Handler {
         printMenus(out);
         continue;
       }
-
-
       try {
         int menuNo = Integer.parseInt(request);
         if (menuNo < 1 || menuNo > menus.length) {
@@ -85,16 +83,13 @@ public abstract class AbstractHandler implements Handler {
 
         BreadCrumb.getBreadCrumbOfCurrentThread().pickUp();
 
-        out.writeUTF(request);
       } catch (Exception e) {
         error(out, e); 
 
       }
-
-
-
     } // while
-  }
+
+  } 
 
 
 
