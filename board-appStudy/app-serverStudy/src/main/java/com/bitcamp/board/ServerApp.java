@@ -7,7 +7,6 @@ import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import javax.swing.text.DefaultEditorKit.InsertBreakAction;
 import com.bitcamp.board.handler.BoardHandler;
 import com.bitcamp.board.handler.MemberHandler;
 import com.bitcamp.handler.Handler;
@@ -40,43 +39,13 @@ public class ServerApp {
         new Thread(new ServiceProccesor(serverSocket.accept())).start();
         System.out.println("클라이언트 접속");
       } 
-      tempOut.println(breadCrumb.toString());
-      printMainMenus(tempOut);
-      out.writeUTF(strOut.toString());
-    }
-
-
-    try {
-      int mainMenuNo = Integer.parseInt(request);
-
-      if (mainMenuNo >= 1 && mainMenuNo <= menus.length ) {
-        breadCrumb.put(menus[mainMenuNo - 1]);
-
-        handlers.get(mainMenuNo - 1).execute(in, out);
-
-        breadCrumb.pickUp();
-
-      } else {
-        throw new Exception("해당 번호의 메뉴가 없습니다.");
-      }
+      //      System.out.println("서버 종료");
     } catch (Exception e) {
-      errorMessage = String.format("실행오류: %s", e.getMessage());
+      System.out.println("서버 실행 중 오류 발생!");
+      e.printStackTrace();
     }
   }
-  System.out.println("클라이언트에 접속 종료!");
-
-
-}).start(); 
-
-}
-
-} catch (Exception e) {
-  System.out.println("서버 실행 중 오류 발생!");
-  e.printStackTrace();
-}
-
-}
-/*
+  /*
   public static void main2(String[] args) {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mariadb://localhost:3306/studydb","study","1111")){
@@ -136,88 +105,99 @@ public class ServerApp {
       e.getStackTrace();
     }
   }
- */
-static void welcome(DataOutputStream out) throws Exception {
-  try (StringWriter strOut = new StringWriter();
-      PrintWriter tempOut = new PrintWriter(strOut);) {
-    tempOut.println("[게시판 애플리케이션]");
-    tempOut.println();
-    tempOut.println("환영합니다!");
-    tempOut.println();
-    out.writeUTF(strOut.toString());
-  }
-}
-
-void printMainMenus(DataOutputStream out) throws Exception {
-  try (StringWriter strOut = new StringWriter();
-      PrintWriter tempOut = new PrintWriter(strOut);) {
-    for (int i = 0; i < menus.length; i++) {
-      tempOut.printf("  %d: %s\n", i + 1, menus[i]);
+   */
+  static void welcome(DataOutputStream out) throws Exception {
+    try (StringWriter strOut = new StringWriter();
+        PrintWriter tempOut = new PrintWriter(strOut);) {
+      tempOut.println("[게시판 애플리케이션]");
+      tempOut.println();
+      tempOut.println("환영합니다!");
+      tempOut.println();
+      out.writeUTF(strOut.toString());
     }
-    tempOut.printf("메뉴를 선택하세요[1..%d](quit: 종료) ", menus.length);
-    out.writeUTF(strOut.toString());
   }
 
-}
+  static void error(DataOutputStream out, Exception e) {
+    try (StringWriter strOut = new StringWriter();
+        PrintWriter tempOut = new PrintWriter(strOut);) {
+      tempOut.printf("실행오류 :&s\n", e.getMessage());
 
-protected void printTitle() {
-  StringBuilder builder = new StringBuilder();
-  for (String title : breadcrumbMenu) {
-    if (!builder.isEmpty()) {
-      builder.append(" > ");
+      out.writeUTF(strOut.toString());
+    } catch (Exception e2) {
+      e2.printStackTrace();
     }
-    builder.append(title);
   }
-  System.out.printf("%s:\n", builder.toString());
-}
 
-private class ServiceProccesor implements Runnable {
-  Socket socket;
+  void printMainMenus(DataOutputStream out) throws Exception {
+    try (StringWriter strOut = new StringWriter();
+        PrintWriter tempOut = new PrintWriter(strOut);) {
+      tempOut.println(BreadCrumb.getBreadCrumbOfCurrentThread().toString());
 
-  public ServiceProccesor(Socket socket) {
-    this.socket = socket;
+      for (int i = 0; i < menus.length; i++) {
+        tempOut.printf("  %d: %s\n", i + 1, menus[i]);
+      }
+      tempOut.printf("메뉴를 선택하세요[1..%d](quit: 종료) ", menus.length);
+      out.writeUTF(strOut.toString());
+    }
   }
-  @Override
-  public void run() {
-    try (Socket s = this.socket;
-        DataOutputStream out = new DataOutputStream(s.getOutputStream());
-        DataInputStream in = new DataInputStream(s.getInputStream())) {
 
-      BreadCrumb breadCrumb = new BreadCrumb();
-      breadCrumb.put("메인");
 
-      welcome(out);
 
-      while(true) {
-        String request = in.readUTF();
-        if (request.equals("quit")) {
-          break;
-        }
-        if (request.equals("menu")) {
-          breadCrumb.toString();
-          printMainMenus(out);
-          continue;
-        }
+  private class ServiceProccesor implements Runnable {
+    Socket socket;
 
-        try {
-          int menuNo = Integer.parseInt(request);
-          if (menuNo < 1 || menuNo > menus.length) {
-            throw new Exception("메뉴 번호가 옳지 않습니다.");
+    public ServiceProccesor(Socket socket) {
+      this.socket = socket;
+    }
+    @Override
+    public void run() {
+      try (Socket s = this.socket;
+          DataOutputStream out = new DataOutputStream(s.getOutputStream());
+          DataInputStream in = new DataInputStream(s.getInputStream())) {
+
+        BreadCrumb breadCrumb = new BreadCrumb();
+        breadCrumb.put("메인");
+
+        welcome(out);
+
+        while(true) {
+          String request = in.readUTF();
+
+          if (request.equals("quit")) {
+            break;
+          } else if (request.equals("menu")) {
+            printMainMenus(out);
+          } else {
+            processMainMenu(in, out, request);
           }
-        } catch (Exception e) {
-
         }
+        System.out.println("클라이언트에 접속 종료!");
+
+      } catch (Exception e) {
+        System.out.println("클라이언트 통신하는 중 오류 발생!");
+        e.printStackTrace();
       }
 
-
-
-
-    } catch (Exception e) {
-      System.out.println("클라이언트 통신하는 중 오류 발생!");
-      e.printStackTrace();
     }
 
+    void processMainMenu (DataInputStream in, DataOutputStream out, String request) {
+      try {
+        int menuNo = Integer.parseInt(request);
+        if (menuNo < 1 || menuNo > menus.length) {
+          throw new Exception("메뉴 번호가 옳지 않습니다.");
+        }
+        BreadCrumb breadCrumb = BreadCrumb.getBreadCrumbOfCurrentThread();
 
-  }
-}  
+        breadCrumb.put(menus[menuNo - 1]);
+
+        handlers.get(menuNo - 1).execute(in, out);
+
+        breadCrumb.pickUp();
+
+      } catch (Exception e) {
+        error(out, e); 
+      }
+
+    }
+  }  
 }

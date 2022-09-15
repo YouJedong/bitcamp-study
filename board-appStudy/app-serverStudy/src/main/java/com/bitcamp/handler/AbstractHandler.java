@@ -24,11 +24,18 @@ public abstract class AbstractHandler implements Handler {
   // 다음 메서드는 execute()에서 메뉴를 출력할 때 사용된다.
   // 다만 서브 클래스서 출력 형식을 바꾸기 위해 오버라이딩 할 수 있도록 
   // 접근 범위를 protected로 설정한다.
-  protected void printMenus(PrintWriter out) {
-    for (int i = 0; i < menus.length; i++) {
-      out.printf("  %d: %s\n", i + 1, menus[i]);
+  protected void printMenus(DataOutputStream out) throws Exception {
+    try (StringWriter strOut = new StringWriter();
+        PrintWriter tempOut = new PrintWriter(strOut);) {
+      tempOut.println(BreadCrumb.getBreadCrumbOfCurrentThread().toString());
+
+      for (int i = 0; i < menus.length; i++) {
+        tempOut.printf("  %d: %s\n", i + 1, menus[i]);
+      }
+      tempOut.printf("메뉴를 선택하세요[1..%d](0: 이전) ", menus.length);
+
+      out.writeUTF(strOut.toString());
     }
-    out.printf("메뉴를 선택하세요[1..%d](0: 이전) ", menus.length);
   }
 
   protected static void printHeadline(PrintWriter out) {
@@ -42,25 +49,13 @@ public abstract class AbstractHandler implements Handler {
   @Override
   public void execute(DataInputStream in, DataOutputStream out) throws Exception {
 
+    printMenus(out);
+
     BreadCrumb breadCrumb = BreadCrumb.getBreadCrumbOfCurrentThread();
     //      printTitle();
 
     String message = null;
     while (true) {
-
-      try(StringWriter strOut = new StringWriter();
-          PrintWriter tempOut = new PrintWriter(strOut)) {
-
-        if (message != "null") {
-          tempOut.println(message);
-          message = null;
-        }
-
-        tempOut.println();
-        tempOut.println(breadCrumb.toString());
-        printMenus(tempOut);
-        out.writeUTF(strOut.toString());
-      }
 
       String request = in.readUTF();
       if (request.equals("0")) {
@@ -71,9 +66,9 @@ public abstract class AbstractHandler implements Handler {
       if (menuNo < 1 || menuNo > menus.length) {
         message = "메뉴 번호가 옳지 않습니다!";
         continue; // while 문의 조건 검사로 보낸다.
-      } else {
-        message = "해당 매뉴를 준비 중 입니다.";
-      }
+      } 
+      message = "해당 매뉴를 준비 중 입니다.";
+
 
       //      printBlankLine();
 
