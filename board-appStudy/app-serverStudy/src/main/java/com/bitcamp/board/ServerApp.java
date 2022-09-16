@@ -24,20 +24,6 @@ public class ServerApp {
   private int port;
   ArrayList<Handler> handlers = new ArrayList<>();
 
-  public ServerApp(int port) throws Exception {
-    this.port = port;
-    Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb","study","1111");
-
-    BoardDao boardDao = new MariaDBBoardDao(con);
-    MemberDao memberDao = new MariaDBMemberDao(con);
-
-
-    handlers.add(new BoardHandler(boardDao));
-    handlers.add(new MemberHandler(memberDao));
-
-  }
-
   public static void main(String[] args) {
     try {
       ServerApp app = new ServerApp(8888);
@@ -47,6 +33,19 @@ public class ServerApp {
       System.out.println("서버 실행 오류!");
     }
   }
+
+  public ServerApp(int port) throws Exception {
+    this.port = port;
+    Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/studydb","study","1111");
+
+    BoardDao boardDao = new MariaDBBoardDao(con);
+    MemberDao memberDao = new MariaDBMemberDao(con);
+
+    handlers.add(new BoardHandler(boardDao));
+    handlers.add(new MemberHandler(memberDao));
+  }
+
 
   public void execute()  {
     try (ServerSocket serverSocket = new ServerSocket(this.port);) {
@@ -62,60 +61,7 @@ public class ServerApp {
       e.printStackTrace();
     }
   }
-  /*
-  public static void main2(String[] args) {
 
-
-
-
-
-      // "메인" 메뉴의 이름을 스택에 등록한다.
-      breadcrumbMenu.push("메인");
-
-
-
-      loop: while (true) {
-
-        printTitle();
-        printMainMenus(menus);
-        System.out.println();
-
-        try {
-
-
-          if (mainMenuNo < 0 || mainMenuNo > menus.length) {
-            System.out.println("메뉴 번호가 옳지 않습니다!");
-            continue; // while 문의 조건 검사로 보낸다.
-
-          } else if (mainMenuNo == 0) {
-            break loop;
-          }
-
-          // 메뉴에 진입할 때 breadcrumb 메뉴바에 그 메뉴를 등록한다.
-          breadcrumbMenu.push(menus[mainMenuNo - 1]);
-
-
-
-          breadcrumbMenu.pop();
-
-        } catch (Exception ex) {
-          System.out.println("입력 값이 옳지 않습니다.");
-        }
-
-
-      } // while
-      Prompt.close();
-
-      System.out.println("연결을 끊었음!");
-
-
-      System.out.println("종료!");
-    } catch (Exception e) {
-      System.out.println("시스템오류 발생!");
-      e.getStackTrace();
-    }
-  }
-   */
   static void welcome(DataOutputStream out) throws Exception {
     try (StringWriter strOut = new StringWriter();
         PrintWriter tempOut = new PrintWriter(strOut);) {
@@ -151,8 +97,6 @@ public class ServerApp {
     }
   }
 
-
-
   private class ServiceProccesor implements Runnable {
     Socket socket;
 
@@ -175,8 +119,10 @@ public class ServerApp {
 
           if (request.equals("quit")) {
             break;
+
           } else if (request.equals("menu")) {
             printMainMenus(out);
+
           } else {
             processMainMenu(in, out, request);
           }

@@ -1,4 +1,4 @@
-package com.bitcamp.dao;
+package com.bitcamp.board.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.bitcamp.board.domain.Member;
 
-// 게시글 목록을 관리하는 역할
-//
-public class MariaDBMemberDao implements MemberDao{
+public class MariaDBMemberDao implements MemberDao {
 
   Connection con;
 
@@ -20,25 +18,12 @@ public class MariaDBMemberDao implements MemberDao{
 
   @Override
   public int insert(Member member) throws Exception {
-    try(PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = con.prepareStatement(
         "insert into app_member(name,email,pwd) values(?,?,sha2(?,256))")) {
-      pstmt.setString(1, member.name);
-      pstmt.setString(2, member.email);
-      pstmt.setString(3, member.password);
-
-      return pstmt.executeUpdate();
-    }
-  }
-
-  @Override
-  public int update(Member member) throws Exception {
-    try(PreparedStatement pstmt = con.prepareStatement(
-        "update app_member set name=?, email=?, pwd=sha2(?, 256) where mno=?")) {
 
       pstmt.setString(1, member.name);
       pstmt.setString(2, member.email);
       pstmt.setString(3, member.password);
-      pstmt.setInt(4, member.no);
 
       return pstmt.executeUpdate();
     }
@@ -46,14 +31,14 @@ public class MariaDBMemberDao implements MemberDao{
 
   @Override
   public Member findByNo(int no) throws Exception {
-    try(PreparedStatement pstmt = con.prepareStatement(
+
+    try (PreparedStatement pstmt = con.prepareStatement(
         "select mno,name,email,cdt from app_member where mno=" + no);
         ResultSet rs = pstmt.executeQuery()) {
 
-
-      if(!rs.next()) {
+      if (!rs.next()) {
         return null;
-      } 
+      }
 
       Member member = new Member();
       member.no = rs.getInt("mno");
@@ -65,18 +50,34 @@ public class MariaDBMemberDao implements MemberDao{
   }
 
   @Override
+  public int update(Member member) throws Exception {
+    try (PreparedStatement pstmt = con.prepareStatement(
+        "update app_member set name=?, email=?, pwd=sha2(?,256) where mno=?")) {
+
+      pstmt.setString(1, member.name);
+      pstmt.setString(2, member.email);
+      pstmt.setString(3, member.password);
+      pstmt.setInt(4, member.no);
+
+      return pstmt.executeUpdate();
+    }
+  }
+
+  @Override
   public int delete(int no) throws Exception {
-    try(PreparedStatement pstmt1 = con.prepareStatement("delete from app_board where mno=?");
+    try (PreparedStatement pstmt1 = con.prepareStatement("delete from app_board where mno=?");
         PreparedStatement pstmt2 = con.prepareStatement("delete from app_member where mno=?")) {
 
       // 커넥션 객체를 수동 커밋 상태로 설정한다.
       con.setAutoCommit(false);
 
+      // 회원이 작성한 게시글을 삭제한다.
       pstmt1.setInt(1, no);
       pstmt1.executeUpdate();
 
+      // 회원을 삭제한다.
       pstmt2.setInt(1, no);
-      int count =  pstmt2.executeUpdate();
+      int count = pstmt2.executeUpdate();
 
       // 현재까지 작업한 데이터 변경 결과를 실제 테이블에 적용해 달라고 요청한다.
       con.commit();
@@ -99,7 +100,7 @@ public class MariaDBMemberDao implements MemberDao{
 
   @Override
   public List<Member> findAll() throws Exception {
-    try(PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = con.prepareStatement(
         "select mno,name,email from app_member");
         ResultSet rs = pstmt.executeQuery()) {
 
@@ -118,6 +119,7 @@ public class MariaDBMemberDao implements MemberDao{
     }
   }
 }
+
 
 
 

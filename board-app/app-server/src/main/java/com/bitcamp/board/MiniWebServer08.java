@@ -1,12 +1,9 @@
 package com.bitcamp.board;
 
-import static org.reflections.scanners.Scanners.TypesAnnotated;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Parameter;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -14,15 +11,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import org.reflections.Reflections;
 import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.dao.MariaDBBoardDao;
 import com.bitcamp.board.dao.MariaDBMemberDao;
 import com.bitcamp.board.dao.MemberDao;
+import com.bitcamp.board.handler.BoardFormHandler;
 import com.bitcamp.board.handler.ErrorHandler;
-import com.bitcamp.servlet.Servlet;
-import com.bitcamp.servlet.annotation.WebServlet;
+import com.bitcamp.board.handler.MemberUpdateHandler;
+import com.bitcamp.board.handler.WelcomeHandler;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -37,30 +33,7 @@ import com.sun.net.httpserver.HttpServer;
 // 7) URL 디코딩 처리
 // 8) 회원 요청 처리하기
 //
-public class MiniWebServer {
-
-  public static void main2(String[] args) throws Exception {
-    // 클래스를 찾아주는 도구를 준비한다.
-    Reflections reflections = new Reflections("com.bitcamp.board");
-    /*
-    // 지정된 패키지에서 @WebServlet 애노테이션이 붙은 클래스를 모두 찾는다.
-    // 검색조건 1) WebServlet 애노테이션이 붙어 있는 클래스의 이름들을 모두 찾아라!
-    QueryFunction<Store,String> 검색필터1 = TypesAnnotated.with(WebServlet.class);
-
-    // 검색조건 2) 찾은 클래스 이름을 가지고 클래스를 Method Area 영역에 로딩하여
-    //             Class 객체 목록을 리턴하라!
-    QueryFunction<Store,Class<?>> 검색필터2 = 검색필터1.asClass();
-
-    // 위의 두 검색 조건으로 클래스를 찾는다.
-    Set<Class<?>> 서블릿클래스들 = reflections.get(검색필터2);
-     */
-    Set<Class<?>> servlets = reflections.get(TypesAnnotated.with(WebServlet.class).asClass());
-    for (Class<?> servlet :servlets) {
-      WebServlet anno = servlet.getAnnotation(WebServlet.class);
-      System.out.printf("%s ---> %s\n", anno.value(), servlet.getName());
-
-    }
-  }
+public class MiniWebServer08 {
 
   public static void main(String[] args) throws Exception {
     Connection con = DriverManager.getConnection(
@@ -69,34 +42,10 @@ public class MiniWebServer {
     BoardDao boardDao = new MariaDBBoardDao(con);
     MemberDao memberDao = new MariaDBMemberDao(con);
 
-    Map<String,Servlet> servletMap = new HashMap<>();
-
-
-    // WebServlet 애노테이션이 붙은 클래스를 찾아 객체를 생성한 후 맵에 저장한다.
-    // 맵에 저장할 때 사용할 key는 WebServlet 애노테이션에 설정된 값이다.
-    Reflections reflections = new Reflections("com.bitcamp.board");
-    Set<Class<?>> servlets = reflections.get(TypesAnnotated.with(WebServlet.class).asClass());
-    for (Class<?> servlet :servlets) {
-      String servletPath = servlet.getAnnotation(WebServlet.class).value();
-
-      Constructor<?> constructor = servlet.getConstructors()[0];
-      Parameter[] params =  constructor.getParameters();
-
-      if (params.length == 0) { // 생성자의 파라미터가 없다면 
-        servletMap.put(servletPath, (Servlet) constructor.newInstance());
-        System.out.println(servlet.getName());
-
-      } else if (params[0].getType() == BoardDao.class) {
-        servletMap.put(servletPath, (Servlet) constructor.newInstance(boardDao));
-
-      } else if (params[0].getType() == MemberDao.class) {
-        servletMap.put(servletPath, (Servlet) constructor.newInstance(memberDao));
-      }
-
-    }
-
-
+    WelcomeHandler welcomeHandler = new WelcomeHandler();
     ErrorHandler errorHandler = new ErrorHandler();
+    BoardFormHandler boardHandler = new BoardFormHandler(boardDao);
+    MemberUpdateHandler memberHandler = new MemberUpdateHandler(memberDao);
 
     class MyHttpHandler implements HttpHandler {
       @Override
@@ -123,12 +72,47 @@ public class MiniWebServer {
           }
           System.out.println(paramMap);
 
-          Servlet servlet = servletMap.get(path);
+          if (path.equals("/")) {
+            welcomeHandler.service(paramMap, printWriter);
 
-          if (servlet != null) {
-            servlet.service(paramMap, printWriter);
+          } else if (path.equals("/board/list")) {
+            boardHandler.list(paramMap, printWriter);
+
+          } else if (path.equals("/board/detail")) {
+            boardHandler.detail(paramMap, printWriter);
+
+          } else if (path.equals("/board/update")) {
+            boardHandler.update(paramMap, printWriter);
+
+          } else if (path.equals("/board/delete")) {
+            boardHandler.delete(paramMap, printWriter);
+
+          } else if (path.equals("/board/form")) {
+            boardHandler.form(paramMap, printWriter);
+
+          } else if (path.equals("/board/add")) {
+            boardHandler.add(paramMap, printWriter);
+
+          } else if (path.equals("/member/list")) {
+            memberHandler.list(paramMap, printWriter);
+
+          } else if (path.equals("/member/detail")) {
+            memberHandler.detail(paramMap, printWriter);
+
+          } else if (path.equals("/member/update")) {
+            memberHandler.update(paramMap, printWriter);
+
+          } else if (path.equals("/member/delete")) {
+            memberHandler.delete(paramMap, printWriter);
+
+          } else if (path.equals("/member/form")) {
+            memberHandler.form(paramMap, printWriter);
+
+          } else if (path.equals("/member/add")) {
+            memberHandler.add(paramMap, printWriter);
+
           } else {
-            errorHandler.service(paramMap, printWriter);
+            errorHandler.error(paramMap, printWriter);
           }
 
           bytes = stringWriter.toString().getBytes("UTF-8");
