@@ -9,7 +9,7 @@
 
 rootProject.name = 'board-appStudy'
 // include('app')
-include('app-clientStudy')
+// include('app-clientStudy')
 include('app-serverStudy')
-include('app-commonStudy')
+// include('app-commonStudy')
 

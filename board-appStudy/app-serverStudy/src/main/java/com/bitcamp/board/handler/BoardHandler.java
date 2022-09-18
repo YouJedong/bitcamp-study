@@ -14,11 +14,11 @@ public class BoardHandler {
   private BoardDao boardDao;
 
   public BoardHandler(BoardDao boardDao) {
-
     this.boardDao = boardDao;
   }
 
-  public void list(PrintWriter out) throws Exception {
+  public void list(Map<String,String> paramMap, PrintWriter out) throws Exception {
+
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");
@@ -133,6 +133,7 @@ public class BoardHandler {
 
     out.println("</body>");
     out.println("</html>");
+
   }
 
   public void update(Map<String,String> paramMap, PrintWriter out) throws Exception {
@@ -142,7 +143,7 @@ public class BoardHandler {
     out.println("<head>");
     out.println("<meta charset=\"UTF-8\">");
     out.println("<title>bitcamp</title>");
-    out.println("<meta http-equiv='Refresh' content='5; url=list'>");
+    out.println("<meta http-equiv='Refresh' content='1; url=list'>");
     out.println("</head>");
     out.println("<body>");
     out.println("<h1>게시글 변경</h1>");
@@ -163,7 +164,7 @@ public class BoardHandler {
     out.println("</html>");
   }
 
-  public void form(PrintWriter out) throws Exception {
+  public void form(Map<String, String> paramMap, PrintWriter out) {
 
     out.println("<!DOCTYPE html>");
     out.println("<html>");
@@ -197,7 +198,7 @@ public class BoardHandler {
 
   }
 
-  public void add(Map<String, String> paramMap, PrintWriter out) throws Exception {
+  public void add(Map<String,String> paramMap, PrintWriter out) throws Exception {
 
     out.println("<!DOCTYPE html>");
     out.println("<html>");
@@ -225,6 +226,8 @@ public class BoardHandler {
     out.println("</html>");
 
   }
+
+
 }
 
 
