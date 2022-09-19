@@ -9,7 +9,7 @@ import com.bitcamp.servlet.Servlet;
 import com.bitcamp.servlet.annotation.WebServlet;
 
 @WebServlet(value="/member/form")
-public class MemberFormHandler  implements Servlet{
+public class MemberFormHandler implements Servlet {
 
   @Override
   public void service(Map<String, String> paramMap, PrintWriter out) {

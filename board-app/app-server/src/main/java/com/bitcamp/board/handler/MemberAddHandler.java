@@ -11,7 +11,7 @@ import com.bitcamp.servlet.Servlet;
 import com.bitcamp.servlet.annotation.WebServlet;
 
 @WebServlet(value="/member/add")
-public class MemberAddHandler implements Servlet{
+public class MemberAddHandler implements Servlet {
 
   private MemberDao memberDao;
 
@@ -20,7 +20,7 @@ public class MemberAddHandler implements Servlet{
   }
 
   @Override
-  public void  service(Map<String,String> paramMap, PrintWriter out) throws Exception {
+  public void service(Map<String,String> paramMap, PrintWriter out) throws Exception {
 
     out.println("<!DOCTYPE html>");
     out.println("<html>");

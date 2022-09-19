@@ -12,7 +12,7 @@ import com.bitcamp.servlet.Servlet;
 import com.bitcamp.servlet.annotation.WebServlet;
 
 @WebServlet(value="/member/list")
-public class MemberListHandler  implements Servlet{
+public class MemberListHandler implements Servlet {
 
   private MemberDao memberDao;
 

@@ -10,8 +10,8 @@ import com.bitcamp.board.domain.Board;
 import com.bitcamp.servlet.Servlet;
 import com.bitcamp.servlet.annotation.WebServlet;
 
-@WebServlet(value="/board/Update")
-public class BoardUpdateHandler implements Servlet{
+@WebServlet(value="/board/update")
+public class BoardUpdateHandler implements Servlet {
 
   private BoardDao boardDao;
 
@@ -47,6 +47,7 @@ public class BoardUpdateHandler implements Servlet{
     out.println("</body>");
     out.println("</html>");
   }
+
 }
 
 

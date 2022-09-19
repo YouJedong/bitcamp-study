@@ -4,8 +4,7 @@ import java.io.PrintWriter;
 import java.util.Map;
 import com.bitcamp.servlet.Servlet;
 
-public class ErrorHandler implements Servlet{
-  @Override
+public class ErrorHandler implements Servlet {
   public void service(Map<String,String> paramMap, PrintWriter out) {
     out.println("<!DOCTYPE html>");
     out.println("<html>");

@@ -10,7 +10,7 @@ import com.bitcamp.servlet.Servlet;
 import com.bitcamp.servlet.annotation.WebServlet;
 
 @WebServlet(value="/member/delete")
-public class MemberDeleteHandler  implements Servlet{
+public class MemberDeleteHandler implements Servlet {
 
   private MemberDao memberDao;
 
@@ -44,6 +44,7 @@ public class MemberDeleteHandler  implements Servlet{
     out.println("</html>");
 
   }
+
 }
 
 

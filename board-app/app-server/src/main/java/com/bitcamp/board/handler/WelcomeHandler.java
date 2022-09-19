@@ -6,8 +6,7 @@ import com.bitcamp.servlet.Servlet;
 import com.bitcamp.servlet.annotation.WebServlet;
 
 @WebServlet(value="/")
-public class WelcomeHandler implements Servlet{
-
+public class WelcomeHandler implements Servlet {
 
   @Override
   public void service(Map<String,String> paramMap, PrintWriter out) {

@@ -10,6 +10,5 @@ import java.lang.annotation.Target;
 // 다음 애노테이션은 HTTP 요청을 처리하는 객체에 대해
 // 경로를 설정할 때 사용한다.
 public @interface WebServlet {
-  String value(); // 애노테이션 필수 속성을 설정
-
+  String value(); // 애노테이션의 필수 속성을 설정
 }

@@ -9,7 +9,7 @@ import com.bitcamp.servlet.Servlet;
 import com.bitcamp.servlet.annotation.WebServlet;
 
 @WebServlet(value="/board/form")
-public class BoardFormHandler implements Servlet{
+public class BoardFormHandler implements Servlet {
 
   @Override
   public void service(Map<String, String> paramMap, PrintWriter out) {
@@ -45,6 +45,7 @@ public class BoardFormHandler implements Servlet{
     out.println("</html>");
 
   }
+
 
 }
 
