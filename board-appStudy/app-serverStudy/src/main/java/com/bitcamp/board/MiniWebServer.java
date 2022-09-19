@@ -1,9 +1,11 @@
 package com.bitcamp.board;
 
+import static org.reflections.scanners.Scanners.TypesAnnotated;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Constructor;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -11,14 +13,25 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Map;
-import com.bitcamp.board.dao.BoardDao;
-import com.bitcamp.board.dao.MariaDBBoardDao;
-import com.bitcamp.board.dao.MariaDBMemberDao;
-import com.bitcamp.board.dao.MemberDao;
-import com.bitcamp.board.handler.BoardHandler;
+import java.util.Set;
+import org.reflections.Reflections;
+import com.bitcamp.board.handler.BoardAddHandler;
+import com.bitcamp.board.handler.BoardDeleteHandler;
+import com.bitcamp.board.handler.BoardDetailHandler;
+import com.bitcamp.board.handler.BoardFormHandler;
+import com.bitcamp.board.handler.BoardListHandler;
+import com.bitcamp.board.handler.BoardUpdateHandler;
 import com.bitcamp.board.handler.ErrorHandler;
-import com.bitcamp.board.handler.MemberHandler;
+import com.bitcamp.board.handler.MemberAddHandler;
+import com.bitcamp.board.handler.MemberDeleteHandler;
+import com.bitcamp.board.handler.MemberDetailHandler;
+import com.bitcamp.board.handler.MemberFormHandler;
+import com.bitcamp.board.handler.MemberListHandler;
+import com.bitcamp.board.handler.MemberUpdateHandler;
 import com.bitcamp.board.handler.WelcomeHandler;
+import com.bitcamp.servlet.Servlet;
+import com.bitcamp.servlet.annotation.Repository;
+import com.bitcamp.servlet.annotation.WebServlet;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -39,13 +52,41 @@ public class MiniWebServer {
     Connection con = DriverManager.getConnection(
         "jdbc:mariadb://localhost:3306/studydb","study","1111");
 
-    BoardDao boardDao = new MariaDBBoardDao(con);
-    MemberDao memberDao = new MariaDBMemberDao(con);
+    Map<String,Object> objMap = new HashMap<>();
 
-    WelcomeHandler welcomeHandler = new WelcomeHandler();
+    Reflections reflections = new Reflections("com.bitcamp.board");
+    Set<Class<?>> classes = reflections.get(TypesAnnotated.with(Repository.class).asClass());
+    for (Class<?> clazz : classes) {
+      String objName = clazz.getAnnotation(Repository.class).value();
+      Constructor<?> constructor = clazz.getConstructor(Connection.class);
+      objMap.put(objName, constructor.newInstance(con));
+    }
+
+    Set<Class<?>> servlets = reflections.get(TypesAnnotated.with(WebServlet.class).asClass());
+    for (Class<?> servlet : servlets) {
+      String servletPath = servlet.getAnnotation(WebServlet.class).value();
+      /////////////
+
+
+    }
+
+
+    Map<String,Servlet> servletMap = new HashMap<>();
+    servletMap.put("/", new WelcomeHandler());
+    servletMap.put("/board/form", new BoardFormHandler());
+    servletMap.put("/board/add", new BoardAddHandler(boardDao));
+    servletMap.put("/board/list", new BoardListHandler(boardDao));
+    servletMap.put("/board/detail", new BoardDetailHandler(boardDao));
+    servletMap.put("/board/update", new BoardUpdateHandler(boardDao));
+    servletMap.put("/board/delete", new BoardDeleteHandler(boardDao)); 
+    servletMap.put("/member/form", new MemberFormHandler());
+    servletMap.put("/member/add", new MemberAddHandler(memberDao));
+    servletMap.put("/member/list", new MemberListHandler(memberDao));
+    servletMap.put("/member/detail", new MemberDetailHandler(memberDao));
+    servletMap.put("/member/update", new MemberUpdateHandler(memberDao));
+    servletMap.put("/member/delete", new MemberDeleteHandler(memberDao));
+
     ErrorHandler errorHandler = new ErrorHandler();
-    BoardHandler boardHandler = new BoardHandler(boardDao);
-    MemberHandler memberHandler = new MemberHandler(memberDao);
 
     class MyHttpHandler implements HttpHandler {
       @Override
@@ -72,47 +113,12 @@ public class MiniWebServer {
           }
           System.out.println(paramMap);
 
-          if (path.equals("/")) {
-            welcomeHandler.service(paramMap, printWriter);
-
-          } else if (path.equals("/board/list")) {
-            boardHandler.list(paramMap, printWriter);
-
-          } else if (path.equals("/board/detail")) {
-            boardHandler.detail(paramMap, printWriter);
-
-          } else if (path.equals("/board/update")) {
-            boardHandler.update(paramMap, printWriter);
-
-          } else if (path.equals("/board/delete")) {
-            boardHandler.delete(paramMap, printWriter);
-
-          } else if (path.equals("/board/form")) {
-            boardHandler.form(paramMap, printWriter);
-
-          } else if (path.equals("/board/add")) {
-            boardHandler.add(paramMap, printWriter);
-
-          } else if (path.equals("/member/list")) {
-            memberHandler.list(paramMap, printWriter);
-
-          } else if (path.equals("/member/detail")) {
-            memberHandler.detail(paramMap, printWriter);
-
-          } else if (path.equals("/member/update")) {
-            memberHandler.update(paramMap, printWriter);
-
-          } else if (path.equals("/member/delete")) {
-            memberHandler.delete(paramMap, printWriter);
-
-          } else if (path.equals("/member/form")) {
-            memberHandler.form(paramMap, printWriter);
-
-          } else if (path.equals("/member/add")) {
-            memberHandler.add(paramMap, printWriter);
+          Servlet servlet = servletMap.get(path);
+          if (servlet != null) {
+            servlet.service(paramMap, printWriter);
 
           } else {
-            errorHandler.error(paramMap, printWriter);
+            errorHandler.service(paramMap, printWriter);
           }
 
           bytes = stringWriter.toString().getBytes("UTF-8");
@@ -141,5 +147,4 @@ public class MiniWebServer {
 
     System.out.println("서버 시작!");
   }
-
 }
