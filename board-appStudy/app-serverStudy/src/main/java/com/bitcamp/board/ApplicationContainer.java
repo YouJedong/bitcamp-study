@@ -11,7 +11,6 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,13 +34,9 @@ import com.sun.net.httpserver.HttpServer;
 // 7) URL 디코딩 처리
 // 8) 회원 요청 처리하기
 //
-public class MiniWebServer {
+public class ApplicationContainer {
 
   public static void main(String[] args) throws Exception {
-    Connection con = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/studydb","study","1111");
-
-    // 객체(DAO, 서블릿)를 보관할 맵을 준비
     Map<String,Object> objMap = new HashMap<>();
 
     // DAO 객체를 찾아 맵에 보관한다.
