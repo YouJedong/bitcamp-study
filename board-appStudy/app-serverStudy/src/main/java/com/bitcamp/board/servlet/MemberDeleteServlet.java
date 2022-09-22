@@ -1,31 +1,38 @@
+/*
+ * 회원 메뉴 처리 클래스
+ */
 package com.bitcamp.board.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.bitcamp.board.dao.BoardDao;
+import com.bitcamp.board.dao.MariaDBMemberDao;
+import com.bitcamp.board.dao.MemberDao;
 
-@WebServlet(value="/board/delete")
-public class BoardDeleteServlet extends HttpServlet {
+@WebServlet(value="/member/delete")
+public class MemberDeleteServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
+  private MemberDao memberDao;
 
-  BoardDao boardDao;
-
-  @Override
-  public void init() throws ServletException {
-    boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+  public MemberDeleteServlet() throws Exception {
+    Class.forName("org.mariadb.jdbc.Driver");
+    Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/studydb","study","1111");
+    memberDao = new MariaDBMemberDao(con);
   }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
 
-    resp.setContentType("text/html;charset=UTF-8");
+    resp.setContentType("text/html; charset=UTF-8");
     PrintWriter out = resp.getWriter();
 
     out.println("<!DOCTYPE html>");
@@ -36,21 +43,20 @@ public class BoardDeleteServlet extends HttpServlet {
     out.println("<meta http-equiv='Refresh' content='1; url=list'>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>게시글 삭제</h1>");
+    out.println("<h1>회원 삭제</h1>");
+
+    int no = Integer.parseInt(req.getParameter("no"));
 
     try {
-      int no = Integer.parseInt(req.getParameter("no"));
-
-      if (boardDao.delete(no) == 0) {
-        out.println("<p>해당 번호의 게시글이 없습니다.</p>");
+      if (memberDao.delete(no) == 0) {
+        out.println("<p>해당 번호의 회원이 없습니다.</p>");
 
       } else {
-        out.println("<p>해당 게시글을 삭제했습니다.</p>");
+        out.println("<p>해당 회원을 삭제했습니다.</p>");
       }
     } catch (Exception e) {
-      out.println("<p>실행 중 오류 발생!</p>");
+      System.out.println("Delete error");
     }
-
     out.println("</body>");
     out.println("</html>");
 

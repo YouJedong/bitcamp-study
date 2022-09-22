@@ -1,31 +1,40 @@
+/*
+ * 회원 메뉴 처리 클래스
+ */
 package com.bitcamp.board.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.bitcamp.board.dao.MariaDBMemberDao;
 import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.domain.Member;
 
 @WebServlet(value="/member/detail")
 public class MemberDetailServlet extends HttpServlet {
+
   private static final long serialVersionUID = 1L;
+  private MemberDao memberDao;
 
-  MemberDao memberDao;
-
-  @Override
-  public void init() throws ServletException {
-    memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
+  public MemberDetailServlet() throws Exception {
+    Class.forName("org.mariadb.jdbc.Driver");
+    Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/studydb","study","1111");
+    memberDao = new MariaDBMemberDao(con);
   }
+
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
 
-    resp.setContentType("text/html;charset=UTF-8");
+    resp.setContentType("text/html; charset=UTF-8");
     PrintWriter out = resp.getWriter();
 
     out.println("<!DOCTYPE html>");
@@ -37,8 +46,8 @@ public class MemberDetailServlet extends HttpServlet {
     out.println("<body>");
     out.println("<h1>회원 상세 정보</h1>");
 
+    int no = Integer.parseInt(req.getParameter("no"));
     try {
-      int no = Integer.parseInt(req.getParameter("no"));
       Member member = memberDao.findByNo(no);
 
       if (member == null) {
@@ -70,13 +79,12 @@ public class MemberDetailServlet extends HttpServlet {
         out.println("</form>");
       }
     } catch (Exception e) {
-      out.println("<p>실행 중 오류 발생!</p>");
+      System.out.println("Detail error");
     }
 
     out.println("</body>");
     out.println("</html>");
   }
-
 }
 
 

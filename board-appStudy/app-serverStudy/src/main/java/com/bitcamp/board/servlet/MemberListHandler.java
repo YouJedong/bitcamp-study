@@ -1,23 +1,34 @@
 /*
- * 게시글 메뉴 처리 클래스
+ * 회원 메뉴 처리 클래스
  */
 package com.bitcamp.board.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.bitcamp.board.domain.Board;
+import com.bitcamp.board.dao.MariaDBMemberDao;
+import com.bitcamp.board.dao.MemberDao;
+import com.bitcamp.board.domain.Member;
 
-
-@WebServlet(value="/board/list")
-public class BoardListServlet extends HttpServlet {
+@WebServlet(value="/member/list")
+public class MemberListHandler extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
+  private MemberDao memberDao;
+
+  public MemberListHandler() throws Exception {
+    Class.forName("org.mariadb.jdbc.Driver");
+    Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/studydb","study","1111");
+    memberDao = new MariaDBMemberDao(con);
+  }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -39,39 +50,34 @@ public class BoardListServlet extends HttpServlet {
     out.println("</style>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>게시글</h1>");
-    out.println("<a href='form'>새 글</a>");
+    out.println("<h1>회원</h1>");
+    out.println("<a href='form'>새 회원</a>");
 
     try {
-      List<Board> boards = AppInitServlet.boardDao.findAll();
       out.println("<table border='1'>");
       out.println("  <tr>");
       out.println("    <th>번호</th>");
-      out.println("    <th>제목</th>");
-      out.println("    <th>조회수</th>");
-      out.println("    <th>작성자</th>");
-      out.println("    <th>등록일</th>");
+      out.println("    <th>이름</th>");
+      out.println("    <th>이메일</th>");
       out.println("  </tr>");
 
-      for (Board board : boards) {
+      List<Member> members = memberDao.findAll();
+      for (Member member : members) {
         out.println("<tr>");
-        out.printf("  <td>%d</td>", board.no);
-        out.printf("  <td><a href='detail?no=%d'>%s</a></td>", board.no, board.title);
-        out.printf("  <td>%d</td>", board.viewCount);
-        out.printf("  <td>%d</td>", board.memberNo);
-        out.printf("  <td>%s</td>", board.createdDate);
+        out.printf("  <td>%d</td>", member.no);
+        out.printf("  <td><a href='detail?no=%d'>%s</a></td>", member.no, member.name);
+        out.printf("  <td>%s</td>", member.email);
         out.println("</tr>");
       }
-
-      out.println("</table>");
     } catch (Exception e) {
-      out.println("<p>실행중 오류 발생!</p>");
+      System.out.println("list error");
     }
+
+    out.println("</table>");
     out.println("<p><a href='../welcome'>메인</a></p>");
     out.println("</body>");
     out.println("</html>");
   }
-
 }
 
 

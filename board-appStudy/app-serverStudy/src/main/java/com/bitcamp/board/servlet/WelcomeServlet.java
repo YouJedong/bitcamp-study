@@ -2,27 +2,23 @@ package com.bitcamp.board.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(value="/welcome")
-public class WelcomeServlet implements Servlet {
+public class WelcomeServlet extends HttpServlet {
 
-  ServletConfig config;
+  private static final long serialVersionUID = 1L;
 
   @Override
-  public void service(ServletRequest req, ServletResponse res)
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
 
-    // 콘텐트를 출력하는 출력 스트림을 준비하기 전에
-    // 어떤 인코딩으로 콘텐트를 출력할 것인지 먼저 설정해야 한다.
-    res.setContentType("text/html; charset=UTF-8");
-
-    PrintWriter out = res.getWriter();
+    resp.setContentType("text/html; charset=UTF-8");
+    PrintWriter out = resp.getWriter();
 
     out.println("<!DOCTYPE html>");
     out.println("<html>");
@@ -41,26 +37,4 @@ public class WelcomeServlet implements Servlet {
     out.println("</html>");
   }
 
-  @Override
-  public void init(ServletConfig config) throws ServletException {
-    System.out.println("WelcomeServlet.init()");
-    this.config = config;
-  }
-
-  @Override
-  public void destroy() {
-    System.out.println("WelcomeServlet.destory()");
-  }
-
-  @Override
-  public String getServletInfo() {
-    System.out.println("WelcomeServlet.getServletInfo()");
-    return "환영인사를 하는 서블릿";
-  }
-
-  @Override
-  public ServletConfig getServletConfig() {
-    System.out.println("WelcomeServlet.getServletConfig()");
-    return this.config;
-  }
 }
