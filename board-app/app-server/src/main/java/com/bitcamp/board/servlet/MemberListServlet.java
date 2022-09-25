@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.domain.Member;
 
-@WebServlet(value="/member/list")
+//@WebServlet(value="/member/list")
 public class MemberListServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 

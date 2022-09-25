@@ -1,20 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-  pageEncoding="UTF-8"%>
-
+<%@ page language="java" 
+    contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="java.util.List"%>
 <%@ page import="com.bitcamp.board.dao.BoardDao"%>
 <%@ page import="com.bitcamp.board.domain.Board"%>
 
-<%!
+<%! 
   BoardDao boardDao;
 
-  // init(ServletConfig) 메서드에 코드를 넣고 싶으면
-  // 다음과 같이 JspPage.jspInit() 
-  public void jspInit() {
+  public void init() throws ServletException {
     boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
   }
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +27,7 @@ tr:hover {
 <body>
   <h1>게시글-JSP</h1>
   <a href='form'>새 글</a>
-<%
+<% 
 try {
   List<Board> boards = boardDao.findAll();
 %>
@@ -52,21 +49,21 @@ try {
       <td><%=board.memberNo%></td>
       <td><%=board.createdDate%></td>
     </tr>
-<% 
+<%   
   }
 %>
   </table>
-<%  
+<%   
 } catch (Exception e) {
 %>
   <p>실행 중 오류 발생!</p>
-<%  
-  }
+<%     
+}
 %>
-  <p><a href='../welcome'>메인</a></p>
+  <p><a href='../'>메인</a></p>
 </body>
 </html>
 
 
 
-
+    
