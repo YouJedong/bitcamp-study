@@ -7,7 +7,6 @@
 <%!
   BoardDao boardDao;
 
-  @Override
   public void init() throws ServletException {
     boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
   }
