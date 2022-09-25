@@ -7,5 +7,32 @@
   metadata-complete="false">
   
   <display-name>board-app</display-name>
+  
+  <servlet>
+    <servlet-name>welcome</servlet-name>
+    <jsp-file>/welcome.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>welcome</servlet-name>
+    <url-pattern>/welcome</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>board/list</servlet-name>
+    <jsp-file>/board/list.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>board/list</servlet-name>
+    <url-pattern>/board/list</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>board/add</servlet-name>
+    <jsp-file>/board/add.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>board/add</servlet-name>
+    <url-pattern>/board/add</url-pattern>
+  </servlet-mapping>
 
 </web-app>
