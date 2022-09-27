@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.Board;
 
-@WebServlet("/board/add")
-public class BoardAddController extends HttpServlet {
+@WebServlet("/board/detail")
+public class BoardDetailController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   BoardDao boardDao;
@@ -25,26 +25,18 @@ public class BoardAddController extends HttpServlet {
       throws ServletException, IOException {
 
     try {
-      Board board = new Board();
-      board.title = request.getParameter("title");
-      board.content = request.getParameter("content");
-      board.memberNo = Integer.parseInt(request.getParameter("writerNo"));
+      int boardNo = Integer.parseInt(request.getParameter("no"));
 
-      if (boardDao.insert(board) == 0) {
-        throw new Exception("게시글 등록 실패!");
+      Board board = boardDao.findByNo(boardNo);
+
+      if (board == null) {
+        throw new Exception("게시글 상세조회 실패!");
       }
 
-      //      // 1. JSP의 해더 설정 + 작업처리 위임 
-      //      response.setHeader("Refresh", "1;url=list");
-      //      response.setContentType("text/html; charset=UTF-8");
-      //      request.getRequestDispatcher("/board/add.jsp").include(request, response);
+      request.setAttribute("board", board);
 
-      // 2. 작업처리 위임 (Refresh)
       response.setContentType("text/html; charset=UTF-8");
-      request.getRequestDispatcher("/board/add.jsp").include(request, response);
-
-      //      // 3.
-      //      response.sendRedirect("list");
+      request.getRequestDispatcher("/board/detail.jsp").include(request, response);
 
     } catch (Exception e) {
       request.setAttribute("exception", e);
@@ -52,7 +44,3 @@ public class BoardAddController extends HttpServlet {
     }
   }
 }
-
-
-
-
