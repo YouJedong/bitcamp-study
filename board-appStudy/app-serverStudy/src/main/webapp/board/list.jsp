@@ -17,7 +17,7 @@ tr:hover {
 </style>
 </head>
 <body>
-  <h1>게시글-JSP</h1>
+  <h1>게시글-JSP+Servlet</h1>
   <a href='form'>새 글</a>
   <table border='1'>
     <tr>
@@ -27,10 +27,9 @@ tr:hover {
       <th>작성자</th>
       <th>등록일</th>
     </tr>
-<% 
-try {
-  List<Board> boards = boardDao.findAll();
-  for (Board board : boards) {
+<%
+List<Board> boards = (List<Board>) request.getAttribute("boards");
+for (Board board : boards) {
 %>
     <tr>
       <td><%=board.no%></td>
@@ -40,16 +39,9 @@ try {
       <td><%=board.createdDate%></td>
     </tr>
 <%   
-  }
-%>
-  </table>
-<%   
-} catch (Exception e) {
-%>
-  <p>실행 중 오류 발생!</p>
-<%     
 }
 %>
+  </table>
   <p><a href='../welcome'>메인</a></p>
 </body>
 </html>

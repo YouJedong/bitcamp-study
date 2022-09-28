@@ -27,25 +27,6 @@
   </servlet-mapping>
   
   <servlet>
-    <servlet-name>board/list</servlet-name>
-    <jsp-file>/board/list.jsp</jsp-file>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>board/list</servlet-name>
-    <url-pattern>/board/list</url-pattern>
-  </servlet-mapping>
-  
-  
-  <servlet>
-    <servlet-name>board/update</servlet-name>
-    <jsp-file>/board/update.jsp</jsp-file>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>board/update</servlet-name>
-    <url-pattern>/board/update</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
     <servlet-name>board/form</servlet-name>
     <jsp-file>/board/form.jsp</jsp-file>
   </servlet>
