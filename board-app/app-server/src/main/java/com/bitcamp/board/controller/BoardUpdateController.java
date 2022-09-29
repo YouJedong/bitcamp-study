@@ -22,9 +22,10 @@ public class BoardUpdateController extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     try {
+      request.setCharacterEncoding("UTF-8");
 
       Board board = new Board();
       board.setNo(Integer.parseInt(request.getParameter("no")));
@@ -40,15 +41,7 @@ public class BoardUpdateController extends HttpServlet {
         throw new Exception("게시글 변경 실패!");
       }
 
-      // Refresh 
-      response.setHeader("Refresh", "1,url=list");
-      response.setContentType("text/html; charset=UTF-8");
-      request.getRequestDispatcher("/board/update.jsp").include(request, response);
-
-      // Redirect
-      // - 클라이언트에게 콘텐트를 보내지 않는다.
-      // - 응답 프로토콜
-      //      response.sendRedirect("list");
+      response.sendRedirect("list");
 
 
     } catch (Exception e) {

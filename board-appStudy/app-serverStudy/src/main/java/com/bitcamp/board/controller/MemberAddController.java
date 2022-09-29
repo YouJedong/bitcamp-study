@@ -10,38 +10,41 @@ import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.domain.Member;
 
 @WebServlet("/member/add")
-public class MemberAddController extends HttpServlet{
-
+public class MemberAddController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   MemberDao memberDao;
 
   @Override
-  public void init() {
+  public void init() throws ServletException {
     memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
   }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     try {
-      request.setCharacterEncoding("UTF-8");
-
       Member member = new Member();
-      member.setName(request.getParameter("name"));
-      member.setEmail(request.getParameter("email"));
-      member.setPassword(request.getParameter("password"));
+      member.name = request.getParameter("name");
+      member.email = request.getParameter("email");
+      member.password = request.getParameter("password");
+
 
       if (memberDao.insert(member) == 0) {
         throw new Exception("회원 등록 실패!");
+
       }
+
       response.sendRedirect("list");
 
-    }catch (Exception e) {
+    } catch (Exception e) {
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response); 
+      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
-
 }
+
+
+
+
