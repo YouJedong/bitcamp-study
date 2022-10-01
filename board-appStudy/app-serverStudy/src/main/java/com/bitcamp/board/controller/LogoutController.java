@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSession;
 import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.domain.Member;
 
-@WebServlet("/auth/login")
-public class LoginController extends HttpServlet {
+@WebServlet("/auth/logout")
+public class LogoutController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   MemberDao memberDao;
