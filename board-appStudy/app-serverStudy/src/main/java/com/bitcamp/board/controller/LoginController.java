@@ -3,6 +3,7 @@ package com.bitcamp.board.controller;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +36,14 @@ public class LoginController extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("loginMember", member);
       }
+
+      Cookie cookie = new Cookie("email", email);
+      if (request.getParameter("saveEmail") == null) {
+        cookie.setMaxAge(0);
+      } else {
+        cookie.setMaxAge(60 * 60 * 24 * 7);
+      }
+      response.addCookie(cookie);
 
       request.setAttribute("member", member);
       response.setContentType("text/html; charset=UTF-8");

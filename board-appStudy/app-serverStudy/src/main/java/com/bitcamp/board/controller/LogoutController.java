@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.bitcamp.board.dao.MemberDao;
-import com.bitcamp.board.domain.Member;
 
 @WebServlet("/auth/logout")
 public class LogoutController extends HttpServlet {
@@ -27,18 +26,10 @@ public class LogoutController extends HttpServlet {
 
 
     try {
-      String email = request.getParameter("email");
-      String password = request.getParameter("password");
-      Member member = memberDao.findByEmailPassword(email, password);
+      HttpSession session = request.getSession();
+      session.invalidate();
 
-      if (member != null) {
-        HttpSession session = request.getSession();
-        session.setAttribute("loginMember", member);
-      }
-
-      request.setAttribute("member", member);
-      response.setContentType("text/html; charset=UTF-8");
-      request.getRequestDispatcher("/auth/loginResult.jsp").include(request, response);
+      response.sendRedirect("../");
 
     } catch (Exception e) {
       e.printStackTrace();
