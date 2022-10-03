@@ -34,6 +34,7 @@ public class BoardListController extends HttpServlet {
       request.getRequestDispatcher("/board/list.jsp").include(request, response);
 
     } catch (Exception e) {
+      e.printStackTrace();
       request.setAttribute("exception", e);
       request.getRequestDispatcher("/error.jsp").forward(request, response);
     }

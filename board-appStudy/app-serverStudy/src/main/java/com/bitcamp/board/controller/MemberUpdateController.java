@@ -25,10 +25,10 @@ public class MemberUpdateController extends HttpServlet {
       throws ServletException, IOException {
 
     Member member = new Member();
-    member.no = Integer.parseInt(request.getParameter("no"));
-    member.name = request.getParameter("name");
-    member.email = request.getParameter("email");
-    member.password = request.getParameter("password");
+    member.setNo(Integer.parseInt(request.getParameter("no")));
+    member.setName(request.getParameter("name"));
+    member.setEmail(request.getParameter("email"));
+    member.setPassword(request.getParameter("password"));
 
     try {
       if (memberDao.update(member) == 0) {

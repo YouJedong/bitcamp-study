@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.Board;
+import com.bitcamp.board.domain.Member;
 
 @WebServlet("/board/add")
 public class BoardAddController extends HttpServlet {
@@ -26,9 +27,11 @@ public class BoardAddController extends HttpServlet {
 
     try {
       Board board = new Board();
-      board.title = request.getParameter("title");
-      board.content = request.getParameter("content");
-      board.memberNo = Integer.parseInt(request.getParameter("writerNo"));
+      board.setTitle(request.getParameter("title"));
+      board.setContent(request.getParameter("content"));
+
+      Member loginMember = (Member) request.getSession().getAttribute("loginMember");
+      board.setWriter(loginMember);
 
       if (boardDao.insert(board) == 0) {
         throw new Exception("게시글 등록 실패!");
