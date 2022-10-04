@@ -12,11 +12,8 @@ public class Board {
   private int viewCount;
   private Date createdDate;
   private Member writer;
-
   // 첨부파일명 정보를 저장할 필드
   private List<AttachedFile> attachedFiles;
-
-
 
   public List<AttachedFile> getAttachedFiles() {
     return attachedFiles;

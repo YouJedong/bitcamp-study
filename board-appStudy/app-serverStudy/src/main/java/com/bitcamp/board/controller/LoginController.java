@@ -23,13 +23,13 @@ public class LoginController extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
 
     try {
       String email = request.getParameter("email");
       String password = request.getParameter("password");
+
       Member member = memberDao.findByEmailPassword(email, password);
 
       if (member != null) {
