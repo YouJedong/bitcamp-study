@@ -38,8 +38,6 @@ public class MariaDBBoardDao implements BoardDao {
         board.setNo(rs.getInt(1));
       }
 
-      insertFiles(board);
-
       return count;
     }
   }
@@ -79,7 +77,7 @@ public class MariaDBBoardDao implements BoardDao {
       board.setWriter(writer);
 
       // 게시글 첨부파일 가져오기 
-      try(PreparedStatement pstmt2 = con.prepareStatement(
+      try (PreparedStatement pstmt2 = con.prepareStatement(
           "select bfno, filepath, bno from app_board_file where bno = " + no);
           ResultSet rs2 = pstmt2.executeQuery()) {
 
@@ -91,7 +89,6 @@ public class MariaDBBoardDao implements BoardDao {
           attachedFiles.add(file);
         }
         board.setAttachedFiles(attachedFiles);
-
       }
 
       return board;
@@ -107,23 +104,13 @@ public class MariaDBBoardDao implements BoardDao {
       pstmt.setString(2, board.getContent());
       pstmt.setInt(3, board.getNo());
 
-      int count =  pstmt.executeUpdate();
-
-      // 게시글을 변경했다면 첨부 파일 이름을 추가한다.
-      if (count > 0) {
-        insertFiles(board);
-      }
-
-      return count;
+      return pstmt.executeUpdate();
     }
   }
 
   @Override
   public int delete(int no) throws Exception {
     try (PreparedStatement pstmt = con.prepareStatement("delete from app_board where bno=?")) {
-
-      // 게시글의 첨부파일을 먼저 삭제한다.
-      deleteFiles(no);
 
       pstmt.setInt(1, no);
       return pstmt.executeUpdate();
@@ -187,7 +174,7 @@ public class MariaDBBoardDao implements BoardDao {
   @Override
   public AttachedFile findFileByNo(int fileNo) throws Exception {
     // 게시글 첨부파일 가져오기 
-    try(PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = con.prepareStatement(
         "select bfno, filepath, bno from app_board_file where bfno = " + fileNo);
         ResultSet rs = pstmt.executeQuery()) {
 
