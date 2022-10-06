@@ -6,6 +6,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
@@ -26,6 +28,10 @@ public class BoardAddController extends HttpServlet {
       throws ServletException, IOException {
 
     try {
+      DiskFileItemFactory factory = new DiskFileItemFactory();
+      ServletFileUpload upload = new ServletFileUpload(factory);
+
+
       Board board = new Board();
       board.setTitle(request.getParameter("title"));
       board.setContent(request.getParameter("content"));
