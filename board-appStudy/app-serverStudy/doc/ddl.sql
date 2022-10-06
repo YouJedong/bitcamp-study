@@ -67,3 +67,4 @@ ALTER TABLE app_board
     REFERENCES app_member ( -- 회원
       mno -- 회원번호
     );
+    
