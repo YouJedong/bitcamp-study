@@ -117,7 +117,13 @@ public class MariaDBBoardDao implements BoardDao {
       pstmt.setString(2, board.getContent());
       pstmt.setInt(3, board.getNo());
 
-      return pstmt.executeUpdate();
+      int count = pstmt.executeUpdate();
+
+      if (count > 0) {
+        insertFiles(board);
+      }
+
+      return count;
     }
   }
 
@@ -126,9 +132,25 @@ public class MariaDBBoardDao implements BoardDao {
     try (PreparedStatement pstmt = con.prepareStatement(
         "delete from app_board where bno=?")) {
 
+      deleteFiles(no);
+
       pstmt.setInt(1, no);
+      int count =  pstmt.executeUpdate();
+
+      return count;
+    }
+  }
+
+  @Override
+  public int deleteFiles(int fileNo) throws Exception {
+    try (PreparedStatement pstmt = con.prepareStatement(
+        "delete from app_board_file where bno=?")) {
+
+      pstmt.setInt(1, fileNo);
       return pstmt.executeUpdate();
     }
+
+
   }
 
   @Override

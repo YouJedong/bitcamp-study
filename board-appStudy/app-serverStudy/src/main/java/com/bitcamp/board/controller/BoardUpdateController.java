@@ -1,8 +1,10 @@
 package com.bitcamp.board.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +17,7 @@ import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
+
 
 @WebServlet("/board/update")
 public class BoardUpdateController extends HttpServlet {
@@ -47,15 +50,21 @@ public class BoardUpdateController extends HttpServlet {
           String paramValue = item.getString("UTF-8");
 
           switch (paramName) {
-            case "no" :  
+            case "no" : board.setNo(Integer.parseInt(paramValue));
+            case "title" : board.setTitle(paramValue);
+            case "content" : board.setContent(paramValue);
 
           }
+        } else {
+          if (item.getSize() == 0) {
+            continue;
+          }
+          String filename = UUID.randomUUID().toString();
+          item.write(new File(dirPath + "/" + filename));
+          attachedFiles.add(new AttachedFile(filename));
         }
+        board.setAttachedFiles(attachedFiles);
       }
-
-      board.setNo(Integer.parseInt(request.getParameter("no")));
-      board.setTitle(request.getParameter("title"));
-      board.setContent(request.getParameter("content"));
 
       Member loginMember = (Member) request.getSession().getAttribute("loginMember");
       if (boardDao.findByNo(board.getNo()).getWriter().getNo() != loginMember.getNo()) {
@@ -66,10 +75,7 @@ public class BoardUpdateController extends HttpServlet {
         throw new Exception("게시글 변경 실패!");
       }
 
-      response.setHeader("Refresh", "1;url=list");
-      response.setContentType("text/html; charset=UTF-8");
-      request.getRequestDispatcher("/board/update.jsp").include(request, response);
-
+      response.sendRedirect("list");
 
     } catch (Exception e) {
       e.printStackTrace();

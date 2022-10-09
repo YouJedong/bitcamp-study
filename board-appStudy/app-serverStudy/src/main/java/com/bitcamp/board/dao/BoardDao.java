@@ -16,9 +16,11 @@ public interface BoardDao {
 
   List<Board> findAll() throws Exception;
 
-  AttachedFile findFileByNo(int no) throws Exception;
+  AttachedFile findFileByNo(int fileNo) throws Exception;
 
-  int deleteFile(int no) throws Exception;
+  int deleteFile(int fuleNo) throws Exception;
+
+  int deleteFiles(int fileNo) throws Exception;
 }
 
 

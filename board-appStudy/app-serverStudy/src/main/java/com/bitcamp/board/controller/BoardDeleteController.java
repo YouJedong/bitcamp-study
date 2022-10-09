@@ -36,17 +36,7 @@ public class BoardDeleteController extends HttpServlet {
         throw new Exception("게시글 삭제 실패!");
       }
 
-      // 1. JSP의 해더 설정 + 작업처리 위임 
-      response.setHeader("Refresh", "1;url=list");
-      response.setContentType("text/html; charset=UTF-8");
-      request.getRequestDispatcher("/board/delete.jsp").include(request, response);
-
-      //      // 2. 작업처리 위임 (Refresh)
-      //      response.setContentType("text/html; charset=UTF-8");
-      //      request.getRequestDispatcher("/board/add.jsp").include(request, response);
-
-      //      // 3.
-      //      response.sendRedirect("list");
+      response.sendRedirect("list");
 
     } catch (Exception e) {
       request.setAttribute("exception", e);
