@@ -1,5 +1,6 @@
 package com.bitcamp.board.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,16 +57,12 @@ public class BoardAddController extends HttpServlet {
 
           attachedFiles.add(new AttachedFile(filename));
 
-
+          item.write(new File(dirPath + "/" + filename));
 
         }
       }
 
-
-      board.setTitle(request.getParameter("title"));
-      board.setContent(request.getParameter("content"));
-
-
+      board.setAttachedFiles(attachedFiles);
 
       Member loginMember = (Member) request.getSession().getAttribute("loginMember");
       board.setWriter(loginMember);

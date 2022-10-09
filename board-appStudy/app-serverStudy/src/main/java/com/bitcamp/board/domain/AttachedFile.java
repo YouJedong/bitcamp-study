@@ -5,6 +5,8 @@ public class AttachedFile {
   private String filepath;
   private int boardNo;
 
+  public AttachedFile() {}
+
   public AttachedFile(String filepath) {
     this.filepath = filepath;
   }

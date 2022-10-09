@@ -1,10 +1,13 @@
 package com.bitcamp.board.dao;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
 
@@ -20,11 +23,37 @@ public class MariaDBBoardDao implements BoardDao {
   @Override
   public int insert(Board board) throws Exception {
     try (PreparedStatement pstmt = con.prepareStatement(
-        "insert into app_board(title,cont,mno) values(?,?,?)")) {
+        "insert into app_board(title,cont,mno) values(?,?,?)",
+        Statement.RETURN_GENERATED_KEYS)) {
       pstmt.setString(1, board.getTitle());
       pstmt.setString(2, board.getContent());
       pstmt.setInt(3, board.getWriter().getNo());
-      return pstmt.executeUpdate();
+
+      int count = pstmt.executeUpdate();
+
+      try (ResultSet rs = pstmt.getGeneratedKeys()) {
+        rs.next();
+        board.setNo(rs.getInt(1));
+      }
+
+      insertFiles(board);
+
+      return count;
+
+    }
+  }
+
+  private int insertFiles(Board board) throws Exception {
+    try (PreparedStatement pstmt = con.prepareStatement(
+        "insert into app_board_file(filepath,bno) values(?,?)")) {
+
+      List<AttachedFile> attachedFiles = board.getAttachedFiles();
+      for (AttachedFile attachedFile : attachedFiles) {
+        pstmt.setString(1, attachedFile.getFilepath());
+        pstmt.setInt(2, board.getNo());
+        pstmt.executeUpdate();
+      }
+      return attachedFiles.size();
     }
   }
 
@@ -60,6 +89,20 @@ public class MariaDBBoardDao implements BoardDao {
       member.setName(rs.getString("name"));
 
       board.setWriter(member);
+
+      try (PreparedStatement pstmt2 = con.prepareStatement(
+          "select bfno, filepath, bno from app_board_file where bno=" + no);
+          ResultSet rs2 = pstmt2.executeQuery()) {
+
+        ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
+        while (rs2.next()) {
+          AttachedFile file = new AttachedFile(); 
+          file.setNo(rs2.getInt("bfno"));
+          file.setFilepath(rs2.getString("filepath"));
+          attachedFiles.add(file);
+        }
+        board.setAttachedFiles(attachedFiles);
+      }
 
       return board;
     }
@@ -121,6 +164,36 @@ public class MariaDBBoardDao implements BoardDao {
 
       return list;
     }
+  }
+
+  @Override
+  public AttachedFile findFileByNo(int fileNo) throws Exception {
+    try (PreparedStatement pstmt = con.prepareStatement(
+        "select bfno, filepath, bno from app_board_file where bfno=" + fileNo);
+        ResultSet rs = pstmt.executeQuery()) {
+
+      if (!rs.next()) {
+        return null;
+      }
+
+      AttachedFile file = new AttachedFile();
+      file.setNo(rs.getInt("bfno"));
+      file.setFilepath(rs.getString("filepath"));
+      file.setBoardNo(rs.getInt("bno"));
+
+      return file;
+    }
+  }
+
+  @Override
+  public int deleteFile(int fileNo) throws Exception {
+    try (PreparedStatement pstmt = con.prepareStatement(
+        "delete from app_board_file where bfno=?")) {
+
+      pstmt.setInt(1, fileNo);
+      return pstmt.executeUpdate();
+    }
+
   }
 }
 
