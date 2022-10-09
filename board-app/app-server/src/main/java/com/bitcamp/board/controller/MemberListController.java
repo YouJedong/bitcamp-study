@@ -1,9 +1,7 @@
 package com.bitcamp.board.controller;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.MemberService;
 import com.bitcamp.servlet.Controller;
 
@@ -16,9 +14,7 @@ public class MemberListController implements Controller{
 
   @Override
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    List<Member> members = memberService.list();
-
-    request.setAttribute("members", members);
+    request.setAttribute("members", memberService.list());
 
     return "/member/list.jsp";
 

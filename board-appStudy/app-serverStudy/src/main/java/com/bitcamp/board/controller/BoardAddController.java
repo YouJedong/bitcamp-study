@@ -40,6 +40,8 @@ public class BoardAddController extends HttpServlet {
       Board board = new Board();
       List<AttachedFile> attachedFiles = new ArrayList<>();
 
+      String dirPath = this.getServletContext().getRealPath("/board/files");
+
       for (FileItem item : items) {
         if (item.isFormField()) {
           String paramName = item.getFieldName();
@@ -54,7 +56,6 @@ public class BoardAddController extends HttpServlet {
 
           attachedFiles.add(new AttachedFile(filename));
 
-          String dirPath = this.getServletContext().getRealPath("/board/files");
 
 
         }
