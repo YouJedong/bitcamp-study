@@ -30,17 +30,12 @@ public class MemberAddController extends HttpServlet {
       member.setEmail(request.getParameter("email"));
       member.setPassword(request.getParameter("password"));
 
+      memberService.add(member);
 
-      if (memberService.add(member) == 0) {
-        throw new Exception("회원 등록 실패!");
-
-      }
-
-      response.sendRedirect("list");
+      request.setAttribute("viewName", "redirect:list");
 
     } catch (Exception e) {
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }

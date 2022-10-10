@@ -37,7 +37,7 @@ tr:hover {
     </tr>
 </c:forEach>
   </table>
-  <p><a href='../welcome'>메인</a></p>
+  <p><a href='../../welcome'>메인</a></p>
 </body>
 </html>
 

@@ -1,6 +1,8 @@
 package com.bitcamp.board.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -43,16 +45,15 @@ public class LoginController extends HttpServlet {
       } else {
         cookie.setMaxAge(60 * 60 * 24 * 7);
       }
-      response.addCookie(cookie);
+      List<Cookie> cookies = new ArrayList<>();
+      cookies.add(cookie);
 
+      request.setAttribute("cookies", cookies);
       request.setAttribute("member", member);
-      response.setContentType("text/html; charset=UTF-8");
-      request.getRequestDispatcher("/auth/loginResult.jsp").include(request, response);
+      request.setAttribute("viewName", "/auth/loginResult.jsp");
 
     } catch (Exception e) {
-      e.printStackTrace();
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }

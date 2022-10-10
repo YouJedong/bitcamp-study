@@ -11,6 +11,7 @@ import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.service.DefaultBoardService;
 import com.bitcamp.board.service.DefaultMemberService;
 import com.bitcamp.sql.DataSource;
+import com.bitcamp.transaction.TransactionManager;
 
 @WebListener
 public class ContextLoaderListener implements ServletContextListener{
@@ -26,10 +27,12 @@ public class ContextLoaderListener implements ServletContextListener{
           "study", 
           "1111");
 
+      TransactionManager txManager = new TransactionManager(ds);
+
       BoardDao boardDao = new MariaDBBoardDao(ds);
       MemberDao memberDao = new MariaDBMemberDao(ds);
 
-      ctx.setAttribute("boardService", new DefaultBoardService(boardDao, ds));
+      ctx.setAttribute("boardService", new DefaultBoardService(boardDao, txManager));
       ctx.setAttribute("memberService", new DefaultMemberService(memberDao));
     } catch (Exception e) {
       e.printStackTrace();

@@ -30,17 +30,14 @@ public class BoardDetailController extends HttpServlet {
       Board board = boardService.get(boardNo);
 
       if (board == null) {
-        throw new Exception("게시글 상세조회 실패!");
+        throw new Exception("해당 번호의 게시글이 없습니다!");
       }
 
       request.setAttribute("board", board);
-
-      response.setContentType("text/html; charset=UTF-8");
-      request.getRequestDispatcher("/board/detail.jsp").include(request, response);
+      request.setAttribute("viewName", "/board/detail.jsp");
 
     } catch (Exception e) {
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }

@@ -29,14 +29,10 @@ public class BoardListController extends HttpServlet {
       List<Board> boards = boardService.list();
 
       request.setAttribute("boards", boards);
-
-      response.setContentType("text/html; charset=UTF-8");
-      request.getRequestDispatcher("/board/list.jsp").include(request, response);
+      request.setAttribute("viewName", "redirect:/board/list.jsp");
 
     } catch (Exception e) {
-      e.printStackTrace();
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }

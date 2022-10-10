@@ -41,12 +41,11 @@ public class BoardAddController extends HttpServlet {
       board.setContent(request.getParameter("content"));
 
       List<AttachedFile> attachedFiles = new ArrayList<>();
-
       String dirPath = this.getServletContext().getRealPath("/board/files");
-
       Collection<Part> parts = request.getParts();
+
       for (Part part : parts) {
-        if (!part.getName().equals("files")) {
+        if (!part.getName().equals("files") || part.getSize() == 0) {
           continue;
         }
 
@@ -54,19 +53,16 @@ public class BoardAddController extends HttpServlet {
         part.write(dirPath + "/" + filename);
         attachedFiles.add(new AttachedFile(filename));
       }
-
       board.setAttachedFiles(attachedFiles);
 
       Member loginMember = (Member) request.getSession().getAttribute("loginMember");
       board.setWriter(loginMember);
 
       boardService.add(board);
-
-      response.sendRedirect("list");
+      request.setAttribute("viewName", "redirect:list");
 
     } catch (Exception e) {
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }
