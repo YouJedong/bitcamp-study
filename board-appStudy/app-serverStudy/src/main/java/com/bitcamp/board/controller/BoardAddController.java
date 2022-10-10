@@ -1,32 +1,32 @@
 package com.bitcamp.board.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import com.bitcamp.board.dao.BoardDao;
+import javax.servlet.http.Part;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
+import com.bitcamp.board.service.BoardService;
 
+@MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 @WebServlet("/board/add")
 public class BoardAddController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  BoardDao boardDao;
+  BoardService boardService;
 
   @Override
   public void init() throws ServletException {
-    boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    boardService = (BoardService) this.getServletContext().getAttribute("boardService");
   }
 
   @Override
@@ -34,32 +34,25 @@ public class BoardAddController extends HttpServlet {
       throws ServletException, IOException {
 
     try {
-      DiskFileItemFactory factory = new DiskFileItemFactory();
-      ServletFileUpload upload = new ServletFileUpload(factory);
-      List<FileItem> items = upload.parseRequest(request);
+      request.setCharacterEncoding("UTF-8");
 
       Board board = new Board();
+      board.setTitle(request.getParameter("title"));
+      board.setContent(request.getParameter("content"));
+
       List<AttachedFile> attachedFiles = new ArrayList<>();
 
       String dirPath = this.getServletContext().getRealPath("/board/files");
 
-      for (FileItem item : items) {
-        if (item.isFormField()) {
-          String paramName = item.getFieldName();
-          String paramValue = item.getString("UTF-8");
-
-          switch (paramName) {
-            case "title": board.setTitle(paramValue);
-            case "content": board.setContent(paramValue);
-          }
-        } else {
-          String filename = UUID.randomUUID().toString();
-
-          attachedFiles.add(new AttachedFile(filename));
-
-          item.write(new File(dirPath + "/" + filename));
-
+      Collection<Part> parts = request.getParts();
+      for (Part part : parts) {
+        if (!part.getName().equals("files")) {
+          continue;
         }
+
+        String filename = UUID.randomUUID().toString();
+        part.write(dirPath + "/" + filename);
+        attachedFiles.add(new AttachedFile(filename));
       }
 
       board.setAttachedFiles(attachedFiles);
@@ -67,9 +60,7 @@ public class BoardAddController extends HttpServlet {
       Member loginMember = (Member) request.getSession().getAttribute("loginMember");
       board.setWriter(loginMember);
 
-      if (boardDao.insert(board) == 0) {
-        throw new Exception("게시글 등록 실패!");
-      }
+      boardService.add(board);
 
       response.sendRedirect("list");
 

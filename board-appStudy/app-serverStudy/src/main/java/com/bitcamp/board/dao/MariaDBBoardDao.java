@@ -1,7 +1,6 @@
 package com.bitcamp.board.dao;
 
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -10,25 +9,26 @@ import java.util.List;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
+import com.bitcamp.sql.DataSource;
 
 public class MariaDBBoardDao implements BoardDao {
 
-  Connection con;
+  DataSource ds;
 
   //DAO가 사용할 의존 객체 Connection을 생성자의 파라미터로 받는다.
-  public MariaDBBoardDao(Connection con) {
-    this.con = con;
+  public MariaDBBoardDao(DataSource ds) {
+    this.ds = ds;
   }
 
   @Override
   public int insert(Board board) throws Exception {
-    try (PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
         "insert into app_board(title,cont,mno) values(?,?,?)",
         Statement.RETURN_GENERATED_KEYS)) {
+
       pstmt.setString(1, board.getTitle());
       pstmt.setString(2, board.getContent());
       pstmt.setInt(3, board.getWriter().getNo());
-
       int count = pstmt.executeUpdate();
 
       try (ResultSet rs = pstmt.getGeneratedKeys()) {
@@ -36,15 +36,13 @@ public class MariaDBBoardDao implements BoardDao {
         board.setNo(rs.getInt(1));
       }
 
-      insertFiles(board);
-
       return count;
-
     }
   }
 
-  private int insertFiles(Board board) throws Exception {
-    try (PreparedStatement pstmt = con.prepareStatement(
+  @Override
+  public int insertFiles(Board board) throws Exception {
+    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
         "insert into app_board_file(filepath,bno) values(?,?)")) {
 
       List<AttachedFile> attachedFiles = board.getAttachedFiles();
@@ -59,7 +57,7 @@ public class MariaDBBoardDao implements BoardDao {
 
   @Override
   public Board findByNo(int no) throws Exception {
-    try (PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
         "select "
             + "  b.bno,"
             + "  b.title,"
@@ -90,7 +88,7 @@ public class MariaDBBoardDao implements BoardDao {
 
       board.setWriter(member);
 
-      try (PreparedStatement pstmt2 = con.prepareStatement(
+      try (PreparedStatement pstmt2 = ds.getConnection().prepareStatement(
           "select bfno, filepath, bno from app_board_file where bno=" + no);
           ResultSet rs2 = pstmt2.executeQuery()) {
 
@@ -110,40 +108,31 @@ public class MariaDBBoardDao implements BoardDao {
 
   @Override
   public int update(Board board) throws Exception {
-    try (PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
         "update app_board set title=?, cont=? where bno=?")) {
 
       pstmt.setString(1, board.getTitle());
       pstmt.setString(2, board.getContent());
       pstmt.setInt(3, board.getNo());
 
-      int count = pstmt.executeUpdate();
-
-      if (count > 0) {
-        insertFiles(board);
-      }
-
-      return count;
+      return pstmt.executeUpdate();
     }
   }
 
   @Override
   public int delete(int no) throws Exception {
-    try (PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
         "delete from app_board where bno=?")) {
 
-      deleteFiles(no);
-
       pstmt.setInt(1, no);
-      int count =  pstmt.executeUpdate();
 
-      return count;
+      return pstmt.executeUpdate();
     }
   }
 
   @Override
   public int deleteFiles(int fileNo) throws Exception {
-    try (PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
         "delete from app_board_file where bno=?")) {
 
       pstmt.setInt(1, fileNo);
@@ -155,7 +144,7 @@ public class MariaDBBoardDao implements BoardDao {
 
   @Override
   public List<Board> findAll() throws Exception {
-    try (PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
         "select "
             + "  b.bno,"
             + "  b.title,"
@@ -190,7 +179,7 @@ public class MariaDBBoardDao implements BoardDao {
 
   @Override
   public AttachedFile findFileByNo(int fileNo) throws Exception {
-    try (PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
         "select bfno, filepath, bno from app_board_file where bfno=" + fileNo);
         ResultSet rs = pstmt.executeQuery()) {
 
@@ -209,7 +198,7 @@ public class MariaDBBoardDao implements BoardDao {
 
   @Override
   public int deleteFile(int fileNo) throws Exception {
-    try (PreparedStatement pstmt = con.prepareStatement(
+    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
         "delete from app_board_file where bfno=?")) {
 
       pstmt.setInt(1, fileNo);

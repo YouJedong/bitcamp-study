@@ -21,6 +21,8 @@ public interface BoardDao {
   int deleteFile(int fuleNo) throws Exception;
 
   int deleteFiles(int fileNo) throws Exception;
+
+  int insertFiles(Board board) throws Exception;
 }
 
 

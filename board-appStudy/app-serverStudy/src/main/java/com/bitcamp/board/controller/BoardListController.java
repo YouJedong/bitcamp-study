@@ -7,18 +7,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.Board;
+import com.bitcamp.board.service.BoardService;
 
 @WebServlet("/board/list")
 public class BoardListController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  BoardDao boardDao;
+  BoardService boardService;
 
   @Override
   public void init() throws ServletException {
-    boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    boardService = (BoardService) this.getServletContext().getAttribute("boardService");
   }
 
   @Override
@@ -26,7 +26,7 @@ public class BoardListController extends HttpServlet {
       throws ServletException, IOException {
 
     try {
-      List<Board> boards = boardDao.findAll();
+      List<Board> boards = boardService.list();
 
       request.setAttribute("boards", boards);
 

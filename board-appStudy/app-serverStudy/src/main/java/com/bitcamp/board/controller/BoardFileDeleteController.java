@@ -6,20 +6,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
+import com.bitcamp.board.service.BoardService;
 
 @WebServlet("/board/fileDelete")
 public class BoardFileDeleteController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  BoardDao boardDao;
+  BoardService boardService;
 
   @Override
   public void init() throws ServletException {
-    boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    boardService = (BoardService) this.getServletContext().getAttribute("boardService");
   }
 
   @Override
@@ -28,18 +28,17 @@ public class BoardFileDeleteController extends HttpServlet {
 
     try {
       int no = Integer.parseInt(request.getParameter("no"));
-
-      AttachedFile attachedFile = boardDao.findFileByNo(no);
+      AttachedFile attachedFile = boardService.getAttachedFile(no);
 
       Member loginMember = (Member) request.getSession().getAttribute("loginMember");
-      Board board = boardDao.findByNo(attachedFile.getBoardNo());
+      Board board = boardService.get(attachedFile.getBoardNo());
 
       if (board.getWriter().getNo() != loginMember.getNo()) {
         throw new Exception("게시글의 작성자가 아닙니다.");
       }
 
-      if (boardDao.deleteFile(no) == 0) {
-        throw new Exception("게시글 첨부파일 삭제 실패!");
+      if (!boardService.deleteAttachedFile(no)) {
+        throw new Exception("게시글 첨부파일 삭제할 수 없습니다.");
       }
 
       response.sendRedirect("detail?no=" + board.getNo());
