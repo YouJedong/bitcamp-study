@@ -7,14 +7,16 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import org.springframework.stereotype.Component;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.BoardService;
 import com.bitcamp.servlet.Controller;
 
-// Servlet API에서 제공하는 multipart/form-data 처리기를 사용하려면
-// 서블릿에 다음 애노테이션으로 설정해야 한다.
+@Component("/board/add")
+// - 애노테이션을 붙일 때 객체 이름을 명시하면 그 이름으로 저장한다.
+// - 프론트 컨트롤러는 페이지 컨트롤러를 찾을 때 이 이름으로 찾을 것이다.
 public class BoardAddController implements Controller {
 
   BoardService boardService;
