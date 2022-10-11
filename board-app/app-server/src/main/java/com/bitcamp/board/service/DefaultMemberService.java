@@ -1,13 +1,13 @@
 package com.bitcamp.board.service;
 
 import java.util.List;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.domain.Member;
 
 // 비즈니스 로직을 수행하는 객체
 // - 메서드의 이름은 업무와 관련된 이름을 사용한다.
-@Component
+@Service // 서비스 역할을 수행하는 객체에 붙이는 애노테이션
 public class DefaultMemberService implements MemberService {
   MemberDao memberDao;
 

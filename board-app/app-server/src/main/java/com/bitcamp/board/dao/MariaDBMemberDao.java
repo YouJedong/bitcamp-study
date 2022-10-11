@@ -5,10 +5,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import com.bitcamp.board.domain.Member;
 
-@Component
+@Repository
 //- 이 애노테이션을 붙이면 Spring IoC 컨테이너가 객체를 자동 생성한다.
 //- 객체의 이름을 명시하지 않으면 
 //  클래스 이름(첫 알파벳은 소문자 예: mariaDBMemberDao)을 사용하여 저장한다.

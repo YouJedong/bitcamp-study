@@ -7,17 +7,17 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.BoardService;
-import com.bitcamp.servlet.Controller;
 
-@Component("/board/update")
+@Controller
 //- 애노테이션을 붙일 때 객체 이름을 명시하면 그 이름으로 저장한다.
 //- 프론트 컨트롤러는 페이지 컨트롤러를 찾을 때 이 이름으로 찾을 것이다.
-public class BoardUpdateController implements Controller{
+public class BoardUpdateController {
 
   BoardService boardService;
 
@@ -25,7 +25,7 @@ public class BoardUpdateController implements Controller{
     this.boardService = boardService;
   }
 
-  @Override
+  @PostMapping("/board/update")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     request.setCharacterEncoding("UTF-8");
 
