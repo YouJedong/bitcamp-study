@@ -7,12 +7,11 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.board.domain.Member;
 
-@WebFilter("/service/*")
+//@WebFilter("/service/*")
 public class LoginCheckFilter implements Filter {
 
   @Override
@@ -23,7 +22,7 @@ public class LoginCheckFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-    System.out.println("AdminCheckFilter.doFilter() 실행!");
+    System.out.println("LoginCheckFilter.doFilter() 실행!");
 
     // 요청 URL을 통해 로그인 여부를 검사할 지 결정한다.
     // 요청 URL을 HTTP 프로토콜과 관련된 값이다.
@@ -54,7 +53,7 @@ public class LoginCheckFilter implements Filter {
 
       Member loginMember = (Member) httpRequest.getSession().getAttribute("loginMember");
       if (loginMember == null) {// 로그인하지 않았다면
-        httpResponse.sendRedirect(httpRequest.getContextPath() + "/service/auth/form.jsp");
+        httpResponse.sendRedirect(httpRequest.getContextPath() + "/service/auth/form");
         return;
       }
     }
