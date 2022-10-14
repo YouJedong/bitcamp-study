@@ -1,10 +1,7 @@
 package com.bitcamp.servlet;
 
 import java.io.IOException;
-import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,32 +14,27 @@ public class DispatcherServlet extends HttpServlet {
   protected void service(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
 
-    String pathInpo = req.getPathInfo();
+    try {
+      String pathInpo = req.getPathInfo();
 
-    resp.setContentType("text/html;charset=UTF-8");
-    RequestDispatcher 요청배달자 = req.getRequestDispatcher(pathInpo);
-    요청배달자.include(req, resp);
-
-    @SuppressWarnings("unchecked")
-    List<Cookie> cookies = (List<Cookie>) req.getAttribute("cookies");
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        resp.addCookie(cookie);
+      Controller controller = (Controller) req.getServletContext().getAttribute(pathInpo);
+      if (controller == null) {
+        throw new Exception("페이지 컨트롤러가 없습니다.");
       }
-    }
 
-    String viewName = (String) req.getAttribute("viewName");
-    if (viewName != null) {
+      resp.setContentType("text/html;charset=UTF-8");
+      String viewName = controller.execute(req, resp);
+
       if (viewName.startsWith("redirect:")) {
         resp.sendRedirect(viewName.substring(9));
-        return;
 
       } else {
         req.getRequestDispatcher(viewName).include(req, resp);
-
       }
-    } else {
-      req.getRequestDispatcher("/error.jsp").include(req, resp);
+
+    } catch (Exception e) {
+      req.setAttribute("exception", e);
+      req.getRequestDispatcher("/error.jsp").forward(req, resp);
     }
   }
 }

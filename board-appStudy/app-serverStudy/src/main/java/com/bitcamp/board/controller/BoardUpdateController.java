@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -15,8 +13,6 @@ import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.BoardService;
 import com.bitcamp.servlet.Controller;
 
-@MultipartConfig(maxFileSize = 1024 * 1024 * 10)
-@WebServlet("/board/update")
 public class BoardUpdateController implements Controller {
 
   BoardService boardService;
@@ -56,7 +52,7 @@ public class BoardUpdateController implements Controller {
       throw new Exception("게시글 변경 할 수 없습니다.");
     }
 
-    return "redirect:/list";
+    return "redirect:list";
 
   } 
 }

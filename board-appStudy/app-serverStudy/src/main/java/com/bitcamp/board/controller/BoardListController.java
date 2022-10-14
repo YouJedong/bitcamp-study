@@ -1,12 +1,10 @@
 package com.bitcamp.board.controller;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.board.service.BoardService;
 import com.bitcamp.servlet.Controller;
 
-@WebServlet("/board/list")
 public class BoardListController implements Controller {
 
   BoardService boardService;

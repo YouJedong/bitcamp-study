@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.board.domain.Member;
 
-@WebFilter("*")
+@WebFilter("/service/*")
 public class LoginCheckFilter implements Filter {
 
   @Override
@@ -37,7 +37,7 @@ public class LoginCheckFilter implements Filter {
 
       Member loginMember = (Member) httpRequest.getSession().getAttribute("loginMember");
       if (loginMember == null) {
-        httpResponse.sendRedirect(httpRequest.getContextPath() + "/auth/form.jsp");
+        httpResponse.sendRedirect(httpRequest.getContextPath() + "/service/auth/form.jsp");
         return;
       }
     }

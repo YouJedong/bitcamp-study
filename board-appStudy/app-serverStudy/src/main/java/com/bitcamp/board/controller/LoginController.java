@@ -1,8 +1,5 @@
 package com.bitcamp.board.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +8,6 @@ import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.MemberService;
 import com.bitcamp.servlet.Controller;
 
-@WebServlet("/auth/login")
 public class LoginController implements Controller {
 
   MemberService memberService;
@@ -37,10 +33,8 @@ public class LoginController implements Controller {
     } else {
       cookie.setMaxAge(60 * 60 * 24 * 7);
     }
-    List<Cookie> cookies = new ArrayList<>();
-    cookies.add(cookie);
+    response.addCookie(cookie);
 
-    request.setAttribute("cookies", cookies);
     request.setAttribute("member", member);
     return "/auth/loginResult.jsp";
 

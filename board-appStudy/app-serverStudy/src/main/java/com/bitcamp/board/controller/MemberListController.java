@@ -1,12 +1,10 @@
 package com.bitcamp.board.controller;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.board.service.MemberService;
 import com.bitcamp.servlet.Controller;
 
-@WebServlet("/member/list")
 public class MemberListController implements Controller {
 
   MemberService memberService;

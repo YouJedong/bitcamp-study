@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -16,7 +15,6 @@ import com.bitcamp.board.service.BoardService;
 import com.bitcamp.servlet.Controller;
 
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
-@WebServlet("/board/add")
 public class BoardAddController implements Controller{
 
   BoardService boardService;
