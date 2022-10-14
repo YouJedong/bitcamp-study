@@ -1,23 +1,18 @@
 package com.bitcamp.board.controller;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import com.bitcamp.servlet.Controller;
 
 @WebServlet("/auth/logout")
-public class LogoutController extends HttpServlet {
-  private static final long serialVersionUID = 1L;
-
+public class LogoutController implements Controller {
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     HttpSession session = request.getSession();
     session.invalidate();
-    request.setAttribute("viewName", "redirect:../../");
+    return "redirect:../../";
 
   }
 }
