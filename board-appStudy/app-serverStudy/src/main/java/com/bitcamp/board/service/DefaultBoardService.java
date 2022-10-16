@@ -1,24 +1,31 @@
 package com.bitcamp.board.service;
 
 import java.util.List;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
-import com.bitcamp.transaction.TransactionManager;
-import com.bitcamp.transaction.TransactionStatus;
 
 public class DefaultBoardService implements BoardService{
   BoardDao boardDao;
-  TransactionManager txManager;
+  PlatformTransactionManager txManager;
 
-  public DefaultBoardService(BoardDao boardDao, TransactionManager txManager) {
+  public DefaultBoardService(BoardDao boardDao, PlatformTransactionManager txManager) {
     this.boardDao = boardDao;
     this.txManager = txManager;
   }
 
   @Override
   public void add(Board board) throws Exception {
-    TransactionStatus status = txManager.getTransaction();
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+    TransactionStatus status = txManager.getTransaction(def);
+
     try {
       if (boardDao.insert(board) == 0) {
         throw new Exception("게시글 등록 실패!");
@@ -41,7 +48,11 @@ public class DefaultBoardService implements BoardService{
 
   @Override
   public boolean delete(int no) throws Exception {
-    TransactionStatus status = txManager.getTransaction();
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+    TransactionStatus status = txManager.getTransaction(def);
 
     try {
       boardDao.deleteFiles(no);
@@ -75,7 +86,11 @@ public class DefaultBoardService implements BoardService{
 
   @Override
   public boolean update(Board board) throws Exception {
-    TransactionStatus status = txManager.getTransaction();
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+    TransactionStatus status = txManager.getTransaction(def);
     try {
       if (boardDao.update(board) == 0) {
         return false;

@@ -20,7 +20,11 @@ dependencies {
     
     implementation 'javax.servlet:jstl:1.2'
     
-    implementation 'commons-fileupload:commons-fileupload:1.4'
+    // implementation 'commons-fileupload:commons-fileupload:1.4'
+    
+    implementation 'org.springframework:spring-context:5.3.23'
+    
+    implementation 'org.springframework:spring-jdbc:5.3.23'
 }
 
 application {

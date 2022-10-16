@@ -70,9 +70,6 @@ DROP TABLE IF EXISTS board_tatlle RESTRICT;
 -- 스크랩
 DROP TABLE IF EXISTS scrap RESTRICT;
 
--- 모임 회차
-DROP TABLE IF EXISTS party_count RESTRICT;
-
 -- 회원신고
 DROP TABLE IF EXISTS member_tatlle RESTRICT;
 
@@ -606,22 +603,6 @@ ALTER TABLE scrap
       bno  -- 게시글번호
     );
 
--- 모임 회차
-CREATE TABLE party_count (
-  mno   INTEGER NOT NULL COMMENT '회원번호', -- 회원번호
-  sno   INTEGER NOT NULL COMMENT '운동일련번호', -- 운동일련번호
-  count INTEGER NOT NULL DEFAULT 0 COMMENT '회차' -- 회차
-)
-COMMENT '모임 회차';
-
--- 모임 회차
-ALTER TABLE party_count
-  ADD CONSTRAINT PK_party_count -- 모임 회차 기본키
-    PRIMARY KEY (
-      mno, -- 회원번호
-      sno  -- 운동일련번호
-    );
-
 -- 회원신고
 CREATE TABLE member_tatlle (
   mtno  INTEGER    NOT NULL COMMENT '신고번호', -- 신고번호
@@ -1065,26 +1046,6 @@ ALTER TABLE scrap
     )
     REFERENCES board ( -- 게시글
       bno -- 게시글번호
-    );
-
--- 모임 회차
-ALTER TABLE party_count
-  ADD CONSTRAINT FK_member_TO_party_count -- 회원 -> 모임 회차
-    FOREIGN KEY (
-      mno -- 회원번호
-    )
-    REFERENCES member ( -- 회원
-      mno -- 회원번호
-    );
-
--- 모임 회차
-ALTER TABLE party_count
-  ADD CONSTRAINT FK_sports_TO_party_count -- 운동 분류 -> 모임 회차
-    FOREIGN KEY (
-      sno -- 운동일련번호
-    )
-    REFERENCES sports ( -- 운동 분류
-      sno -- 운동일련번호
     );
 
 -- 회원신고
