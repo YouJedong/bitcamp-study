@@ -24,7 +24,7 @@
 </table>
 <p>
   <button type='submit'>등록</button>
-  <a href='/list'>목록</a>
+  <a href='list'>목록</a>
 </p>
 </form>
 

@@ -7,21 +7,22 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.BoardService;
-import com.bitcamp.servlet.Controller;
 
-@Component("/board/update")
-public class BoardUpdateController implements Controller {
+@Controller
+public class BoardUpdateController {
 
   BoardService boardService;
   public BoardUpdateController(BoardService boardService) {
     this.boardService = boardService;
   }
-  @Override
+
+  @PostMapping("/board/update")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     request.setCharacterEncoding("UTF-8");
 

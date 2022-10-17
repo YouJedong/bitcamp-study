@@ -7,12 +7,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.domain.Member;
 
-@Component
+@Repository
 public class MariaDBBoardDao implements BoardDao {
 
   DataSource ds;

@@ -5,10 +5,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import com.bitcamp.board.domain.Member;
 
-@Component
+@Repository
 public class MariaDBMemberDao implements MemberDao {
 
   DataSource ds;

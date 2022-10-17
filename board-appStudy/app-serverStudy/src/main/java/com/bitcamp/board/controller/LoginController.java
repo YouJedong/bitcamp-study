@@ -4,20 +4,20 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.MemberService;
-import com.bitcamp.servlet.Controller;
 
-@Component("/auth/login")
-public class LoginController implements Controller {
+@Controller
+public class LoginController  {
 
   MemberService memberService;
   public LoginController(MemberService memberService) {
     this.memberService = memberService;
   }
 
-  @Override
+  @PostMapping("/auth/login")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     String email = request.getParameter("email");
     String password = request.getParameter("password");

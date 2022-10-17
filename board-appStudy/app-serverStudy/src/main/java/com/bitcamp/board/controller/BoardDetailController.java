@@ -2,21 +2,20 @@ package com.bitcamp.board.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import com.bitcamp.board.domain.Board;
 import com.bitcamp.board.service.BoardService;
-import com.bitcamp.servlet.Controller;
 
-@Component("/board/detail")
-public class BoardDetailController implements Controller {
-  private static final long serialVersionUID = 1L;
+@Controller
+public class BoardDetailController {
 
   BoardService boardService;
   public BoardDetailController(BoardService boardService) {
     this.boardService = boardService;
   }
 
-  @Override
+  @GetMapping("/board/detail")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     int boardNo = Integer.parseInt(request.getParameter("no"));
 

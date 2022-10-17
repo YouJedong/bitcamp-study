@@ -7,9 +7,9 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRegistration.Dynamic;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebListener;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
 import com.bitcamp.board.config.AppConfig;
-import com.bitcamp.servlet.DispatcherServlet;
 
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10) 
 @WebListener
@@ -18,9 +18,10 @@ public class ContextLoaderListener implements ServletContextListener{
   public void contextInitialized(ServletContextEvent sce) {
     System.out.println("공유자원 준비 중!!");
     try {
-      // 스프링 IoC 컨테이너
-      AnnotationConfigApplicationContext iocContainer =
-          new AnnotationConfigApplicationContext(AppConfig.class); 
+      AnnotationConfigWebApplicationContext iocContainer =
+          new AnnotationConfigWebApplicationContext(); 
+      iocContainer.register(AppConfig.class);
+      iocContainer.refresh();
 
       ServletContext ctx = sce.getServletContext();
 
@@ -29,7 +30,7 @@ public class ContextLoaderListener implements ServletContextListener{
       config.addMapping("/service/*");
       config.setMultipartConfig(new MultipartConfigElement(
           this.getClass().getAnnotation(MultipartConfig.class)));
-
+      config.setLoadOnStartup(1);
 
 
     } catch (Exception e) {

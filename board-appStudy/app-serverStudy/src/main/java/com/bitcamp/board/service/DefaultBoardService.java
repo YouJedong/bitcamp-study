@@ -1,7 +1,7 @@
 package com.bitcamp.board.service;
 
 import java.util.List;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -10,7 +10,7 @@ import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.domain.AttachedFile;
 import com.bitcamp.board.domain.Board;
 
-@Component
+@Service
 public class DefaultBoardService implements BoardService{
   BoardDao boardDao;
   PlatformTransactionManager txManager;

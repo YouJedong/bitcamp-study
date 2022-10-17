@@ -1,11 +1,11 @@
 package com.bitcamp.board.service;
 
 import java.util.List;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import com.bitcamp.board.dao.MemberDao;
 import com.bitcamp.board.domain.Member;
 
-@Component
+@Service
 public class DefaultMemberService implements MemberService {
   MemberDao memberDao;
 

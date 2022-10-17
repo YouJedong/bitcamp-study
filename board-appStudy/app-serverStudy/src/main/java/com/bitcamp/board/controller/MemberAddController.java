@@ -2,19 +2,19 @@ package com.bitcamp.board.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.MemberService;
-import com.bitcamp.servlet.Controller;
 
-@Component("/member/add")
-public class MemberAddController implements Controller {
+@Controller
+public class MemberAddController {
 
   MemberService memberService;
   public MemberAddController(MemberService memberService) {
     this.memberService = memberService;
   }
-  @Override
+  @PostMapping("/member/add")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     Member member = new Member();
     member.setName(request.getParameter("name"));
