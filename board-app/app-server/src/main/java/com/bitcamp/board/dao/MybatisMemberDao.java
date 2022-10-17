@@ -1,58 +1,40 @@
 package com.bitcamp.board.dao;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import com.bitcamp.board.domain.Member;
 
-//@Repository
+@Repository
 //- 이 애노테이션을 붙이면 Spring IoC 컨테이너가 객체를 자동 생성한다.
 //- 객체의 이름을 명시하지 않으면 
 //  클래스 이름(첫 알파벳은 소문자 예: mariaDBMemberDao)을 사용하여 저장한다.
 //- 물론 생성자의 파라미터 값을 자동으로 주입한다.
 //- 파라미터에 해당하는 객체가 없다면 생성 오류가 발생한다.
-public class MariaDBMemberDao implements MemberDao {
+public class MybatisMemberDao implements MemberDao {
 
-  DataSource ds;
-
-  public MariaDBMemberDao(DataSource ds) {
-    System.out.println("MariaDBMemberDao() 호출됨!");
-
-    this.ds = ds;
-  }
+  @Autowired DataSource ds;
+  @Autowired SqlSessionFactory sqlSessionFactory;
 
   @Override
   public int insert(Member member) throws Exception {
-    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
-        "insert into app_member(name,email,pwd) values(?,?,sha2(?,256))")) {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
 
-      pstmt.setString(1, member.getName());
-      pstmt.setString(2, member.getEmail());
-      pstmt.setString(3, member.getPassword());
-
-      return pstmt.executeUpdate();
+      return sqlSession.insert("MemberDao.insert", member);
     }
   }
 
   @Override
   public Member findByNo(int no) throws Exception {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.selectOne("MemberDao.findByNo", no);
 
-    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
-        "select mno,name,email,cdt from app_member where mno=" + no);
-        ResultSet rs = pstmt.executeQuery()) {
-
-      if (!rs.next()) {
-        return null;
-      }
-
-      Member member = new Member();
-      member.setNo(rs.getInt("mno"));
-      member.setName(rs.getString("name"));
-      member.setEmail(rs.getString("email"));
-      member.setCreatedDate(rs.getDate("cdt"));
-      return member;
     }
   }
 
@@ -107,45 +89,23 @@ public class MariaDBMemberDao implements MemberDao {
 
   @Override
   public List<Member> findAll() throws Exception {
-    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
-        "select mno,name,email from app_member order by name");
-        ResultSet rs = pstmt.executeQuery()) {
-
-      ArrayList<Member> list = new ArrayList<>();
-
-      while (rs.next()) {
-        Member member = new Member();
-        member.setNo(rs.getInt("mno"));
-        member.setName(rs.getString("name"));
-        member.setEmail(rs.getString("email"));
-
-        list.add(member);
-      }
-
-      return list;
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.selectList("MemberDao.findAll");
     }
   }
 
   @Override
   public Member findByEmailPassword(String email, String password) throws Exception {
-    try (PreparedStatement pstmt = ds.getConnection().prepareStatement(
-        "select mno,name,email,cdt from app_member where email=? and pwd=sha2(?,256)")) {
 
-      pstmt.setString(1, email);
-      pstmt.setString(2, password);
+    try (SqlSession sqlSession = sqlSessionFactory.openSession();) {
+      Map<String,Object> paramMap = new HashMap<>();
+      paramMap.put("email", email);
+      paramMap.put("password", password);
 
-      try (ResultSet rs = pstmt.executeQuery()) {
-        if (!rs.next()) {
-          return null;
-        }
-
-        Member member = new Member();
-        member.setNo(rs.getInt("mno"));
-        member.setName(rs.getString("name"));
-        member.setEmail(rs.getString("email"));
-        member.setCreatedDate(rs.getDate("cdt"));
-        return member;
-      }
+      return sqlSession.selectOne(
+          "MemberDao.findByEmailPassword", // sql문의 아이디
+          paramMap
+          );
     }
   }
 }

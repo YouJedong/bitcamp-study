@@ -4,10 +4,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Component;
 import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.MemberService;
 import com.bitcamp.servlet.Controller;
 
+@Component("/auth/login")
 public class LoginController implements Controller {
 
   MemberService memberService;

@@ -30,10 +30,10 @@ public class LoginCheckFilter implements Filter {
 
     String servletPath = httpRequest.getServletPath();
 
-    if (servletPath.endsWith("form") ||
-        servletPath.endsWith("add") ||
-        servletPath.endsWith("update") ||
-        servletPath.endsWith("delete")) {
+    if (servletPath.toLowerCase().endsWith("form") ||
+        servletPath.toLowerCase().endsWith("add") ||
+        servletPath.toLowerCase().endsWith("update") ||
+        servletPath.toLowerCase().endsWith("delete")) {
 
       Member loginMember = (Member) httpRequest.getSession().getAttribute("loginMember");
       if (loginMember == null) {

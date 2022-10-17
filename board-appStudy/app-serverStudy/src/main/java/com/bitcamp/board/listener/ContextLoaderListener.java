@@ -24,12 +24,11 @@ public class ContextLoaderListener implements ServletContextListener{
 
       ServletContext ctx = sce.getServletContext();
 
-      DispatcherServlet servlet = new DispatcherServlet();
+      DispatcherServlet servlet = new DispatcherServlet(iocContainer);
       Dynamic config =  ctx.addServlet("DispatcherServlet", servlet);
       config.addMapping("/service/*");
       config.setMultipartConfig(new MultipartConfigElement(
           this.getClass().getAnnotation(MultipartConfig.class)));
-
 
 
 

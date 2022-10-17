@@ -2,10 +2,12 @@ package com.bitcamp.board.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.BoardService;
 import com.bitcamp.servlet.Controller;
 
+@Component("/board/delete")
 public class BoardDeleteController implements Controller {
 
   BoardService boardService;

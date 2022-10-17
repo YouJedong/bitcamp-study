@@ -45,19 +45,16 @@ insert into location_review_file(lrfno, filepath, lrno) values(5, 'http://image.
 
 
 ------------------------------------------------------------------------------------------------
+select * from party p
+ join party_file pf on p.pno=pf.pno;
 
-
--- 회원 게시글 입력
-insert into app_board(bno,title,cont,mno) values(11, '제목1', '내용1', 1);
-insert into app_board(bno,title,cont,mno) values(12, '제목2', '내용2', 1);
-insert into app_board(bno,title,cont,mno) values(13, '제목3', '내용3', 1);
-insert into app_board(bno,title,cont,mno) values(14, '제목4', '내용4', 2);
-insert into app_board(bno,title,cont,mno) values(15, '제목5', '내용5', 2);
-insert into app_board(bno,title,cont,mno) values(16, '제목6', '내용6', 4);
-
--- 비회원 게시글 입력
-insert into app_board(bno,title,cont,pwd) values(17, '제목101', '내용101', sha2('1111',256));
-insert into app_board(bno,title,cont,pwd) values(18, '제목102', '내용102', sha2('1111',256));
-insert into app_board(bno,title,cont,pwd) values(19, '제목103', '내용103', sha2('',256));
-insert into app_board(bno,title,cont,pwd) values(20, '제목104', '내용104', sha2('',256));
-insert into app_board(bno,title,cont,pwd) values(20, '제목104', '내용104', sha2('',256));
+select * form party_file pf
+ left join party p on p.pno=pf.pno;
+/*
+1. 모임 리스트 출력하기
+- party (제목, 모임일)
+조인 party_file (filpath)
+조인 region (시도, 시구) - rno = pno
+조인 party review (별점(모임평균평점으로 하자)) pno =pno
+정렬순서 평점순
+*/
