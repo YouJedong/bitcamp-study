@@ -5,20 +5,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.bitcamp.board.domain.Member;
 import com.bitcamp.board.service.MemberService;
 
 @Controller
-public class LoginController  {
+public class AuthController  {
 
   MemberService memberService;
-  public LoginController(MemberService memberService) {
+  public AuthController(MemberService memberService) {
     this.memberService = memberService;
   }
 
   @PostMapping("/auth/login")
-  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+  public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
     String email = request.getParameter("email");
     String password = request.getParameter("password");
 
@@ -39,6 +40,19 @@ public class LoginController  {
 
     request.setAttribute("member", member);
     return "/auth/loginResult.jsp";
+
+  }
+
+  @GetMapping("/auth/form")
+  public String form(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    return "/auth/form.jsp";
+  }
+
+  @GetMapping("/auth/logout")
+  public String logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    HttpSession session = request.getSession();
+    session.invalidate();
+    return "redirect:../../";
 
   }
 }

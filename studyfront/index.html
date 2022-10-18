@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <link rel="stylesheet" href=style.css>
+</head>
+<body>
+  <header id="header" class="header_wrap ">
+    <div class="header_top wide_max_width_area">
+                <h1 class="ofm_logo" style="top:79px;left:6px;">
+                    <a href="/">
+        <span class="text_logo">여기모여</span>
+                                <img src="https://static.onoffmix.com/images/pc/ofm_logo.png" alt="ONOFFMIX">
+                            </a>
+</h1>
+
+<div class="user_area">
+    <ul class="service_menu">
+                                    <li class="list_item login"><a href="/account/login">로그인</a></li>
+            <li class="list_item join"><a href="/account/join">회원가입</a></li>
+                                <li class="list_item service"><a href="/service">서비스안내</a></li>
+        <li class="list_item customer"><a href="/cs/main">고객센터</a></li>
+    </ul>
+
+    <ul class="member_menu">
+        <li class="list_item mypage" tabindex="0">
+            <a href="/account/main">마이페이지</a>
+            <div class="sub_menu">
+                <ul class="sub_list mypage_list">
+                    <li><a href="/account/login?returnUrl=/account/edit" class="site_link edit">회원정보수정</a></li>
+                    <li><a href="/account/login?returnUrl=/account/pass" class="site_link pass">비밀번호변경</a></li>
+                    <li><a href="/account/login?returnUrl=/account/event" class="site_link event">신청내역</a></li>
+                    <!-- <li><a href="/account/login?returnUrl=/account/payment" class="site_link payment">결제내역</a></li> -->
+                    <li><a href="/account/login?returnUrl=/account/pin" class="site_link pin">관심내역</a></li>
+                </ul>
+            </div>
+        </li>
+                                    <li class="list_item eventopen"><a href="/event/add">모임개설</a></li>
+                                <li class="list_item notice">
+                                        <a href="/account/login?returnUrl=/">알림</a>
+                                    </li>
+    </ul>
+</div>
+<div class="search_area">
+    <form class="search_form" action="/event/main" method="GET">
+        <label for="searchInput">검색할 모임을 입력해주세요.</label>
+        <input type="text" id="searchInput" class="search_input" name="s" value="" title="키워드로 모임을 검색하세요" data-event="264452">
+                                <span class="ofm_keyword_value" data-event_no="264452" data-event_title="AI + SW 실무교육 수강생 모집중!( ~11월23일)" data-creative_name="PC_메인_검색창광고" data-creative_slot="1">AI + SW 실무교육 수강생 모집중! →</span>
+        <script>
+            gtag('event', 'view_promotion', {
+                "non_interaction": true,
+                "promotions": [
+                    {
+                        "id": "event_264452",
+                        "name": "event_AI + SW 실무교육 수강생 모집중!( ~11월23일)",
+                        "creative_name": "PC_메인_검색창광고",
+                        "creative_slot": "1"
+                    }
+                ]
+            });
+        </script>
+                                <input type="submit" class="btn_search" value="검색" title="검색">
+    </form>
+</div>
+</div>
+
+</header>
+</body>
+</html>
