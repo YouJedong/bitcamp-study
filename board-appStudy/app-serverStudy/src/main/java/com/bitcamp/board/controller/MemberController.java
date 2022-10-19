@@ -56,8 +56,6 @@ public class MemberController {
 
   @PostMapping("/member/update")
   public String update(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    request.setCharacterEncoding("UTF-8");
-
     Member member = new Member();
     member.setNo(Integer.parseInt(request.getParameter("no")));
     member.setName(request.getParameter("name"));
