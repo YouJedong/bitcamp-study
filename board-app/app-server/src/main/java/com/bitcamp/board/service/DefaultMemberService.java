@@ -3,7 +3,6 @@ package com.bitcamp.board.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import com.bitcamp.board.dao.BoardDao;
 import com.bitcamp.board.dao.MemberDao;
@@ -13,9 +12,6 @@ import com.bitcamp.board.domain.Member;
 // - 메서드의 이름은 업무와 관련된 이름을 사용한다.
 @Service // 서비스 역할을 수행하는 객체에 붙이는 애노테이션
 public class DefaultMemberService implements MemberService {
-
-  @Autowired 
-  PlatformTransactionManager txManager;
 
   @Autowired 
   MemberDao memberDao;

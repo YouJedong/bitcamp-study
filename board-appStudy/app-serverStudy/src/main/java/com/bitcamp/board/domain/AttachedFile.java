@@ -40,4 +40,5 @@ public class AttachedFile {
     this.boardNo = boardNo;
   }
 
+
 }

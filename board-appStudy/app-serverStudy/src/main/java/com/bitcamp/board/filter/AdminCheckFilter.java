@@ -7,12 +7,11 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.board.domain.Member;
 
-@WebFilter("/service/member/*")
+//@WebFilter("/service/member/*")
 public class AdminCheckFilter implements Filter {
 
   @Override
@@ -29,14 +28,21 @@ public class AdminCheckFilter implements Filter {
     HttpServletResponse httpResponse = (HttpServletResponse) response;
 
     Member loginMember = (Member) httpRequest.getSession().getAttribute("loginMember");
-    if (loginMember == null ||
-        !loginMember.getEmail().equals("admin@test.com")) {
+    if (loginMember == null || // 로그인이 안됐거나 
+        !loginMember.getEmail().equals("admin@test.com")) { // 관리자가 아니라면
       httpResponse.sendRedirect(httpRequest.getContextPath() + "/");
       return;
     }
 
     chain.doFilter(request, response);
-
   }
 
 }
+
+
+
+
+
+
+
+

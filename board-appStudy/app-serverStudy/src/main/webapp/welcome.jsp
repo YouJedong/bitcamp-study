@@ -14,18 +14,18 @@
 <ul>
   <li><a href='service/board/list'>게시글</a></li>
   <li><a href='service/member/list'>회원</a></li>
-
 <c:choose>
   <c:when test="${not empty sessionScope.loginMember}">
-    <li><a href='service/auth/logout'>${loginMember.name}(로그아웃)</a></li>
+    <li><a href="service/auth/logout">${sessionScope.loginMember.name}(로그아웃)</a></li>
   </c:when>
   <c:otherwise>
     <li><a href='service/auth/form'>로그인</a></li>
   </c:otherwise>
 </c:choose>
-
-
 </ul>
 </body>
 </html>
+
+
+
 
