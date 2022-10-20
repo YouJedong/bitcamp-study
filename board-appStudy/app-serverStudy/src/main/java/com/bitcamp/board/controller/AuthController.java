@@ -28,7 +28,7 @@ public class AuthController {
 
   // InternalResourceViewResolver 설정 후
   @GetMapping("form") 
-  public String form() throws Exception {
+  public String form() throws Exception { 
     return "auth/form";
   }
 
