@@ -33,10 +33,12 @@ public class ContextLoaderListener implements ServletContextListener {
 
       ServletContext ctx = sce.getServletContext();
 
+      ctx.setAttribute("contextPath", ctx.getContextPath());
+
       // 자바 코드로 서블릿 객체를 직접 생성하여 서버에 등록하기
       DispatcherServlet servlet = new DispatcherServlet(iocContainer);
-      Dynamic config = ctx.addServlet("DispatcherServlet", servlet);
-      config.addMapping("/service/*");
+      Dynamic config = ctx.addServlet("app", servlet);
+      config.addMapping("/app/*");
       config.setMultipartConfig(new MultipartConfigElement(
           this.getClass().getAnnotation(MultipartConfig.class)));
       config.setLoadOnStartup(1); // 웹 애플리케이션을 시작할 때 프론트 컨트롤러를 자동 생성.
@@ -47,21 +49,21 @@ public class ContextLoaderListener implements ServletContextListener {
       filterConfig.addMappingForServletNames(
           EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE), 
           false, 
-          "DispatcherServlet");
+          "app");
 
       AdminCheckFilter adminFilter = new AdminCheckFilter();
       FilterRegistration.Dynamic adminFilterConfig = ctx.addFilter("AdminCheckFilter", adminFilter);
       adminFilterConfig.addMappingForUrlPatterns(
           EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE), 
           false, 
-          "/service/member/*");
+          "/app/member/*");
 
       LoginCheckFilter loginFilter = new LoginCheckFilter();
       FilterRegistration.Dynamic loginFilterConfig = ctx.addFilter("LoginCheckFilter", loginFilter);
       loginFilterConfig.addMappingForUrlPatterns(
           EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE), 
           false, 
-          "/service/*");
+          "/app/*");
 
     } catch (Exception e) {
       e.printStackTrace();

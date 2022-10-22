@@ -52,7 +52,7 @@ public class LoginCheckFilter implements Filter {
 
       Member loginMember = (Member) httpRequest.getSession().getAttribute("loginMember");
       if (loginMember == null) { // 로그인 하지 않았다면
-        httpResponse.sendRedirect(httpRequest.getContextPath() + "/service/auth/form");
+        httpResponse.sendRedirect(httpRequest.getContextPath() + "/app/auth/form");
         return;
       }
     }
