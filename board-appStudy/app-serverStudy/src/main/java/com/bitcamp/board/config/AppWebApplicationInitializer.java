@@ -8,7 +8,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 import javax.servlet.annotation.WebListener;
-import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.AbstractContextLoaderInitializer;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -17,10 +18,18 @@ import com.bitcamp.board.filter.LoginCheckFilter;
 
 //@MultipartConfig(maxFileSize = 1024 * 1024 * 10) 
 @WebListener
-public class AppWebApplicationInitializer implements WebApplicationInitializer {
+public class AppWebApplicationInitializer extends AbstractContextLoaderInitializer {
+
+  @Override
+  protected WebApplicationContext createRootApplicationContext() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
   @Override
   public void onStartup(ServletContext servletContext) throws ServletException {
     System.out.println("AppWebApplicationInitializer.onStartup()!!");
+    //    super.onStartup(servletContext);
 
     AnnotationConfigWebApplicationContext iocContainer = 
         new AnnotationConfigWebApplicationContext();
