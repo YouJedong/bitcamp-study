@@ -80,7 +80,7 @@
           useGeneratedKeys="true" keyColumn="bno" keyProperty="no">
     insert into app_board(title,cont,mno) 
     values(#{title},#{content},#{writer.no})
-  </insert>
+  </insert> 
   
   <update id="update" parameterType="board">
     update app_board set 
