@@ -2,56 +2,52 @@ package com.bitcamp.board.config;
 
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
 import javax.servlet.FilterRegistration;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration.Dynamic;
 import javax.servlet.annotation.WebListener;
-import org.springframework.web.context.AbstractContextLoaderInitializer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
 import com.bitcamp.board.filter.AdminCheckFilter;
 import com.bitcamp.board.filter.LoginCheckFilter;
 
 //@MultipartConfig(maxFileSize = 1024 * 1024 * 10) 
 @WebListener
-public class AppWebApplicationInitializer extends AbstractContextLoaderInitializer {
+public class AppWebApplicationInitializer extends AbstractDispatcherServletInitializer {
+
 
   @Override
   protected WebApplicationContext createRootApplicationContext() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public void onStartup(ServletContext servletContext) throws ServletException {
-    System.out.println("AppWebApplicationInitializer.onStartup()!!");
-    //    super.onStartup(servletContext);
+  protected String getServletName() {
+    return "app";
+  }
 
+  @Override
+  protected WebApplicationContext createServletApplicationContext() {
     AnnotationConfigWebApplicationContext iocContainer = 
         new AnnotationConfigWebApplicationContext();
     iocContainer.register(AppConfig.class);
+    return iocContainer;
+  } 
 
-    servletContext.setAttribute("contextPath", servletContext.getContextPath());
+  @Override
+  protected String[] getServletMappings() {
+    return new String[] {"/app/*"};
+  }
 
-    // 자바 코드로 서블릿 객체를 직접 생성하여 서버에 등록하기
-    DispatcherServlet servlet = new DispatcherServlet(iocContainer);
-    Dynamic config = servletContext.addServlet("app", servlet);
-    config.setLoadOnStartup(1); // 웹 애플리케이션을 시작할 때 프론트 컨트롤러를 자동 생성.
-    config.addMapping("/app/*");
-
-    config.setMultipartConfig(new MultipartConfigElement(
-        System.getProperty("java.io.tmpdir"), 
-        1024 * 1024 * 5,
-        1024 * 1024 * 10,
-        1024 * 1024 
-        ));
-
+  @Override
+  protected Filter[] getServletFilters() {
     // 필터 등록
     CharacterEncodingFilter filter = new CharacterEncodingFilter("UTF-8");
+
     FilterRegistration.Dynamic filterConfig = servletContext.addFilter("CharacterEncodingFilter", filter);
     filterConfig.addMappingForServletNames(
         EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE), 
@@ -71,6 +67,22 @@ public class AppWebApplicationInitializer extends AbstractContextLoaderInitializ
         EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE), 
         false, 
         "/app/*");
+  }
+
+  @Override
+  public void onStartup(ServletContext servletContext) throws ServletException {
+
+    servletContext.setAttribute("contextPath", servletContext.getContextPath());
+
+    config.setMultipartConfig(new MultipartConfigElement(
+        System.getProperty("java.io.tmpdir"), 
+        1024 * 1024 * 5,
+        1024 * 1024 * 10,
+        1024 * 1024 
+        ));
+
+
+
 
   }
 }
