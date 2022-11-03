@@ -48,7 +48,7 @@ for (var e of el) {
 
 // 다음처럼 한 개의 함수를 정의한 후에
 // 각 태그에 리스너로 등록하던가!
-
+ 
 function f1() {
 	console.log(this);
 }
@@ -56,6 +56,15 @@ for (var e of el) {
 	  e.onclick = f1
 }
 
+// jquery 사용 1
+//$(".btn1").on('click', () => {
+//	console.log(this);
+//});
+
+//jquery 사용 2
+//$(".btn1").click(function() {
+//  console.log(this);
+//});
 
 
 </script>
